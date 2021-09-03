@@ -1,96 +1,122 @@
 lockfileVersion: 5.3
 
-specifiers:
-  '@commitlint/cli': ^12.1.4
-  '@commitlint/config-conventional': ^12.1.4
-  '@ls-lint/ls-lint': ^1.10.0
-  '@rollup/plugin-commonjs': ^20.0.0
-  '@rollup/plugin-node-resolve': ^13.0.0
-  '@types/fs-extra': ^9.0.12
-  '@types/lodash-es': ^4.17.4
-  '@types/node': ^16.4.6
-  '@types/rollup-plugin-peer-deps-external': ^2.2.1
-  '@typescript-eslint/eslint-plugin': ^4.28.5
-  '@typescript-eslint/parser': ^4.28.5
-  '@vitejs/plugin-vue': ^1.2.5
-  '@vitejs/plugin-vue-jsx': ^1.1.7
-  '@vue/babel-plugin-jsx': ^1.0.6
-  '@vue/compiler-sfc': ^3.0.5
-  '@vue/composition-api': ^1.0.0-rc.1
-  '@vue/eslint-config-prettier': ^6.0.0
-  '@vue/test-utils': ^1.2.2
-  chalk: ^4.1.1
-  eslint: ^7.31.0
-  eslint-config-prettier: ^8.3.0
-  eslint-plugin-import: ^2.23.4
-  eslint-plugin-prettier: ^3.4.0
-  eslint-plugin-vue: ^7.14.0
-  execa: ^5.1.1
-  fs-extra: ^10.0.0
-  husky: ^7.0.0
-  lerna: ^4.0.0
-  lint-staged: ^11.1.1
-  minimist: ^1.2.5
-  prettier: ^2.3.2
-  rimraf: ^3.0.2
-  rollup: ^2.53.1
-  rollup-plugin-dts: ^3.0.2
-  rollup-plugin-filesize: ^9.1.1
-  rollup-plugin-peer-deps-external: ^2.2.4
-  rollup-plugin-scss: ^3.0.0
-  rollup-plugin-terser: ^7.0.2
-  rollup-plugin-typescript2: ^0.30.0
-  rollup-plugin-vue: ^6.0.0
-  ts-node: ^10.1.0
-  tslib: ^2.3.0
-  typescript: ^4.3.2
-  vite: ^2.4.3
+importers:
 
-devDependencies:
-  '@commitlint/cli': registry.nlark.com/@commitlint/cli/12.1.4
-  '@commitlint/config-conventional': registry.nlark.com/@commitlint/config-conventional/12.1.4
-  '@ls-lint/ls-lint': registry.nlark.com/@ls-lint/ls-lint/1.10.0
-  '@rollup/plugin-commonjs': registry.nlark.com/@rollup/plugin-commonjs/20.0.0_rollup@2.56.3
-  '@rollup/plugin-node-resolve': registry.nlark.com/@rollup/plugin-node-resolve/13.0.4_rollup@2.56.3
-  '@types/fs-extra': registry.nlark.com/@types/fs-extra/9.0.12
-  '@types/lodash-es': registry.nlark.com/@types/lodash-es/4.17.4
-  '@types/node': registry.nlark.com/@types/node/16.7.10
-  '@types/rollup-plugin-peer-deps-external': registry.nlark.com/@types/rollup-plugin-peer-deps-external/2.2.1
-  '@typescript-eslint/eslint-plugin': registry.nlark.com/@typescript-eslint/eslint-plugin/4.30.0_8a8a2d3eaa9257455a03c16dce5f55b3
-  '@typescript-eslint/parser': registry.nlark.com/@typescript-eslint/parser/4.30.0_eslint@7.32.0+typescript@4.4.2
-  '@vitejs/plugin-vue': registry.nlark.com/@vitejs/plugin-vue/1.6.0_@vue+compiler-sfc@3.2.8
-  '@vitejs/plugin-vue-jsx': registry.nlark.com/@vitejs/plugin-vue-jsx/1.1.7
-  '@vue/babel-plugin-jsx': registry.nlark.com/@vue/babel-plugin-jsx/1.0.6
-  '@vue/compiler-sfc': registry.nlark.com/@vue/compiler-sfc/3.2.8
-  '@vue/composition-api': registry.nlark.com/@vue/composition-api/1.1.4
-  '@vue/eslint-config-prettier': registry.nlark.com/@vue/eslint-config-prettier/6.0.0_d2db54262204ddabce28100aff0e004d
-  '@vue/test-utils': registry.nlark.com/@vue/test-utils/1.2.2
-  chalk: registry.nlark.com/chalk/4.1.2
-  eslint: registry.nlark.com/eslint/7.32.0
-  eslint-config-prettier: registry.nlark.com/eslint-config-prettier/8.3.0_eslint@7.32.0
-  eslint-plugin-import: registry.nlark.com/eslint-plugin-import/2.24.2_eslint@7.32.0
-  eslint-plugin-prettier: registry.nlark.com/eslint-plugin-prettier/3.4.1_eslint@7.32.0+prettier@2.3.2
-  eslint-plugin-vue: registry.nlark.com/eslint-plugin-vue/7.17.0_eslint@7.32.0
-  execa: registry.nlark.com/execa/5.1.1
-  fs-extra: registry.nlark.com/fs-extra/10.0.0
-  husky: registry.nlark.com/husky/7.0.2
-  lerna: registry.nlark.com/lerna/4.0.0
-  lint-staged: registry.nlark.com/lint-staged/11.1.2
-  minimist: 1.2.5
-  prettier: registry.nlark.com/prettier/2.3.2
-  rimraf: 3.0.2
-  rollup: registry.nlark.com/rollup/2.56.3
-  rollup-plugin-dts: registry.nlark.com/rollup-plugin-dts/3.0.2_rollup@2.56.3+typescript@4.4.2
-  rollup-plugin-filesize: registry.nlark.com/rollup-plugin-filesize/9.1.1
-  rollup-plugin-peer-deps-external: registry.nlark.com/rollup-plugin-peer-deps-external/2.2.4_rollup@2.56.3
-  rollup-plugin-scss: registry.nlark.com/rollup-plugin-scss/3.0.0
-  rollup-plugin-terser: 7.0.2_rollup@2.56.3
-  rollup-plugin-typescript2: registry.nlark.com/rollup-plugin-typescript2/0.30.0_rollup@2.56.3+typescript@4.4.2
-  rollup-plugin-vue: registry.nlark.com/rollup-plugin-vue/6.0.0_@vue+compiler-sfc@3.2.8
-  ts-node: registry.nlark.com/ts-node/10.2.1_737b1ec089c67d77c879529dd12190ba
-  tslib: registry.nlark.com/tslib/2.3.1
-  typescript: registry.nlark.com/typescript/4.4.2
-  vite: registry.nlark.com/vite/2.5.3
+  .:
+    specifiers:
+      '@commitlint/cli': ^12.1.4
+      '@commitlint/config-conventional': ^12.1.4
+      '@ls-lint/ls-lint': ^1.10.0
+      '@rollup/plugin-commonjs': ^20.0.0
+      '@rollup/plugin-node-resolve': ^13.0.0
+      '@types/fs-extra': ^9.0.12
+      '@types/lodash-es': ^4.17.4
+      '@types/node': ^16.4.6
+      '@types/rollup-plugin-peer-deps-external': ^2.2.1
+      '@typescript-eslint/eslint-plugin': ^4.28.5
+      '@typescript-eslint/parser': ^4.28.5
+      '@vitejs/plugin-vue': ^1.2.5
+      '@vitejs/plugin-vue-jsx': ^1.1.7
+      '@vue/babel-plugin-jsx': ^1.0.6
+      '@vue/compiler-sfc': ^3.0.5
+      '@vue/composition-api': ^1.0.0-rc.1
+      '@vue/eslint-config-prettier': ^6.0.0
+      '@vue/test-utils': ^1.2.2
+      chalk: ^4.1.1
+      eslint: ^7.31.0
+      eslint-config-prettier: ^8.3.0
+      eslint-plugin-import: ^2.23.4
+      eslint-plugin-prettier: ^3.4.0
+      eslint-plugin-vue: ^7.14.0
+      execa: ^5.1.1
+      fs-extra: ^10.0.0
+      husky: ^7.0.0
+      lerna: ^4.0.0
+      lint-staged: ^11.1.1
+      minimist: ^1.2.5
+      prettier: ^2.3.2
+      rimraf: ^3.0.2
+      rollup: ^2.53.1
+      rollup-plugin-dts: ^3.0.2
+      rollup-plugin-filesize: ^9.1.1
+      rollup-plugin-peer-deps-external: ^2.2.4
+      rollup-plugin-scss: ^3.0.0
+      rollup-plugin-terser: ^7.0.2
+      rollup-plugin-typescript2: ^0.30.0
+      rollup-plugin-vue: ^6.0.0
+      ts-node: ^10.1.0
+      tslib: ^2.3.0
+      typescript: ^4.3.2
+    devDependencies:
+      '@commitlint/cli': registry.nlark.com/@commitlint/cli/12.1.4
+      '@commitlint/config-conventional': registry.nlark.com/@commitlint/config-conventional/12.1.4
+      '@ls-lint/ls-lint': registry.nlark.com/@ls-lint/ls-lint/1.10.0
+      '@rollup/plugin-commonjs': registry.nlark.com/@rollup/plugin-commonjs/20.0.0_rollup@2.56.3
+      '@rollup/plugin-node-resolve': registry.nlark.com/@rollup/plugin-node-resolve/13.0.4_rollup@2.56.3
+      '@types/fs-extra': registry.nlark.com/@types/fs-extra/9.0.12
+      '@types/lodash-es': registry.nlark.com/@types/lodash-es/4.17.4
+      '@types/node': registry.nlark.com/@types/node/16.7.10
+      '@types/rollup-plugin-peer-deps-external': registry.nlark.com/@types/rollup-plugin-peer-deps-external/2.2.1
+      '@typescript-eslint/eslint-plugin': registry.nlark.com/@typescript-eslint/eslint-plugin/4.30.0_8a8a2d3eaa9257455a03c16dce5f55b3
+      '@typescript-eslint/parser': registry.nlark.com/@typescript-eslint/parser/4.30.0_eslint@7.32.0+typescript@4.4.2
+      '@vitejs/plugin-vue': registry.nlark.com/@vitejs/plugin-vue/1.6.0_@vue+compiler-sfc@3.2.8
+      '@vitejs/plugin-vue-jsx': registry.nlark.com/@vitejs/plugin-vue-jsx/1.1.7
+      '@vue/babel-plugin-jsx': registry.nlark.com/@vue/babel-plugin-jsx/1.0.6
+      '@vue/compiler-sfc': registry.nlark.com/@vue/compiler-sfc/3.2.8
+      '@vue/composition-api': registry.nlark.com/@vue/composition-api/1.1.4
+      '@vue/eslint-config-prettier': registry.nlark.com/@vue/eslint-config-prettier/6.0.0_d2db54262204ddabce28100aff0e004d
+      '@vue/test-utils': registry.nlark.com/@vue/test-utils/1.2.2
+      chalk: registry.nlark.com/chalk/4.1.2
+      eslint: registry.nlark.com/eslint/7.32.0
+      eslint-config-prettier: registry.nlark.com/eslint-config-prettier/8.3.0_eslint@7.32.0
+      eslint-plugin-import: registry.nlark.com/eslint-plugin-import/2.24.2_eslint@7.32.0
+      eslint-plugin-prettier: registry.nlark.com/eslint-plugin-prettier/3.4.1_5a48a349ffec60f5257b5f148f5199c3
+      eslint-plugin-vue: registry.nlark.com/eslint-plugin-vue/7.17.0_eslint@7.32.0
+      execa: registry.nlark.com/execa/5.1.1
+      fs-extra: registry.nlark.com/fs-extra/10.0.0
+      husky: registry.nlark.com/husky/7.0.2
+      lerna: registry.nlark.com/lerna/4.0.0
+      lint-staged: registry.nlark.com/lint-staged/11.1.2
+      minimist: 1.2.5
+      prettier: registry.nlark.com/prettier/2.3.2
+      rimraf: 3.0.2
+      rollup: registry.nlark.com/rollup/2.56.3
+      rollup-plugin-dts: registry.nlark.com/rollup-plugin-dts/3.0.2_rollup@2.56.3+typescript@4.4.2
+      rollup-plugin-filesize: registry.nlark.com/rollup-plugin-filesize/9.1.1
+      rollup-plugin-peer-deps-external: registry.nlark.com/rollup-plugin-peer-deps-external/2.2.4_rollup@2.56.3
+      rollup-plugin-scss: registry.nlark.com/rollup-plugin-scss/3.0.0
+      rollup-plugin-terser: 7.0.2_rollup@2.56.3
+      rollup-plugin-typescript2: registry.nlark.com/rollup-plugin-typescript2/0.30.0_rollup@2.56.3+typescript@4.4.2
+      rollup-plugin-vue: registry.nlark.com/rollup-plugin-vue/6.0.0_@vue+compiler-sfc@3.2.8
+      ts-node: registry.nlark.com/ts-node/10.2.1_737b1ec089c67d77c879529dd12190ba
+      tslib: registry.nlark.com/tslib/2.3.1
+      typescript: registry.nlark.com/typescript/4.4.2
+
+  packages/cli:
+    specifiers: {}
+
+  packages/code-inject:
+    specifiers: {}
+
+  packages/demo:
+    specifiers:
+      '@vitejs/plugin-vue': ^1.6.0
+      '@vue/compiler-sfc': ^3.2.6
+      typescript: ^4.3.2
+      vite: ^2.5.2
+      vue: ^3.2.6
+      vue-tsc: ^0.2.2
+    dependencies:
+      vue: registry.nlark.com/vue/3.2.8
+    devDependencies:
+      '@vitejs/plugin-vue': registry.nlark.com/@vitejs/plugin-vue/1.6.0_@vue+compiler-sfc@3.2.8
+      '@vue/compiler-sfc': registry.nlark.com/@vue/compiler-sfc/3.2.8
+      typescript: registry.nlark.com/typescript/4.4.2
+      vite: registry.nlark.com/vite/2.5.3
+      vue-tsc: registry.nlark.com/vue-tsc/0.2.3_typescript@4.4.2
+
+  packages/engine:
+    specifiers: {}
 
 packages:
 
@@ -160,6 +186,8 @@ packages:
     engines: {node: '>= 6.0.0'}
     dependencies:
       debug: registry.nlark.com/debug/4.3.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /agentkeepalive/4.1.4:
@@ -169,6 +197,8 @@ packages:
       debug: registry.nlark.com/debug/4.3.2
       depd: 1.1.2
       humanize-ms: 1.2.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /aggregate-error/3.1.0:
@@ -261,6 +291,10 @@ packages:
       safer-buffer: 2.1.2
     dev: true
 
+  /assert-never/1.2.1:
+    resolution: {integrity: sha1-EfDjY78UYgX7CBk7XHuQ9NHPRP4=, tarball: assert-never/download/assert-never-1.2.1.tgz}
+    dev: true
+
   /assert-plus/1.0.0:
     resolution: {integrity: sha1-8S4PPF13sLHN2RRpQuTpbB5N1SU=, tarball: assert-plus/download/assert-plus-1.0.0.tgz}
     engines: {node: '>=0.8'}
@@ -340,6 +374,12 @@ packages:
 
   /caseless/0.12.0:
     resolution: {integrity: sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=, tarball: caseless/download/caseless-0.12.0.tgz}
+    dev: true
+
+  /character-parser/2.2.0:
+    resolution: {integrity: sha1-x84o821LzZdE5f/CxfzeHHMmH8A=, tarball: character-parser/download/character-parser-2.2.0.tgz}
+    dependencies:
+      is-regex: registry.nlark.com/is-regex/1.1.4
     dev: true
 
   /chardet/0.7.0:
@@ -467,6 +507,13 @@ packages:
     engines: {node: '>= 0.10.0'}
     dependencies:
       bluebird: registry.nlark.com/bluebird/3.7.2
+    dev: true
+
+  /constantinople/4.0.1:
+    resolution: {integrity: sha1-De8RP6Dk3I3oMzGlz3nIsyUhMVE=, tarball: constantinople/download/constantinople-4.0.1.tgz}
+    dependencies:
+      '@babel/parser': registry.nlark.com/@babel/parser/7.15.4
+      '@babel/types': registry.nlark.com/@babel/types/7.15.4
     dev: true
 
   /conventional-changelog-angular/5.0.12:
@@ -629,8 +676,16 @@ packages:
       esutils: 2.0.3
     dev: true
 
+  /doctypes/1.1.0:
+    resolution: {integrity: sha1-6oCxBqh1OHdOijpKWv4pPeSJ4Kk=, tarball: doctypes/download/doctypes-1.1.0.tgz}
+    dev: true
+
   /dom-event-types/1.0.0:
     resolution: {integrity: sha1-WDCgop4b+Df+UKcM2ApZcjKBPK4=, tarball: dom-event-types/download/dom-event-types-1.0.0.tgz}
+    dev: true
+
+  /domelementtype/2.2.0:
+    resolution: {integrity: sha1-mgtsJ4LtahxzI9QiZxg9+b2LHVc=, tarball: domelementtype/download/domelementtype-2.2.0.tgz}
     dev: true
 
   /dot-prop/5.3.0:
@@ -744,7 +799,6 @@ packages:
 
   /estree-walker/2.0.2:
     resolution: {integrity: sha1-UvAQF4wqTBF6d1fP6UKtt9LaTKw=, tarball: estree-walker/download/estree-walker-2.0.2.tgz}
-    dev: true
 
   /esutils/2.0.3:
     resolution: {integrity: sha1-dNLrTeC42hKTcRkQ1Qd1ubcQ72Q=, tarball: esutils/download/esutils-2.0.3.tgz}
@@ -835,6 +889,7 @@ packages:
   /fsevents/2.3.2:
     resolution: {integrity: sha1-ilJveLj99GI7cJ4Ll1xSwkwC/Ro=, tarball: fsevents/download/fsevents-2.3.2.tgz}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
     dev: true
     optional: true
 
@@ -1014,6 +1069,8 @@ packages:
       '@tootallnate/once': 1.1.2
       agent-base: 6.0.2
       debug: registry.nlark.com/debug/4.3.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /http-signature/1.2.0:
@@ -1031,6 +1088,8 @@ packages:
     dependencies:
       agent-base: 6.0.2
       debug: registry.nlark.com/debug/4.3.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /humanize-ms/1.2.1:
@@ -1122,6 +1181,13 @@ packages:
       ci-info: registry.nlark.com/ci-info/2.0.0
     dev: true
 
+  /is-expression/4.0.0:
+    resolution: {integrity: sha1-wzFVliq/IdCv0lUlFNZ9LsFv0qs=, tarball: is-expression/download/is-expression-4.0.0.tgz}
+    dependencies:
+      acorn: registry.nlark.com/acorn/7.4.1
+      object-assign: 4.1.1
+    dev: true
+
   /is-extendable/0.1.1:
     resolution: {integrity: sha1-YrEQ4omkcUGOPsNqYX1HLjAd/Ik=, tarball: is-extendable/download/is-extendable-0.1.1.tgz}
     engines: {node: '>=0.10.0'}
@@ -1201,6 +1267,10 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /is-promise/2.2.2:
+    resolution: {integrity: sha1-OauVnMv5p3TPB597QMeib3YxNfE=, tarball: is-promise/download/is-promise-2.2.2.tgz}
+    dev: true
+
   /is-regexp/1.0.0:
     resolution: {integrity: sha1-/S2INUXEa6xaYz57mgnof6LLUGk=, tarball: is-regexp/download/is-regexp-1.0.0.tgz}
     engines: {node: '>=0.10.0'}
@@ -1229,6 +1299,10 @@ packages:
 
   /isstream/0.1.2:
     resolution: {integrity: sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=, tarball: isstream/download/isstream-0.1.2.tgz}
+    dev: true
+
+  /js-stringify/1.0.2:
+    resolution: {integrity: sha1-Fzb939lyTyijaCrcYjCufk6Weds=, tarball: js-stringify/download/js-stringify-1.0.2.tgz}
     dev: true
 
   /js-yaml/3.14.1:
@@ -1290,6 +1364,14 @@ packages:
     hasBin: true
     dependencies:
       minimist: 1.2.5
+    dev: true
+
+  /jsonc-parser/2.3.1:
+    resolution: {integrity: sha1-WVSRULEz8u+sykj+nOHsBlmvI0I=, tarball: jsonc-parser/download/jsonc-parser-2.3.1.tgz}
+    dev: true
+
+  /jsonc-parser/3.0.0:
+    resolution: {integrity: sha1-q914VwHH5+rKip7IzwcMpRp0WiI=, tarball: jsonc-parser/download/jsonc-parser-3.0.0.tgz}
     dev: true
 
   /jsonfile/4.0.0:
@@ -1869,6 +1951,12 @@ packages:
       retry: registry.nlark.com/retry/0.12.0
     dev: true
 
+  /promise/7.3.1:
+    resolution: {integrity: sha1-BktyYCsY+Q8pGSuLG8QY/9Hr078=, tarball: promise/download/promise-7.3.1.tgz}
+    dependencies:
+      asap: 2.0.6
+    dev: true
+
   /proto-list/1.2.4:
     resolution: {integrity: sha1-IS1b/hMYMGpCD2QCuOJv85ZHqEk=, tarball: proto-list/download/proto-list-1.2.4.tgz}
     dev: true
@@ -1883,6 +1971,77 @@ packages:
 
   /psl/1.8.0:
     resolution: {integrity: sha1-kyb4vPsBOtzABf3/BWrM4CDlHCQ=, tarball: psl/download/psl-1.8.0.tgz}
+    dev: true
+
+  /pug-attrs/3.0.0:
+    resolution: {integrity: sha1-sQRR4DSBZeMfrRzCPr3dncc0fEE=, tarball: pug-attrs/download/pug-attrs-3.0.0.tgz}
+    dependencies:
+      constantinople: 4.0.1
+      js-stringify: 1.0.2
+      pug-runtime: 3.0.1
+    dev: true
+
+  /pug-code-gen/3.0.2:
+    resolution: {integrity: sha1-rRkPSUMTO/GGtguA3kgxAOEy4s4=, tarball: pug-code-gen/download/pug-code-gen-3.0.2.tgz}
+    dependencies:
+      constantinople: 4.0.1
+      doctypes: 1.1.0
+      js-stringify: 1.0.2
+      pug-attrs: 3.0.0
+      pug-error: 2.0.0
+      pug-runtime: 3.0.1
+      void-elements: 3.1.0
+      with: 7.0.2
+    dev: true
+
+  /pug-error/2.0.0:
+    resolution: {integrity: sha1-XGIXPLCcNN4qLOBPF7it/sdNjKU=, tarball: pug-error/download/pug-error-2.0.0.tgz}
+    dev: true
+
+  /pug-filters/4.0.0:
+    resolution: {integrity: sha1-0+Sa9bqEcum3pm2YDnB86dLMm14=, tarball: pug-filters/download/pug-filters-4.0.0.tgz}
+    dependencies:
+      constantinople: 4.0.1
+      jstransformer: registry.nlark.com/jstransformer/1.0.0
+      pug-error: 2.0.0
+      pug-walk: 2.0.0
+      resolve: 1.20.0
+    dev: true
+
+  /pug-lexer/5.0.1:
+    resolution: {integrity: sha1-rkRijFvvmxkLZlaDsojKkCS4sNU=, tarball: pug-lexer/download/pug-lexer-5.0.1.tgz}
+    dependencies:
+      character-parser: 2.2.0
+      is-expression: 4.0.0
+      pug-error: 2.0.0
+    dev: true
+
+  /pug-linker/4.0.0:
+    resolution: {integrity: sha1-EsvAWU/Fo+Brn8Web5PBRpYqdwg=, tarball: pug-linker/download/pug-linker-4.0.0.tgz}
+    dependencies:
+      pug-error: 2.0.0
+      pug-walk: 2.0.0
+    dev: true
+
+  /pug-load/3.0.0:
+    resolution: {integrity: sha1-n9nNpSICsIrbEdJWgfufNL1BtmI=, tarball: pug-load/download/pug-load-3.0.0.tgz}
+    dependencies:
+      object-assign: 4.1.1
+      pug-walk: 2.0.0
+    dev: true
+
+  /pug-runtime/3.0.1:
+    resolution: {integrity: sha1-9jaXYgRyPzWoxfb61qzaKhkbg9c=, tarball: pug-runtime/download/pug-runtime-3.0.1.tgz}
+    dev: true
+
+  /pug-strip-comments/2.0.0:
+    resolution: {integrity: sha1-+UsH/WtJVSMzD0kKf1VLT/h2MD4=, tarball: pug-strip-comments/download/pug-strip-comments-2.0.0.tgz}
+    dependencies:
+      pug-error: 2.0.0
+    dev: true
+
+  /pug-walk/2.0.0:
+    resolution: {integrity: sha1-QXqrwpIyu0SZtbUGmistKiTV9f4=, tarball: pug-walk/download/pug-walk-2.0.0.tgz}
     dev: true
 
   /punycode/2.1.1:
@@ -1914,7 +2073,7 @@ packages:
   /randombytes/2.1.0:
     resolution: {integrity: sha1-32+ENy8CcNxlzfYpE0mrekc9Tyo=, tarball: randombytes/download/randombytes-2.1.0.tgz}
     dependencies:
-      safe-buffer: 5.1.2
+      safe-buffer: 5.2.1
     dev: true
 
   /read-pkg-up/3.0.0:
@@ -2007,6 +2166,20 @@ packages:
   /resolve-from/5.0.0:
     resolution: {integrity: sha1-w1IlhD3493bfIcV1V7wIfp39/Gk=, tarball: resolve-from/download/resolve-from-5.0.0.tgz}
     engines: {node: '>=8'}
+    dev: true
+
+  /resolve-global/1.0.0:
+    resolution: {integrity: sha1-oqed9K8so/Sb93753azTItrRklU=, tarball: resolve-global/download/resolve-global-1.0.0.tgz}
+    engines: {node: '>=8'}
+    dependencies:
+      global-dirs: 0.1.1
+    dev: true
+
+  /resolve/1.20.0:
+    resolution: {integrity: sha1-YpoBP7P3B1XW8LeTXMHCxTeLGXU=, tarball: resolve/download/resolve-1.20.0.tgz}
+    dependencies:
+      is-core-module: registry.nlark.com/is-core-module/2.6.0
+      path-parse: registry.nlark.com/path-parse/1.0.7
     dev: true
 
   /reusify/1.0.4:
@@ -2169,7 +2342,6 @@ packages:
   /source-map/0.6.1:
     resolution: {integrity: sha1-dHIq8y6WFOnCh6jQu95IteLxomM=, tarball: source-map/download/source-map-0.6.1.tgz}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /source-map/0.7.3:
     resolution: {integrity: sha1-UwL4FpAxc1ImVECS5kmB91F1A4M=, tarball: source-map/download/source-map-0.7.3.tgz}
@@ -2347,6 +2519,10 @@ packages:
       is-number: 7.0.0
     dev: true
 
+  /token-stream/1.0.0:
+    resolution: {integrity: sha1-zCAOqyYT9BZtJ/+a/HylbUnfbrQ=, tarball: token-stream/download/token-stream-1.0.0.tgz}
+    dev: true
+
   /tough-cookie/2.5.0:
     resolution: {integrity: sha1-zZ+yoKodWhK0c72fuW+j3P9lreI=, tarball: tough-cookie/download/tough-cookie-2.5.0.tgz}
     engines: {node: '>=0.8'}
@@ -2462,6 +2638,11 @@ packages:
       extsprintf: registry.nlark.com/extsprintf/1.3.0
     dev: true
 
+  /void-elements/3.1.0:
+    resolution: {integrity: sha1-YU9/v42AHwu18GYfWy9XhXUOTwk=, tarball: void-elements/download/void-elements-3.1.0.tgz}
+    engines: {node: '>=0.10.0'}
+    dev: true
+
   /wcwidth/1.0.1:
     resolution: {integrity: sha1-8LDc+RW8X/FSivrbLA4XtTLaL+g=, tarball: wcwidth/download/wcwidth-1.0.1.tgz}
     dependencies:
@@ -2502,6 +2683,16 @@ packages:
     resolution: {integrity: sha1-rgdOa9wMFKQx6ATmJFScYzsABFc=, tarball: wide-align/download/wide-align-1.1.3.tgz}
     dependencies:
       string-width: 1.0.2
+    dev: true
+
+  /with/7.0.2:
+    resolution: {integrity: sha1-zO461ULSVTinp6gKrSErmChJW6w=, tarball: with/download/with-7.0.2.tgz}
+    engines: {node: '>= 10.0.0'}
+    dependencies:
+      '@babel/parser': registry.nlark.com/@babel/parser/7.15.4
+      '@babel/types': registry.nlark.com/@babel/types/7.15.4
+      assert-never: 1.2.1
+      babel-walk: registry.nlark.com/babel-walk/3.0.0-canary-5
     dev: true
 
   /word-wrap/1.2.3:
@@ -2603,6 +2794,8 @@ packages:
       json5: 2.2.0
       semver: 6.3.0
       source-map: 0.5.7
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@babel/generator/7.15.4:
@@ -2657,6 +2850,8 @@ packages:
       '@babel/helper-optimise-call-expression': registry.nlark.com/@babel/helper-optimise-call-expression/7.15.4
       '@babel/helper-replace-supers': registry.nlark.com/@babel/helper-replace-supers/7.15.4
       '@babel/helper-split-export-declaration': registry.nlark.com/@babel/helper-split-export-declaration/7.15.4
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@babel/helper-function-name/7.15.4:
@@ -2720,6 +2915,8 @@ packages:
       '@babel/template': registry.nlark.com/@babel/template/7.15.4
       '@babel/traverse': registry.nlark.com/@babel/traverse/7.15.4
       '@babel/types': registry.nlark.com/@babel/types/7.15.4
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@babel/helper-optimise-call-expression/7.15.4:
@@ -2748,6 +2945,8 @@ packages:
       '@babel/helper-optimise-call-expression': registry.nlark.com/@babel/helper-optimise-call-expression/7.15.4
       '@babel/traverse': registry.nlark.com/@babel/traverse/7.15.4
       '@babel/types': registry.nlark.com/@babel/types/7.15.4
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@babel/helper-simple-access/7.15.4:
@@ -2773,7 +2972,6 @@ packages:
     name: '@babel/helper-validator-identifier'
     version: 7.14.9
     engines: {node: '>=6.9.0'}
-    dev: true
 
   registry.nlark.com/@babel/helper-validator-option/7.14.5:
     resolution: {integrity: sha1-bnKh//GNXfy4eOHmLxoCHEty1aM=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@babel/helper-validator-option/download/@babel/helper-validator-option-7.14.5.tgz}
@@ -2791,6 +2989,8 @@ packages:
       '@babel/template': registry.nlark.com/@babel/template/7.15.4
       '@babel/traverse': registry.nlark.com/@babel/traverse/7.15.4
       '@babel/types': registry.nlark.com/@babel/types/7.15.4
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@babel/highlight/7.14.5:
@@ -2810,7 +3010,6 @@ packages:
     version: 7.15.4
     engines: {node: '>=6.0.0'}
     hasBin: true
-    dev: true
 
   registry.nlark.com/@babel/plugin-syntax-jsx/7.14.5:
     resolution: {integrity: sha1-AA4uJdhnPM5JMAUXo+2kTCY+QgE=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@babel/plugin-syntax-jsx/download/@babel/plugin-syntax-jsx-7.14.5.tgz}
@@ -2862,6 +3061,8 @@ packages:
       '@babel/helper-create-class-features-plugin': registry.nlark.com/@babel/helper-create-class-features-plugin/7.15.4_@babel+core@7.15.4
       '@babel/helper-plugin-utils': registry.nlark.com/@babel/helper-plugin-utils/7.14.5
       '@babel/plugin-syntax-typescript': registry.nlark.com/@babel/plugin-syntax-typescript/7.14.5_@babel+core@7.15.4
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@babel/runtime/7.15.4:
@@ -2899,6 +3100,8 @@ packages:
       '@babel/types': registry.nlark.com/@babel/types/7.15.4
       debug: registry.nlark.com/debug/4.3.2
       globals: registry.nlark.com/globals/11.12.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@babel/types/7.15.4:
@@ -2909,7 +3112,6 @@ packages:
     dependencies:
       '@babel/helper-validator-identifier': registry.nlark.com/@babel/helper-validator-identifier/7.14.9
       to-fast-properties: registry.nlark.com/to-fast-properties/2.0.0
-    dev: true
 
   registry.nlark.com/@commitlint/cli/12.1.4:
     resolution: {integrity: sha1-r02d08ASLHs5ph+hzSq7rQQi2+A=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@commitlint/cli/download/@commitlint/cli-12.1.4.tgz}
@@ -2924,8 +3126,8 @@ packages:
       '@commitlint/read': registry.nlark.com/@commitlint/read/12.1.4
       '@commitlint/types': registry.nlark.com/@commitlint/types/12.1.4
       lodash: 4.17.21
-      resolve-from: 5.0.0
-      resolve-global: registry.nlark.com/resolve-global/1.0.0
+      resolve-from: registry.nlark.com/resolve-from/5.0.0
+      resolve-global: 1.0.0
       yargs: registry.nlark.com/yargs/16.2.0
     dev: true
 
@@ -3097,6 +3299,28 @@ packages:
       '@cspotcode/source-map-consumer': registry.nlark.com/@cspotcode/source-map-consumer/0.8.0
     dev: true
 
+  registry.nlark.com/@emmetio/abbreviation/2.2.2:
+    resolution: {integrity: sha1-dGdi/Z56jC6mBPWAxi48/iUOaYk=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@emmetio/abbreviation/download/@emmetio/abbreviation-2.2.2.tgz}
+    name: '@emmetio/abbreviation'
+    version: 2.2.2
+    dependencies:
+      '@emmetio/scanner': registry.nlark.com/@emmetio/scanner/1.0.0
+    dev: true
+
+  registry.nlark.com/@emmetio/css-abbreviation/2.1.4:
+    resolution: {integrity: sha1-kDYuihEizjt29sMVeQfTAYL1P1Q=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@emmetio/css-abbreviation/download/@emmetio/css-abbreviation-2.1.4.tgz}
+    name: '@emmetio/css-abbreviation'
+    version: 2.1.4
+    dependencies:
+      '@emmetio/scanner': registry.nlark.com/@emmetio/scanner/1.0.0
+    dev: true
+
+  registry.nlark.com/@emmetio/scanner/1.0.0:
+    resolution: {integrity: sha1-Blsq9iM/50dNRII+PeuJckr0K18=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@emmetio/scanner/download/@emmetio/scanner-1.0.0.tgz}
+    name: '@emmetio/scanner'
+    version: 1.0.0
+    dev: true
+
   registry.nlark.com/@eslint/eslintrc/0.4.3:
     resolution: {integrity: sha1-nkKYHvA1vrPdSa3ResuW6P9vOUw=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@eslint/eslintrc/download/@eslint/eslintrc-0.4.3.tgz}
     name: '@eslint/eslintrc'
@@ -3112,6 +3336,8 @@ packages:
       js-yaml: 3.14.1
       minimatch: 3.0.4
       strip-json-comments: registry.nlark.com/strip-json-comments/3.1.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@gar/promisify/1.1.2:
@@ -3129,6 +3355,8 @@ packages:
       '@humanwhocodes/object-schema': registry.nlark.com/@humanwhocodes/object-schema/1.2.0
       debug: registry.nlark.com/debug/4.3.2
       minimatch: 3.0.4
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@humanwhocodes/object-schema/1.2.0:
@@ -3160,6 +3388,8 @@ packages:
       p-map: registry.nlark.com/p-map/4.0.0
       pacote: registry.nlark.com/pacote/11.3.5
       semver: 7.3.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@lerna/bootstrap/4.0.0:
@@ -3350,6 +3580,8 @@ packages:
       validate-npm-package-name: 3.0.0
       whatwg-url: registry.nlark.com/whatwg-url/8.7.0
       yargs-parser: registry.nlark.com/yargs-parser/20.2.4
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@lerna/describe-ref/4.0.0:
@@ -3581,6 +3813,8 @@ packages:
       npm-package-arg: registry.nlark.com/npm-package-arg/8.1.5
       npm-registry-fetch: registry.nlark.com/npm-registry-fetch/9.0.0
       npmlog: registry.nlark.com/npmlog/4.1.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@lerna/npm-install/4.0.0:
@@ -3612,6 +3846,8 @@ packages:
       npmlog: registry.nlark.com/npmlog/4.1.2
       pify: 5.0.0
       read-package-json: registry.nlark.com/read-package-json/3.0.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@lerna/npm-run-script/4.0.0:
@@ -3766,6 +4002,8 @@ packages:
       p-pipe: registry.nlark.com/p-pipe/3.1.0
       pacote: registry.nlark.com/pacote/11.3.5
       semver: 7.3.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@lerna/pulse-till-done/4.0.0:
@@ -3937,6 +4175,7 @@ packages:
     resolution: {integrity: sha1-ytIAhe3AEKPpOKoBu2bQXl4Ss/M=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@ls-lint/ls-lint/download/@ls-lint/ls-lint-1.10.0.tgz}
     name: '@ls-lint/ls-lint'
     version: 1.10.0
+    os: [darwin, linux, win32]
     hasBin: true
     dev: true
 
@@ -4328,6 +4567,10 @@ packages:
     peerDependencies:
       '@typescript-eslint/parser': ^4.0.0
       eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     dependencies:
       '@typescript-eslint/experimental-utils': registry.nlark.com/@typescript-eslint/experimental-utils/4.30.0_eslint@7.32.0+typescript@4.4.2
       '@typescript-eslint/parser': registry.nlark.com/@typescript-eslint/parser/4.30.0_eslint@7.32.0+typescript@4.4.2
@@ -4338,8 +4581,9 @@ packages:
       regexpp: registry.nlark.com/regexpp/3.2.0
       semver: 7.3.5
       tsutils: 3.21.0_typescript@4.4.2
+      typescript: registry.nlark.com/typescript/4.4.2
     transitivePeerDependencies:
-      - typescript
+      - supports-color
     dev: true
 
   registry.nlark.com/@typescript-eslint/experimental-utils/4.30.0_eslint@7.32.0+typescript@4.4.2:
@@ -4359,6 +4603,7 @@ packages:
       eslint-scope: registry.nlark.com/eslint-scope/5.1.1
       eslint-utils: registry.nlark.com/eslint-utils/3.0.0_eslint@7.32.0
     transitivePeerDependencies:
+      - supports-color
       - typescript
     dev: true
 
@@ -4370,14 +4615,19 @@ packages:
     engines: {node: ^10.12.0 || >=12.0.0}
     peerDependencies:
       eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     dependencies:
       '@typescript-eslint/scope-manager': registry.nlark.com/@typescript-eslint/scope-manager/4.30.0
       '@typescript-eslint/types': registry.nlark.com/@typescript-eslint/types/4.30.0
       '@typescript-eslint/typescript-estree': registry.nlark.com/@typescript-eslint/typescript-estree/4.30.0_typescript@4.4.2
       debug: registry.nlark.com/debug/4.3.2
       eslint: registry.nlark.com/eslint/7.32.0
+      typescript: registry.nlark.com/typescript/4.4.2
     transitivePeerDependencies:
-      - typescript
+      - supports-color
     dev: true
 
   registry.nlark.com/@typescript-eslint/scope-manager/4.30.0:
@@ -4403,6 +4653,11 @@ packages:
     name: '@typescript-eslint/typescript-estree'
     version: 4.30.0
     engines: {node: ^10.12.0 || >=12.0.0}
+    peerDependencies:
+      typescript: '*'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     dependencies:
       '@typescript-eslint/types': registry.nlark.com/@typescript-eslint/types/4.30.0
       '@typescript-eslint/visitor-keys': registry.nlark.com/@typescript-eslint/visitor-keys/4.30.0
@@ -4411,8 +4666,9 @@ packages:
       is-glob: 4.0.1
       semver: 7.3.5
       tsutils: 3.21.0_typescript@4.4.2
+      typescript: registry.nlark.com/typescript/4.4.2
     transitivePeerDependencies:
-      - typescript
+      - supports-color
     dev: true
 
   registry.nlark.com/@typescript-eslint/visitor-keys/4.30.0:
@@ -4437,6 +4693,8 @@ packages:
       '@rollup/pluginutils': registry.nlark.com/@rollup/pluginutils/4.1.1
       '@vue/babel-plugin-jsx': registry.nlark.com/@vue/babel-plugin-jsx/1.0.6_@babel+core@7.15.4
       hash-sum: 2.0.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/@vitejs/plugin-vue/1.6.0_@vue+compiler-sfc@3.2.8:
@@ -4449,6 +4707,66 @@ packages:
       '@vue/compiler-sfc': ^3.2.6
     dependencies:
       '@vue/compiler-sfc': registry.nlark.com/@vue/compiler-sfc/3.2.8
+    dev: true
+
+  registry.nlark.com/@volar/code-gen/0.27.11:
+    resolution: {integrity: sha1-dCO4mx4EwwCeIAoJLAndsL+ip/k=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@volar/code-gen/download/@volar/code-gen-0.27.11.tgz}
+    name: '@volar/code-gen'
+    version: 0.27.11
+    dependencies:
+      '@volar/shared': registry.nlark.com/@volar/shared/0.27.11
+      '@volar/source-map': registry.nlark.com/@volar/source-map/0.27.11
+    dev: true
+
+  registry.nlark.com/@volar/html2pug/0.27.11:
+    resolution: {integrity: sha1-DTmfQJs01JzSSOJC56SRf+gi2hk=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@volar/html2pug/download/@volar/html2pug-0.27.11.tgz}
+    name: '@volar/html2pug'
+    version: 0.27.11
+    dependencies:
+      domelementtype: 2.2.0
+      domhandler: registry.nlark.com/domhandler/4.2.2
+      htmlparser2: registry.nlark.com/htmlparser2/6.1.0
+      pug: registry.nlark.com/pug/3.0.2
+    dev: true
+
+  registry.nlark.com/@volar/shared/0.27.11:
+    resolution: {integrity: sha1-iBZNNqkFzuYTEyxO4XXfkcsTWko=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@volar/shared/download/@volar/shared-0.27.11.tgz}
+    name: '@volar/shared'
+    version: 0.27.11
+    dependencies:
+      upath: 2.0.1
+      vscode-jsonrpc: registry.nlark.com/vscode-jsonrpc/8.0.0-next.2
+      vscode-uri: registry.nlark.com/vscode-uri/3.0.2
+    dev: true
+
+  registry.nlark.com/@volar/source-map/0.27.11:
+    resolution: {integrity: sha1-CSCLMws5mKJPWKpeBS67P0Jla0g=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@volar/source-map/download/@volar/source-map-0.27.11.tgz}
+    name: '@volar/source-map'
+    version: 0.27.11
+    dependencies:
+      '@volar/shared': registry.nlark.com/@volar/shared/0.27.11
+    dev: true
+
+  registry.nlark.com/@volar/transforms/0.27.11:
+    resolution: {integrity: sha1-dyA1ARMgs2gq2Q+2dOH9iAvbSMw=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@volar/transforms/download/@volar/transforms-0.27.11.tgz}
+    name: '@volar/transforms'
+    version: 0.27.11
+    dependencies:
+      '@volar/shared': registry.nlark.com/@volar/shared/0.27.11
+      vscode-languageserver: registry.nlark.com/vscode-languageserver/8.0.0-next.2
+    dev: true
+
+  registry.nlark.com/@vscode/emmet-helper/2.7.0:
+    resolution: {integrity: sha1-PbSF9qZQGW/4u9OLobnkaOyNIvg=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@vscode/emmet-helper/download/@vscode/emmet-helper-2.7.0.tgz}
+    name: '@vscode/emmet-helper'
+    version: 2.7.0
+    dependencies:
+      emmet: registry.nlark.com/emmet/2.3.4
+      jsonc-parser: 2.3.1
+      vscode-languageserver-textdocument: registry.nlark.com/vscode-languageserver-textdocument/1.0.1
+      vscode-languageserver-types: registry.nlark.com/vscode-languageserver-types/3.16.0
+      vscode-nls: registry.nlark.com/vscode-nls/5.0.0
+      vscode-uri: registry.nlark.com/vscode-uri/2.1.2
     dev: true
 
   registry.nlark.com/@vue/babel-plugin-jsx/1.0.6:
@@ -4467,6 +4785,7 @@ packages:
       svg-tags: 1.0.0
     transitivePeerDependencies:
       - '@babel/core'
+      - supports-color
     dev: true
 
   registry.nlark.com/@vue/babel-plugin-jsx/1.0.6_@babel+core@7.15.4:
@@ -4486,6 +4805,7 @@ packages:
       svg-tags: 1.0.0
     transitivePeerDependencies:
       - '@babel/core'
+      - supports-color
     dev: true
 
   registry.nlark.com/@vue/compiler-core/3.2.8:
@@ -4498,7 +4818,6 @@ packages:
       '@vue/shared': registry.nlark.com/@vue/shared/3.2.8
       estree-walker: 2.0.2
       source-map: 0.6.1
-    dev: true
 
   registry.nlark.com/@vue/compiler-dom/3.2.8:
     resolution: {integrity: sha1-abyeCJKKEilcMSmQZ/GNhzAZgak=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@vue/compiler-dom/download/@vue/compiler-dom-3.2.8.tgz}
@@ -4507,7 +4826,6 @@ packages:
     dependencies:
       '@vue/compiler-core': registry.nlark.com/@vue/compiler-core/3.2.8
       '@vue/shared': registry.nlark.com/@vue/shared/3.2.8
-    dev: true
 
   registry.nlark.com/@vue/compiler-sfc/3.2.8:
     resolution: {integrity: sha1-I2mfadOLHDLsVPi0cPPmN1/8a24=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@vue/compiler-sfc/download/@vue/compiler-sfc-3.2.8.tgz}
@@ -4565,9 +4883,16 @@ packages:
     dependencies:
       eslint: registry.nlark.com/eslint/7.32.0
       eslint-config-prettier: registry.nlark.com/eslint-config-prettier/6.15.0_eslint@7.32.0
-      eslint-plugin-prettier: registry.nlark.com/eslint-plugin-prettier/3.4.1_eslint@7.32.0+prettier@2.3.2
+      eslint-plugin-prettier: registry.nlark.com/eslint-plugin-prettier/3.4.1_5a48a349ffec60f5257b5f148f5199c3
       prettier: registry.nlark.com/prettier/2.3.2
     dev: true
+
+  registry.nlark.com/@vue/reactivity/3.2.8:
+    resolution: {integrity: sha1-snIAzPqgbzEqxGexKjgWE3fFV+0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@vue/reactivity/download/@vue/reactivity-3.2.8.tgz}
+    name: '@vue/reactivity'
+    version: 3.2.8
+    dependencies:
+      '@vue/shared': registry.nlark.com/@vue/shared/3.2.8
 
   registry.nlark.com/@vue/ref-transform/3.2.8:
     resolution: {integrity: sha1-pScEe6tDzlDvPUAM5xMSqzD4Jdw=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@vue/ref-transform/download/@vue/ref-transform-3.2.8.tgz}
@@ -4581,11 +4906,29 @@ packages:
       magic-string: 0.25.7
     dev: true
 
+  registry.nlark.com/@vue/runtime-core/3.2.8:
+    resolution: {integrity: sha1-iiNCwLqg/uGS+BmjvcGVR9dDC4g=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@vue/runtime-core/download/@vue/runtime-core-3.2.8.tgz}
+    name: '@vue/runtime-core'
+    version: 3.2.8
+    dependencies:
+      '@vue/reactivity': registry.nlark.com/@vue/reactivity/3.2.8
+      '@vue/shared': registry.nlark.com/@vue/shared/3.2.8
+    dev: false
+
+  registry.nlark.com/@vue/runtime-dom/3.2.8:
+    resolution: {integrity: sha1-xmMbUHBJ05hEsENOgd8ap578xss=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@vue/runtime-dom/download/@vue/runtime-dom-3.2.8.tgz}
+    name: '@vue/runtime-dom'
+    version: 3.2.8
+    dependencies:
+      '@vue/runtime-core': registry.nlark.com/@vue/runtime-core/3.2.8
+      '@vue/shared': registry.nlark.com/@vue/shared/3.2.8
+      csstype: registry.nlark.com/csstype/2.6.17
+    dev: false
+
   registry.nlark.com/@vue/shared/3.2.8:
     resolution: {integrity: sha1-L5GOMwrrP1arEDHKYKWzBnJRJFc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@vue/shared/download/@vue/shared-3.2.8.tgz}
     name: '@vue/shared'
     version: 3.2.8
-    dev: true
 
   registry.nlark.com/@vue/test-utils/1.2.2:
     resolution: {integrity: sha1-AkLqTiAtSFNUG7Fn/q0/IkkUCrc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@vue/test-utils/download/@vue/test-utils-1.2.2.tgz}
@@ -4726,6 +5069,15 @@ packages:
     resolution: {integrity: sha1-x57Zf380y48robyXkLzDZkdLS3k=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/asynckit/download/asynckit-0.4.0.tgz}
     name: asynckit
     version: 0.4.0
+    dev: true
+
+  registry.nlark.com/babel-walk/3.0.0-canary-5:
+    resolution: {integrity: sha1-9m7Ncpg1eu5ElV8jWm71QhkQSxE=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/babel-walk/download/babel-walk-3.0.0-canary-5.tgz}
+    name: babel-walk
+    version: 3.0.0-canary-5
+    engines: {node: '>= 10.0.0'}
+    dependencies:
+      '@babel/types': registry.nlark.com/@babel/types/7.15.4
     dev: true
 
   registry.nlark.com/before-after-hook/2.2.2:
@@ -5056,6 +5408,12 @@ packages:
       yaml: registry.nlark.com/yaml/1.10.2
     dev: true
 
+  registry.nlark.com/csstype/2.6.17:
+    resolution: {integrity: sha1-TPMOuH4dGgBdi2UQ+VKSQT9qHA4=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/csstype/download/csstype-2.6.17.tgz?cache=0&sync_timestamp=1618818778879&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fcsstype%2Fdownload%2Fcsstype-2.6.17.tgz}
+    name: csstype
+    version: 2.6.17
+    dev: false
+
   registry.nlark.com/dargs/7.0.0:
     resolution: {integrity: sha1-BAFcQd4Ly2nshAUPPZvgyvjW1cw=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/dargs/download/dargs-7.0.0.tgz}
     name: dargs
@@ -5084,6 +5442,11 @@ packages:
     name: debug
     version: 4.3.2
     engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
     dependencies:
       ms: registry.nlark.com/ms/2.1.2
     dev: true
@@ -5108,6 +5471,35 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  registry.nlark.com/dom-serializer/1.3.2:
+    resolution: {integrity: sha1-YgZDfTLO767HFhgDIwx6ILwbTZE=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/dom-serializer/download/dom-serializer-1.3.2.tgz}
+    name: dom-serializer
+    version: 1.3.2
+    dependencies:
+      domelementtype: 2.2.0
+      domhandler: registry.nlark.com/domhandler/4.2.2
+      entities: registry.nlark.com/entities/2.2.0
+    dev: true
+
+  registry.nlark.com/domhandler/4.2.2:
+    resolution: {integrity: sha1-6CXXIdGahrjCAaNSZOImxnjudV8=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/domhandler/download/domhandler-4.2.2.tgz?cache=0&sync_timestamp=1630247974940&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fdomhandler%2Fdownload%2Fdomhandler-4.2.2.tgz}
+    name: domhandler
+    version: 4.2.2
+    engines: {node: '>= 4'}
+    dependencies:
+      domelementtype: 2.2.0
+    dev: true
+
+  registry.nlark.com/domutils/2.8.0:
+    resolution: {integrity: sha1-RDfe9dtuLR9dbuhZvZXKfQIEgTU=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/domutils/download/domutils-2.8.0.tgz}
+    name: domutils
+    version: 2.8.0
+    dependencies:
+      dom-serializer: registry.nlark.com/dom-serializer/1.3.2
+      domelementtype: 2.2.0
+      domhandler: registry.nlark.com/domhandler/4.2.2
+    dev: true
+
   registry.nlark.com/duplexer/0.1.2:
     resolution: {integrity: sha1-Or5DrvODX4rgd9E23c4PJ2sEAOY=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/duplexer/download/duplexer-0.1.2.tgz}
     name: duplexer
@@ -5118,6 +5510,15 @@ packages:
     resolution: {integrity: sha1-De6XW1v0XWNXryZvNQ/NtnNqXkA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/electron-to-chromium/download/electron-to-chromium-1.3.828.tgz}
     name: electron-to-chromium
     version: 1.3.828
+    dev: true
+
+  registry.nlark.com/emmet/2.3.4:
+    resolution: {integrity: sha1-W6DXpVaaaMdpffqJDHcuTzF50SM=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/emmet/download/emmet-2.3.4.tgz}
+    name: emmet
+    version: 2.3.4
+    dependencies:
+      '@emmetio/abbreviation': registry.nlark.com/@emmetio/abbreviation/2.2.2
+      '@emmetio/css-abbreviation': registry.nlark.com/@emmetio/css-abbreviation/2.1.4
     dev: true
 
   registry.nlark.com/emoji-regex/7.0.3:
@@ -5139,6 +5540,12 @@ packages:
     engines: {node: '>=8.6'}
     dependencies:
       ansi-colors: 4.1.1
+    dev: true
+
+  registry.nlark.com/entities/2.2.0:
+    resolution: {integrity: sha1-CY3JDruD2N/6CJ1VJWs1HTTE2lU=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/entities/download/entities-2.2.0.tgz}
+    name: entities
+    version: 2.2.0
     dev: true
 
   registry.nlark.com/env-paths/2.2.1:
@@ -5185,7 +5592,7 @@ packages:
     dev: true
 
   registry.nlark.com/esbuild/0.12.25:
-    resolution: {integrity: sha1-whMc7wIs+f6UqqXgARCyf8l2Iho=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/esbuild/download/esbuild-0.12.25.tgz}
+    resolution: {integrity: sha1-whMc7wIs+f6UqqXgARCyf8l2Iho=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/esbuild/download/esbuild-0.12.25.tgz?cache=0&sync_timestamp=1630599207410&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fesbuild%2Fdownload%2Fesbuild-0.12.25.tgz}
     name: esbuild
     version: 0.12.25
     hasBin: true
@@ -5263,7 +5670,7 @@ packages:
       tsconfig-paths: registry.nlark.com/tsconfig-paths/3.11.0
     dev: true
 
-  registry.nlark.com/eslint-plugin-prettier/3.4.1_eslint@7.32.0+prettier@2.3.2:
+  registry.nlark.com/eslint-plugin-prettier/3.4.1_5a48a349ffec60f5257b5f148f5199c3:
     resolution: {integrity: sha1-6d2yAO+289Bf/oOxZlpxavSjh+U=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/eslint-plugin-prettier/download/eslint-plugin-prettier-3.4.1.tgz}
     id: registry.nlark.com/eslint-plugin-prettier/3.4.1
     name: eslint-plugin-prettier
@@ -5271,9 +5678,14 @@ packages:
     engines: {node: '>=6.0.0'}
     peerDependencies:
       eslint: '>=5.0.0'
+      eslint-config-prettier: '*'
       prettier: '>=1.13.0'
+    peerDependenciesMeta:
+      eslint-config-prettier:
+        optional: true
     dependencies:
       eslint: registry.nlark.com/eslint/7.32.0
+      eslint-config-prettier: registry.nlark.com/eslint-config-prettier/8.3.0_eslint@7.32.0
       prettier: registry.nlark.com/prettier/2.3.2
       prettier-linter-helpers: 1.0.0
     dev: true
@@ -5292,6 +5704,8 @@ packages:
       natural-compare: 1.4.0
       semver: 6.3.0
       vue-eslint-parser: registry.nlark.com/vue-eslint-parser/7.10.0_eslint@7.32.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/eslint-scope/5.1.1:
@@ -5387,6 +5801,8 @@ packages:
       table: registry.nlark.com/table/6.7.1
       text-table: 0.2.0
       v8-compile-cache: 2.3.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/espree/6.2.1:
@@ -5731,6 +6147,17 @@ packages:
       function-bind: 1.1.1
     dev: true
 
+  registry.nlark.com/htmlparser2/6.1.0:
+    resolution: {integrity: sha1-xNditsM3GgXb5l6UrkOp+EX7j7c=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/htmlparser2/download/htmlparser2-6.1.0.tgz}
+    name: htmlparser2
+    version: 6.1.0
+    dependencies:
+      domelementtype: 2.2.0
+      domhandler: registry.nlark.com/domhandler/4.2.2
+      domutils: registry.nlark.com/domutils/2.8.0
+      entities: registry.nlark.com/entities/2.2.0
+    dev: true
+
   registry.nlark.com/human-signals/2.1.0:
     resolution: {integrity: sha1-3JH8ukLk0G5Kuu0zs+ejwC9RTqA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/human-signals/download/human-signals-2.1.0.tgz}
     name: human-signals
@@ -5998,6 +6425,15 @@ packages:
       verror: 1.10.0
     dev: true
 
+  registry.nlark.com/jstransformer/1.0.0:
+    resolution: {integrity: sha1-7Yvwkh4vPx7U1cGkT2hwntJHIsM=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/jstransformer/download/jstransformer-1.0.0.tgz}
+    name: jstransformer
+    version: 1.0.0
+    dependencies:
+      is-promise: 2.2.2
+      promise: 7.3.1
+    dev: true
+
   registry.nlark.com/lerna/4.0.0:
     resolution: {integrity: sha1-sTnWhdUOoMob6HcTp8L0Sltnjp4=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/lerna/download/lerna-4.0.0.tgz}
     name: lerna
@@ -6023,6 +6459,8 @@ packages:
       '@lerna/version': registry.nlark.com/@lerna/version/4.0.0
       import-local: 3.0.2
       npmlog: registry.nlark.com/npmlog/4.1.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/libnpmaccess/4.0.3:
@@ -6035,6 +6473,8 @@ packages:
       minipass: 3.1.3
       npm-package-arg: registry.nlark.com/npm-package-arg/8.1.5
       npm-registry-fetch: registry.nlark.com/npm-registry-fetch/11.0.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/libnpmpublish/4.0.2:
@@ -6048,6 +6488,8 @@ packages:
       npm-registry-fetch: registry.nlark.com/npm-registry-fetch/11.0.0
       semver: 7.3.5
       ssri: registry.nlark.com/ssri/8.0.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/lint-staged/11.1.2:
@@ -6070,6 +6512,8 @@ packages:
       please-upgrade-node: 3.2.0
       string-argv: registry.nlark.com/string-argv/0.3.1
       stringify-object: registry.nlark.com/stringify-object/3.3.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/listr2/3.11.1_enquirer@2.3.6:
@@ -6200,6 +6644,8 @@ packages:
       promise-retry: 2.0.1
       socks-proxy-agent: registry.nlark.com/socks-proxy-agent/5.0.1
       ssri: registry.nlark.com/ssri/8.0.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/make-fetch-happen/9.1.0:
@@ -6224,6 +6670,8 @@ packages:
       promise-retry: 2.0.1
       socks-proxy-agent: registry.nlark.com/socks-proxy-agent/6.0.0
       ssri: registry.nlark.com/ssri/8.0.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/meow/7.1.1:
@@ -6526,6 +6974,8 @@ packages:
       minipass-json-stream: 1.0.1
       minizlib: registry.nlark.com/minizlib/2.1.2
       npm-package-arg: registry.nlark.com/npm-package-arg/8.1.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/npm-registry-fetch/9.0.0:
@@ -6542,6 +6992,8 @@ packages:
       minipass-json-stream: 1.0.1
       minizlib: registry.nlark.com/minizlib/2.1.2
       npm-package-arg: registry.nlark.com/npm-package-arg/8.1.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/npmlog/4.1.2:
@@ -6684,6 +7136,8 @@ packages:
       rimraf: 3.0.2
       ssri: registry.nlark.com/ssri/8.0.1
       tar: registry.nlark.com/tar/6.1.11
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/parse-url/6.0.0:
@@ -6826,6 +7280,30 @@ packages:
       read: 1.0.7
     dev: true
 
+  registry.nlark.com/pug-parser/6.0.0:
+    resolution: {integrity: sha1-qP3ANYY6lbLB3F6/Ts+AtOdqEmA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/pug-parser/download/pug-parser-6.0.0.tgz}
+    name: pug-parser
+    version: 6.0.0
+    dependencies:
+      pug-error: 2.0.0
+      token-stream: 1.0.0
+    dev: true
+
+  registry.nlark.com/pug/3.0.2:
+    resolution: {integrity: sha1-81xxBzQ0VOQ7wnrg/3bHMbeOpTU=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/pug/download/pug-3.0.2.tgz}
+    name: pug
+    version: 3.0.2
+    dependencies:
+      pug-code-gen: 3.0.2
+      pug-filters: 4.0.0
+      pug-lexer: 5.0.1
+      pug-linker: 4.0.0
+      pug-load: 3.0.0
+      pug-parser: registry.nlark.com/pug-parser/6.0.0
+      pug-runtime: 3.0.1
+      pug-strip-comments: 2.0.0
+    dev: true
+
   registry.nlark.com/query-string/6.14.1:
     resolution: {integrity: sha1-esLcpG2n8wlEm6D4ax/SglWwyGo=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/query-string/download/query-string-6.14.1.tgz}
     name: query-string
@@ -6963,6 +7441,12 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  registry.nlark.com/request-light/0.5.4:
+    resolution: {integrity: sha1-SXqYxtiuSVNkF6Xi1/ODuTTz44w=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/request-light/download/request-light-0.5.4.tgz}
+    name: request-light
+    version: 0.5.4
+    dev: true
+
   registry.nlark.com/resolve-cwd/3.0.0:
     resolution: {integrity: sha1-DwB18bslRHZs9zumpuKt/ryxPy0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/resolve-cwd/download/resolve-cwd-3.0.0.tgz}
     name: resolve-cwd
@@ -6970,6 +7454,13 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       resolve-from: 5.0.0
+    dev: true
+
+  registry.nlark.com/resolve-from/5.0.0:
+    resolution: {integrity: sha1-w1IlhD3493bfIcV1V7wIfp39/Gk=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/resolve-from/download/resolve-from-5.0.0.tgz}
+    name: resolve-from
+    version: 5.0.0
+    engines: {node: '>=8'}
     dev: true
 
   registry.nlark.com/resolve-global/1.0.0:
@@ -7038,6 +7529,8 @@ packages:
       gzip-size: 6.0.0
       pacote: registry.nlark.com/pacote/11.3.5
       terser: registry.nlark.com/terser/5.7.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/rollup-plugin-peer-deps-external/2.2.4_rollup@2.56.3:
@@ -7089,6 +7582,8 @@ packages:
       debug: registry.nlark.com/debug/4.3.2
       hash-sum: 2.0.0
       rollup-pluginutils: 2.8.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/rollup/0.63.5:
@@ -7169,6 +7664,8 @@ packages:
       agent-base: 6.0.2
       debug: registry.nlark.com/debug/4.3.2
       socks: registry.nlark.com/socks/2.6.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/socks-proxy-agent/6.0.0:
@@ -7180,6 +7677,8 @@ packages:
       agent-base: 6.0.2
       debug: registry.nlark.com/debug/4.3.2
       socks: registry.nlark.com/socks/2.6.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   registry.nlark.com/socks/2.6.1:
@@ -7400,7 +7899,6 @@ packages:
     name: to-fast-properties
     version: 2.0.0
     engines: {node: '>=4'}
-    dev: true
 
   registry.nlark.com/tr46/2.1.0:
     resolution: {integrity: sha1-+oeqgcpdWUHajL8fm3SdyWmk4kA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/tr46/download/tr46-2.1.0.tgz}
@@ -7430,6 +7928,11 @@ packages:
       '@swc/wasm': '>=1.2.50'
       '@types/node': '*'
       typescript: '>=2.7'
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      '@swc/wasm':
+        optional: true
     dependencies:
       '@cspotcode/source-map-support': registry.nlark.com/@cspotcode/source-map-support/0.6.1
       '@tsconfig/node10': registry.nlark.com/@tsconfig/node10/1.0.8
@@ -7593,10 +8096,156 @@ packages:
     dependencies:
       esbuild: registry.nlark.com/esbuild/0.12.25
       postcss: registry.nlark.com/postcss/8.3.6
-      resolve: registry.nlark.com/resolve/1.20.0
+      resolve: 1.20.0
       rollup: registry.nlark.com/rollup/2.56.3
     optionalDependencies:
       fsevents: 2.3.2
+    dev: true
+
+  registry.nlark.com/vscode-css-languageservice/5.1.4:
+    resolution: {integrity: sha1-B+TGPxw7sG5vPzKcMrSQ0gpgG6s=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-css-languageservice/download/vscode-css-languageservice-5.1.4.tgz}
+    name: vscode-css-languageservice
+    version: 5.1.4
+    dependencies:
+      vscode-languageserver-textdocument: registry.nlark.com/vscode-languageserver-textdocument/1.0.1
+      vscode-languageserver-types: registry.nlark.com/vscode-languageserver-types/3.16.0
+      vscode-nls: registry.nlark.com/vscode-nls/5.0.0
+      vscode-uri: registry.nlark.com/vscode-uri/3.0.2
+    dev: true
+
+  registry.nlark.com/vscode-html-languageservice/4.0.7:
+    resolution: {integrity: sha1-lPLtIsghll+CgiLRO1qlQbNY2ZI=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-html-languageservice/download/vscode-html-languageservice-4.0.7.tgz}
+    name: vscode-html-languageservice
+    version: 4.0.7
+    dependencies:
+      vscode-languageserver-textdocument: registry.nlark.com/vscode-languageserver-textdocument/1.0.1
+      vscode-languageserver-types: registry.nlark.com/vscode-languageserver-types/3.16.0
+      vscode-nls: registry.nlark.com/vscode-nls/5.0.0
+      vscode-uri: registry.nlark.com/vscode-uri/3.0.2
+    dev: true
+
+  registry.nlark.com/vscode-json-languageservice/4.1.7:
+    resolution: {integrity: sha1-GCRNYrEVpYGMdSbvQzlDi3F136o=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-json-languageservice/download/vscode-json-languageservice-4.1.7.tgz}
+    name: vscode-json-languageservice
+    version: 4.1.7
+    engines: {npm: '>=7.0.0'}
+    dependencies:
+      jsonc-parser: 3.0.0
+      vscode-languageserver-textdocument: registry.nlark.com/vscode-languageserver-textdocument/1.0.1
+      vscode-languageserver-types: registry.nlark.com/vscode-languageserver-types/3.16.0
+      vscode-nls: registry.nlark.com/vscode-nls/5.0.0
+      vscode-uri: registry.nlark.com/vscode-uri/3.0.2
+    dev: true
+
+  registry.nlark.com/vscode-jsonrpc/8.0.0-next.2:
+    resolution: {integrity: sha1-KF/ClL5YbkdorNZ+WkLvxzilysA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-jsonrpc/download/vscode-jsonrpc-8.0.0-next.2.tgz}
+    name: vscode-jsonrpc
+    version: 8.0.0-next.2
+    engines: {node: '>=8.0.0 || >=10.0.0'}
+    dev: true
+
+  registry.nlark.com/vscode-languageserver-protocol/3.17.0-next.8:
+    resolution: {integrity: sha1-7y63QjtHTMzRE4QjneJEiOf+gYw=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-languageserver-protocol/download/vscode-languageserver-protocol-3.17.0-next.8.tgz}
+    name: vscode-languageserver-protocol
+    version: 3.17.0-next.8
+    dependencies:
+      vscode-jsonrpc: registry.nlark.com/vscode-jsonrpc/8.0.0-next.2
+      vscode-languageserver-types: registry.nlark.com/vscode-languageserver-types/3.17.0-next.3
+    dev: true
+
+  registry.nlark.com/vscode-languageserver-textdocument/1.0.1:
+    resolution: {integrity: sha1-F4Fo6H761hcbNyrdHeo09T5dMw8=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-languageserver-textdocument/download/vscode-languageserver-textdocument-1.0.1.tgz}
+    name: vscode-languageserver-textdocument
+    version: 1.0.1
+    dev: true
+
+  registry.nlark.com/vscode-languageserver-types/3.16.0:
+    resolution: {integrity: sha1-7POT/BIexpdLLaPvsxVWRMUU4kc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-languageserver-types/download/vscode-languageserver-types-3.16.0.tgz}
+    name: vscode-languageserver-types
+    version: 3.16.0
+    dev: true
+
+  registry.nlark.com/vscode-languageserver-types/3.17.0-next.3:
+    resolution: {integrity: sha1-4fQxHgjqMZPoESYVS2o0L8HD26M=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-languageserver-types/download/vscode-languageserver-types-3.17.0-next.3.tgz}
+    name: vscode-languageserver-types
+    version: 3.17.0-next.3
+    dev: true
+
+  registry.nlark.com/vscode-languageserver/8.0.0-next.2:
+    resolution: {integrity: sha1-Oj2vef8QNQ6pzsXHO1MCkBqVURc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-languageserver/download/vscode-languageserver-8.0.0-next.2.tgz}
+    name: vscode-languageserver
+    version: 8.0.0-next.2
+    hasBin: true
+    dependencies:
+      vscode-languageserver-protocol: registry.nlark.com/vscode-languageserver-protocol/3.17.0-next.8
+    dev: true
+
+  registry.nlark.com/vscode-nls/5.0.0:
+    resolution: {integrity: sha1-mfDaC9nqfNpE5WWnTFSx8rwleEA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-nls/download/vscode-nls-5.0.0.tgz}
+    name: vscode-nls
+    version: 5.0.0
+    dev: true
+
+  registry.nlark.com/vscode-pug-languageservice/0.27.11:
+    resolution: {integrity: sha1-oGV4n4pTxlCCpKurA2+g2V6nu5w=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-pug-languageservice/download/vscode-pug-languageservice-0.27.11.tgz}
+    name: vscode-pug-languageservice
+    version: 0.27.11
+    dependencies:
+      '@volar/code-gen': registry.nlark.com/@volar/code-gen/0.27.11
+      '@volar/shared': registry.nlark.com/@volar/shared/0.27.11
+      '@volar/source-map': registry.nlark.com/@volar/source-map/0.27.11
+      '@volar/transforms': registry.nlark.com/@volar/transforms/0.27.11
+      pug-lexer: 5.0.1
+      pug-parser: registry.nlark.com/pug-parser/6.0.0
+      vscode-languageserver: registry.nlark.com/vscode-languageserver/8.0.0-next.2
+    dev: true
+
+  registry.nlark.com/vscode-typescript-languageservice/0.27.11:
+    resolution: {integrity: sha1-gCkrz8WppzwNPI0cQ2otZyCzmyA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-typescript-languageservice/download/vscode-typescript-languageservice-0.27.11.tgz}
+    name: vscode-typescript-languageservice
+    version: 0.27.11
+    dependencies:
+      '@volar/shared': registry.nlark.com/@volar/shared/0.27.11
+      upath: 2.0.1
+      vscode-languageserver: registry.nlark.com/vscode-languageserver/8.0.0-next.2
+      vscode-languageserver-textdocument: registry.nlark.com/vscode-languageserver-textdocument/1.0.1
+    dev: true
+
+  registry.nlark.com/vscode-uri/2.1.2:
+    resolution: {integrity: sha1-yNQN6T61evMfPHFd1lDiyiwJbxw=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-uri/download/vscode-uri-2.1.2.tgz}
+    name: vscode-uri
+    version: 2.1.2
+    dev: true
+
+  registry.nlark.com/vscode-uri/3.0.2:
+    resolution: {integrity: sha1-7P0dBmy470w6II3s26uajCPQVdA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-uri/download/vscode-uri-3.0.2.tgz}
+    name: vscode-uri
+    version: 3.0.2
+    dev: true
+
+  registry.nlark.com/vscode-vue-languageservice/0.27.11:
+    resolution: {integrity: sha1-sLVkVG6K4hbmpcBRTovydsFZaIw=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vscode-vue-languageservice/download/vscode-vue-languageservice-0.27.11.tgz}
+    name: vscode-vue-languageservice
+    version: 0.27.11
+    dependencies:
+      '@volar/code-gen': registry.nlark.com/@volar/code-gen/0.27.11
+      '@volar/html2pug': registry.nlark.com/@volar/html2pug/0.27.11
+      '@volar/shared': registry.nlark.com/@volar/shared/0.27.11
+      '@volar/source-map': registry.nlark.com/@volar/source-map/0.27.11
+      '@volar/transforms': registry.nlark.com/@volar/transforms/0.27.11
+      '@vscode/emmet-helper': registry.nlark.com/@vscode/emmet-helper/2.7.0
+      '@vue/compiler-dom': registry.nlark.com/@vue/compiler-dom/3.2.8
+      '@vue/reactivity': registry.nlark.com/@vue/reactivity/3.2.8
+      '@vue/shared': registry.nlark.com/@vue/shared/3.2.8
+      request-light: registry.nlark.com/request-light/0.5.4
+      upath: 2.0.1
+      vscode-css-languageservice: registry.nlark.com/vscode-css-languageservice/5.1.4
+      vscode-html-languageservice: registry.nlark.com/vscode-html-languageservice/4.0.7
+      vscode-json-languageservice: registry.nlark.com/vscode-json-languageservice/4.1.7
+      vscode-languageserver: registry.nlark.com/vscode-languageserver/8.0.0-next.2
+      vscode-languageserver-textdocument: registry.nlark.com/vscode-languageserver-textdocument/1.0.1
+      vscode-pug-languageservice: registry.nlark.com/vscode-pug-languageservice/0.27.11
+      vscode-typescript-languageservice: registry.nlark.com/vscode-typescript-languageservice/0.27.11
     dev: true
 
   registry.nlark.com/vue-eslint-parser/7.10.0_eslint@7.32.0:
@@ -7616,7 +8265,32 @@ packages:
       esquery: 1.4.0
       lodash: 4.17.21
       semver: 6.3.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
+
+  registry.nlark.com/vue-tsc/0.2.3_typescript@4.4.2:
+    resolution: {integrity: sha1-Er9I48mx5VPTGq0MZBci1dFYQdg=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vue-tsc/download/vue-tsc-0.2.3.tgz}
+    id: registry.nlark.com/vue-tsc/0.2.3
+    name: vue-tsc
+    version: 0.2.3
+    hasBin: true
+    peerDependencies:
+      typescript: '*'
+    dependencies:
+      typescript: registry.nlark.com/typescript/4.4.2
+      vscode-vue-languageservice: registry.nlark.com/vscode-vue-languageservice/0.27.11
+    dev: true
+
+  registry.nlark.com/vue/3.2.8:
+    resolution: {integrity: sha1-kSTkwx68nFkrK58pPfXJqIp46UQ=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/vue/download/vue-3.2.8.tgz}
+    name: vue
+    version: 3.2.8
+    dependencies:
+      '@vue/compiler-dom': registry.nlark.com/@vue/compiler-dom/3.2.8
+      '@vue/runtime-dom': registry.nlark.com/@vue/runtime-dom/3.2.8
+      '@vue/shared': registry.nlark.com/@vue/shared/3.2.8
+    dev: false
 
   registry.nlark.com/whatwg-url/8.7.0:
     resolution: {integrity: sha1-ZWp45RD/jzk3vAvL6fXArDWUG3c=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/whatwg-url/download/whatwg-url-8.7.0.tgz}
