@@ -9,6 +9,7 @@ importers:
       '@ls-lint/ls-lint': ^1.10.0
       '@rollup/plugin-commonjs': ^20.0.0
       '@rollup/plugin-node-resolve': ^13.0.0
+      '@rollup/plugin-replace': ^3.0.0
       '@types/fs-extra': ^9.0.12
       '@types/lodash-es': ^4.17.4
       '@types/node': ^16.4.6
@@ -53,6 +54,7 @@ importers:
       '@ls-lint/ls-lint': registry.nlark.com/@ls-lint/ls-lint/1.10.0
       '@rollup/plugin-commonjs': registry.nlark.com/@rollup/plugin-commonjs/20.0.0_rollup@2.56.3
       '@rollup/plugin-node-resolve': registry.nlark.com/@rollup/plugin-node-resolve/13.0.4_rollup@2.56.3
+      '@rollup/plugin-replace': registry.nlark.com/@rollup/plugin-replace/3.0.0_rollup@2.56.3
       '@types/fs-extra': registry.nlark.com/@types/fs-extra/9.0.12
       '@types/lodash-es': registry.nlark.com/@types/lodash-es/4.17.4
       '@types/node': registry.nlark.com/@types/node/16.7.10
@@ -4413,6 +4415,19 @@ packages:
       deepmerge: 4.2.2
       is-module: 1.0.0
       resolve: registry.nlark.com/resolve/1.20.0
+      rollup: registry.nlark.com/rollup/2.56.3
+    dev: true
+
+  registry.nlark.com/@rollup/plugin-replace/3.0.0_rollup@2.56.3:
+    resolution: {integrity: sha1-OkyWZdTnpM4sNgzwISMnhIkvP6w=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@rollup/plugin-replace/download/@rollup/plugin-replace-3.0.0.tgz}
+    id: registry.nlark.com/@rollup/plugin-replace/3.0.0
+    name: '@rollup/plugin-replace'
+    version: 3.0.0
+    peerDependencies:
+      rollup: ^1.20.0 || ^2.0.0
+    dependencies:
+      '@rollup/pluginutils': registry.nlark.com/@rollup/pluginutils/3.1.0_rollup@2.56.3
+      magic-string: 0.25.7
       rollup: registry.nlark.com/rollup/2.56.3
     dev: true
 

@@ -5,7 +5,11 @@
   "author": "jackson <247955056@qq.com>",
   "homepage": "",
   "license": "ISC",
-  "main": "lib/cli.js",
+  "main": "dist/cli.js",
+  "module": "dist/cli.esm.js",
+  "bin": {
+    "oops-test": "dist/index.js"
+  },
   "directories": {
     "lib": "lib",
     "test": "__tests__"
