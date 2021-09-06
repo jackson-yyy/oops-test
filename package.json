@@ -10,7 +10,8 @@
     "bts": "pnpm clear && lerna bootstrap",
     "clear": "rimraf node_modules && lerna clean --yes",
     "precommit": "ls-lint && lint-staged --no-stash",
-    "dev:demo": "pnpm dev --filter @oops-test/demo"
+    "dev:demo": "pnpm dev --filter @oops-test/demo",
+    "build": "ts-node ./scripts/build/build.ts"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +21,7 @@
     "@ls-lint/ls-lint": "^1.10.0",
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-replace": "^3.0.0",
     "@types/fs-extra": "^9.0.12",
     "@types/lodash-es": "^4.17.4",
     "@types/node": "^16.4.6",
