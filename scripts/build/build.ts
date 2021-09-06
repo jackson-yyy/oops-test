@@ -1,5 +1,5 @@
 import minimist from 'minimist'
-import { build, getAllTargets } from './utils'
+import { build, BuildConfig, getAllTargets } from './utils'
 // import execa from 'execa'
 
 const args = minimist(process.argv.slice(2))
@@ -7,8 +7,17 @@ const args = minimist(process.argv.slice(2))
 const targets = args._
 // const commit = execa.sync('git', ['rev-parse', 'HEAD']).stdout.slice(0, 7)
 
-const buildMap: Record<string, () => Promise<void>> = {
-  cli: buildCli,
+const buildConfigs: Record<string, Omit<BuildConfig, 'target'>> = {
+  cli: {
+    formats: ['cjs'],
+  },
+  'code-inject': {
+    formats: ['global'],
+    globalName: 'oopsTestCodeInject',
+  },
+  engine: {
+    formats: ['esm-bundler', 'cjs'],
+  },
 }
 
 run()
@@ -19,12 +28,11 @@ async function run() {
     targetsToBuild = getAllTargets()
   }
   for (let target of targetsToBuild) {
-    await buildMap[target]?.()
+    await build({
+      ...buildConfigs[target],
+      target: target,
+    })
   }
-}
-
-async function buildCli() {
-  await build({ target: 'cli', formats: ['cjs'] })
 }
 
 // async function buildTypes(target: string) {

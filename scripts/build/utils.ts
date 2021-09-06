@@ -68,8 +68,15 @@ export function getOutputConfigs(target = '', format: string, globalName?: strin
   }[format]
 }
 
+export type BuildFormat = 'esm-bundler' | 'cjs' | 'global'
+export type BuildConfig = {
+  target: string
+  formats?: BuildFormat[]
+  globalName?: string
+}
+
 export async function build(
-  { target = '', formats = ['es-bundler', 'cjs'], globalName = '' },
+  { target, formats = ['esm-bundler', 'cjs'], globalName = '' }: BuildConfig,
   config: RollupOptions = {},
 ): Promise<void> {
   const inputConfigs = getInputConfigs(target, config)
