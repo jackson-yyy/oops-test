@@ -11,11 +11,14 @@ const buildConfigs: Record<string, Omit<BuildConfig, 'target'>> = {
   cli: {
     formats: ['cjs'],
   },
-  'code-inject': {
+  inject: {
     formats: ['global'],
-    globalName: 'oopsTestCodeInject',
+    globalName: 'oopsTestInject',
   },
   engine: {
+    formats: ['esm-bundler', 'cjs'],
+  },
+  marker: {
     formats: ['esm-bundler', 'cjs'],
   },
 }
