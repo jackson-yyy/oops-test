@@ -13,7 +13,7 @@ const buildConfigs: Record<string, Omit<BuildConfig, 'target'>> = {
   },
   inject: {
     formats: ['global'],
-    globalName: 'oopsTestInject',
+    globalName: '_oopsTestInject',
   },
   engine: {
     formats: ['esm-bundler', 'cjs'],

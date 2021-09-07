@@ -84,9 +84,7 @@ export async function build(
   const pkgDir = resolve(packagesRoot, target)
 
   try {
-    if (!formats) {
-      await fs.remove(`${pkgDir}/dist`)
-    }
+    await fs.remove(`${pkgDir}/dist`)
 
     console.log(chalk.yellow(`building package:${target}`))
     const bundle = await rollup(inputConfigs)
