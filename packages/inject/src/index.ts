@@ -1,8 +1,7 @@
 import { Action } from './types'
-import { addEventListener } from './utils'
+import { addEventListener, getSelector } from './utils'
 
 declare let _oopsTestRecordAction: (action: Action) => void
-declare let _oopsTestGetSelector: (target: EventTarget, document: Document) => string
 
 class Recorder {
   private listeners: (() => void)[] = []
@@ -44,7 +43,7 @@ class Recorder {
     _oopsTestRecordAction({
       action: 'click',
       params: {
-        selector: _oopsTestGetSelector(event.target, document),
+        selector: getSelector(event.target, document),
       },
     })
   }

@@ -3,9 +3,10 @@ export interface Action {
   params?: Record<string, any>
 }
 
-export type ActionType = HtmlActions | PageActions | CustomActions | ErrorActions
+export type ActionType = HtmlActions | ContextActions | PageActions | CustomActions | ErrorActions
 
 export type HtmlActions = 'click' | 'dbClick' | 'press' | 'hover'
 export type PageActions = 'newPage' | 'closePage'
+export type ContextActions = 'newContext' | 'closeContext'
 export type CustomActions = 'assertion'
 export type ErrorActions = 'initScriptError'
