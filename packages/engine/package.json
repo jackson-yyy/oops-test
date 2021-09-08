@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@oops-test/inject": "^0.0.0",
+    "debug": "^4.3.2",
     "loadash": "^1.0.0",
     "playwright": "^1.14.1"
   }

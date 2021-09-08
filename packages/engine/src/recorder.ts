@@ -10,16 +10,11 @@ const browserMap: Record<BrowserName, BrowserType> = {
   webkit,
 }
 
-type ActionItem = Action & {
-  page?: number | string
-  context: number | string
-}
-
 class Recorder extends EventEmitter {
   private browser?: Browser
   private context?: BrowserContext
-  private contextId?: number
-  private actionsRecord: ActionItem[] = []
+  private contextId?: string
+  private actionsRecord: Action[] = []
 
   get actions() {
     return this.actionsRecord
@@ -32,12 +27,18 @@ class Recorder extends EventEmitter {
     this.addAction({
       action: 'newContext',
       context: this.contextId!,
+      params: {
+        id: this.contextId!,
+      },
     })
 
     this.context?.on('close', () => {
       this.addAction({
         action: 'closeContext',
         context: this.contextId!,
+        params: {
+          id: this.contextId!,
+        },
       })
       this.finish()
     })
@@ -52,6 +53,9 @@ class Recorder extends EventEmitter {
         action: 'closePage',
         page: pageId,
         context: this.contextId!,
+        params: {
+          id: pageId,
+        },
       })
     })
 
@@ -77,11 +81,12 @@ class Recorder extends EventEmitter {
       context: this.contextId!,
       params: {
         url,
+        id: pageId,
       },
     })
   }
 
-  private addAction(action: ActionItem) {
+  private addAction(action: Action) {
     this.actionsRecord.push(action)
   }
 

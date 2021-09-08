@@ -1,6 +1,6 @@
 export interface Action {
   action: ActionType
-  params?: Record<string, any>
+  params: Record<string, any>
 }
 
 export type ActionType = HtmlActions | ContextActions | PageActions | CustomActions | ErrorActions
