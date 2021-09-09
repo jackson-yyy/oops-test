@@ -1,7 +1,8 @@
 import Debug from 'debug'
 import merge from 'lodash/merge'
-import { chromium, firefox, webkit, BrowserType, LaunchOptions, Browser, BrowserContext, Page } from 'playwright'
+import { LaunchOptions, Browser, BrowserContext, Page } from 'playwright'
 import { BrowserName, Action } from './types'
+import { getBrowser } from './utils'
 
 const debug = Debug('oops-test:runner')
 
@@ -13,12 +14,6 @@ interface RunnerOptions {
 interface MultiRunnerOptions {
   browsers: BrowserName[]
   browserLaunchOptions?: LaunchOptions
-}
-
-const browserMap: Record<BrowserName, BrowserType> = {
-  chromium,
-  firefox,
-  webkit,
 }
 
 const DefaultRunnerOptions = {
@@ -142,7 +137,7 @@ class Runner {
 
   private async initBrowser() {
     if (!this.browser) {
-      this.browser = await browserMap[this.options.browser].launch(this.options.browserLaunchOptions)
+      this.browser = await getBrowser(this.options.browser).launch(this.options.browserLaunchOptions)
     }
   }
 

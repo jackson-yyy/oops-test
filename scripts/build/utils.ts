@@ -7,7 +7,10 @@ import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import filesize from 'rollup-plugin-filesize'
 import typescript from 'rollup-plugin-typescript2'
+// import flatDts from 'rollup-plugin-flat-dts'
 // import { terser } from 'rollup-plugin-terser'
+
+type Format = 'esm-bundler' | 'cjs' | 'global'
 
 const packagesRoot = resolve(__dirname, '../../', 'packages')
 
@@ -36,8 +39,6 @@ export function getInputConfigs(target = '', config: RollupOptions = {}) {
       typescript({
         tsconfigOverride: {
           include: [`${pkgRoot}/src/**/*`],
-          declaration: true,
-          declarationMap: true,
         },
       }),
       ...plugins,
@@ -48,9 +49,9 @@ export function getInputConfigs(target = '', config: RollupOptions = {}) {
   }
 }
 
-export function getOutputConfigs(target = '', format: string, globalName?: string) {
+export function getOutputConfigs(target = '', format: Format, globalName?: string) {
   const pkg = getPkgContent(target)
-  return {
+  const config = {
     'esm-bundler': {
       file: resolve(packagesRoot, target, pkg.module),
       format: `es`,
@@ -65,7 +66,8 @@ export function getOutputConfigs(target = '', format: string, globalName?: strin
       format: `iife`,
       name: globalName,
     },
-  }[format]
+  } as const
+  return { ...config[format] }
 }
 
 export type BuildFormat = 'esm-bundler' | 'cjs' | 'global'

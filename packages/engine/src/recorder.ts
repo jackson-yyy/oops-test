@@ -1,13 +1,13 @@
+import merge from 'lodash-es/merge'
 import path from 'path'
-import { chromium, firefox, webkit, BrowserContext, Browser, BrowserType } from 'playwright'
+import { BrowserContext, Browser } from 'playwright'
 import { EventEmitter } from 'stream'
 import { BrowserName, Action } from './types'
-import { getUuid } from './utils'
+import { getUuid, getBrowser } from './utils'
 
-const browserMap: Record<BrowserName, BrowserType> = {
-  chromium,
-  firefox,
-  webkit,
+interface RecorderOptions {
+  // 开启时，recorder会自动记录页面的所有请求数据，当做用例重跑时的数据源
+  saveMock: boolean
 }
 
 class Recorder extends EventEmitter {
@@ -16,8 +16,17 @@ class Recorder extends EventEmitter {
   private contextId?: string
   private actionsRecord: Action[] = []
 
+  private options: RecorderOptions = {
+    saveMock: true,
+  }
+
   get actions() {
     return this.actionsRecord
+  }
+
+  constructor(options: RecorderOptions) {
+    super()
+    merge(this.options, options)
   }
 
   private async initContext() {
@@ -26,7 +35,6 @@ class Recorder extends EventEmitter {
 
     this.addAction({
       action: 'newContext',
-      context: this.contextId!,
       params: {
         id: this.contextId!,
       },
@@ -35,7 +43,6 @@ class Recorder extends EventEmitter {
     this.context?.on('close', () => {
       this.addAction({
         action: 'closeContext',
-        context: this.contextId!,
         params: {
           id: this.contextId!,
         },
@@ -51,7 +58,6 @@ class Recorder extends EventEmitter {
     page.on('close', () => {
       this.addAction({
         action: 'closePage',
-        page: pageId,
         context: this.contextId!,
         params: {
           id: pageId,
@@ -59,6 +65,7 @@ class Recorder extends EventEmitter {
       })
     })
 
+    // FIXME:这里打包后，会找不到node_modules
     await page.addInitScript({
       path: path.join(__dirname, '../node_modules/@oops-test/inject/dist/index.global.js'),
     })
@@ -77,7 +84,6 @@ class Recorder extends EventEmitter {
 
     this.addAction({
       action: 'newPage',
-      page: pageId,
       context: this.contextId!,
       params: {
         url,
@@ -88,20 +94,18 @@ class Recorder extends EventEmitter {
 
   private addAction(action: Action) {
     this.actionsRecord.push(action)
+    this.emit('addAction', action)
   }
 
   async start({ url = 'http://localhost:8080', browser = 'chromium' }: { url: string; browser?: BrowserName }) {
-    this.browser = await browserMap[browser].launch({ headless: false })
+    this.browser = await getBrowser(browser).launch({ headless: false })
     this.browser.on('disconnected', this.finish)
 
     await this.initContext()
     await this.initPage(url)
-
-    console.log('start')
   }
 
   private finish() {
-    console.log('finish')
     this.browser?.close()
     this.emit('recordFinish')
   }
