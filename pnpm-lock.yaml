@@ -11,6 +11,7 @@ importers:
       '@rollup/plugin-commonjs': ^20.0.0
       '@rollup/plugin-node-resolve': ^13.0.0
       '@rollup/plugin-replace': ^3.0.0
+      '@types/debug': ^4.1.7
       '@types/fs-extra': ^9.0.12
       '@types/lodash-es': ^4.17.4
       '@types/node': ^16.4.6
@@ -41,6 +42,7 @@ importers:
       rollup: ^2.53.1
       rollup-plugin-dts: ^3.0.2
       rollup-plugin-filesize: ^9.1.1
+      rollup-plugin-flat-dts: ^1.3.0
       rollup-plugin-peer-deps-external: ^2.2.4
       rollup-plugin-scss: ^3.0.0
       rollup-plugin-terser: ^7.0.2
@@ -49,6 +51,8 @@ importers:
       ts-node: ^10.2.1
       tslib: ^2.3.0
       typescript: ^4.3.2
+    dependencies:
+      rollup-plugin-flat-dts: registry.nlark.com/rollup-plugin-flat-dts/1.3.0_rollup@2.56.3+typescript@4.4.2
     devDependencies:
       '@commitlint/cli': registry.nlark.com/@commitlint/cli/12.1.4
       '@commitlint/config-conventional': registry.nlark.com/@commitlint/config-conventional/12.1.4
@@ -57,6 +61,7 @@ importers:
       '@rollup/plugin-commonjs': registry.nlark.com/@rollup/plugin-commonjs/20.0.0_rollup@2.56.3
       '@rollup/plugin-node-resolve': registry.nlark.com/@rollup/plugin-node-resolve/13.0.4_rollup@2.56.3
       '@rollup/plugin-replace': registry.nlark.com/@rollup/plugin-replace/3.0.0_rollup@2.56.3
+      '@types/debug': registry.nlark.com/@types/debug/4.1.7
       '@types/fs-extra': registry.nlark.com/@types/fs-extra/9.0.12
       '@types/lodash-es': registry.nlark.com/@types/lodash-es/4.17.4
       '@types/node': registry.nlark.com/@types/node/16.7.10
@@ -126,10 +131,12 @@ importers:
   packages/engine:
     specifiers:
       '@oops-test/inject': ^0.0.0
+      debug: ^4.3.2
       loadash: ^1.0.0
       playwright: ^1.14.1
     dependencies:
       '@oops-test/inject': link:../inject
+      debug: registry.nlark.com/debug/4.3.2
       loadash: registry.nlark.com/loadash/1.0.0
       playwright: registry.nlark.com/playwright/1.14.1
 
@@ -310,8 +317,6 @@ packages:
       debug: registry.nlark.com/debug/4.3.2
       depd: 1.1.2
       humanize-ms: 1.2.1
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /aggregate-error/3.1.0:
@@ -470,8 +475,7 @@ packages:
     resolution: {integrity: sha1-NFThpGLujVmeI23zNs2epPiv4Qc=, tarball: braces/download/braces-3.0.2.tgz}
     engines: {node: '>=8'}
     dependencies:
-      fill-range: 7.0.1
-    dev: true
+      fill-range: registry.nlark.com/fill-range/7.0.1
 
   /buffer-crc32/0.2.13:
     resolution: {integrity: sha1-DTM+PwDqxQqhRUq9MO+MKl2ackI=, tarball: buffer-crc32/download/buffer-crc32-0.2.13.tgz}
@@ -998,13 +1002,6 @@ packages:
       flat-cache: 3.0.4
     dev: true
 
-  /fill-range/7.0.1:
-    resolution: {integrity: sha1-GRmmp8df44ssfHflGYU12prN2kA=, tarball: fill-range/download/fill-range-7.0.1.tgz}
-    engines: {node: '>=8'}
-    dependencies:
-      to-regex-range: 5.0.1
-    dev: true
-
   /flat-cache/3.0.4:
     resolution: {integrity: sha1-YbAzgwKy/p+Vfcwy/CqH8cMEixE=, tarball: flat-cache/download/flat-cache-3.0.4.tgz}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -1238,8 +1235,6 @@ packages:
       '@tootallnate/once': 1.1.2
       agent-base: 6.0.2
       debug: registry.nlark.com/debug/4.3.2
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /http-signature/1.2.0:
@@ -1257,8 +1252,6 @@ packages:
     dependencies:
       agent-base: 6.0.2
       debug: registry.nlark.com/debug/4.3.2
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   /humanize-ms/1.2.1:
@@ -1363,7 +1356,6 @@ packages:
   /is-extglob/2.1.1:
     resolution: {integrity: sha1-qIwCU1eR8C7TfHahueqXc8gz+MI=, tarball: is-extglob/download/is-extglob-2.1.1.tgz}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /is-fullwidth-code-point/1.0.0:
     resolution: {integrity: sha1-754xOG8DGn8NZDr4L95QxFfvAMs=, tarball: is-fullwidth-code-point/download/is-fullwidth-code-point-1.0.0.tgz}
@@ -1387,7 +1379,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       is-extglob: 2.1.1
-    dev: true
 
   /is-lambda/1.0.1:
     resolution: {integrity: sha1-PZh3iZ5qU+/AFgUEzeFfgubwYdU=, tarball: is-lambda/download/is-lambda-1.0.1.tgz}
@@ -1400,7 +1391,6 @@ packages:
   /is-number/7.0.0:
     resolution: {integrity: sha1-dTU0W4lnNNX4DE0GxQlVUnoU8Ss=, tarball: is-number/download/is-number-7.0.0.tgz}
     engines: {node: '>=0.12.0'}
-    dev: true
 
   /is-obj/1.0.1:
     resolution: {integrity: sha1-PkcprB9f3gJc19g6iW2rn09n2w8=, tarball: is-obj/download/is-obj-1.0.1.tgz}
@@ -2561,7 +2551,6 @@ packages:
   /source-map/0.7.3:
     resolution: {integrity: sha1-UwL4FpAxc1ImVECS5kmB91F1A4M=, tarball: source-map/download/source-map-0.7.3.tgz}
     engines: {node: '>= 8'}
-    dev: true
 
   /sourcemap-codec/1.4.8:
     resolution: {integrity: sha1-6oBL2UhXQC5pktBaOO8a41qatMQ=, tarball: sourcemap-codec/download/sourcemap-codec-1.4.8.tgz}
@@ -2738,7 +2727,6 @@ packages:
     engines: {node: '>=8.0'}
     dependencies:
       is-number: 7.0.0
-    dev: true
 
   /token-stream/1.0.0:
     resolution: {integrity: sha1-zCAOqyYT9BZtJ/+a/HylbUnfbrQ=, tarball: token-stream/download/token-stream-1.0.0.tgz}
@@ -3077,8 +3065,6 @@ packages:
       '@babel/helper-optimise-call-expression': registry.nlark.com/@babel/helper-optimise-call-expression/7.15.4
       '@babel/helper-replace-supers': registry.nlark.com/@babel/helper-replace-supers/7.15.4
       '@babel/helper-split-export-declaration': registry.nlark.com/@babel/helper-split-export-declaration/7.15.4
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@babel/helper-function-name/7.15.4:
@@ -3142,8 +3128,6 @@ packages:
       '@babel/template': registry.nlark.com/@babel/template/7.15.4
       '@babel/traverse': registry.nlark.com/@babel/traverse/7.15.4
       '@babel/types': registry.nlark.com/@babel/types/7.15.4
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@babel/helper-optimise-call-expression/7.15.4:
@@ -3172,8 +3156,6 @@ packages:
       '@babel/helper-optimise-call-expression': registry.nlark.com/@babel/helper-optimise-call-expression/7.15.4
       '@babel/traverse': registry.nlark.com/@babel/traverse/7.15.4
       '@babel/types': registry.nlark.com/@babel/types/7.15.4
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@babel/helper-simple-access/7.15.4:
@@ -3225,8 +3207,6 @@ packages:
       '@babel/template': registry.nlark.com/@babel/template/7.15.4
       '@babel/traverse': registry.nlark.com/@babel/traverse/7.15.4
       '@babel/types': registry.nlark.com/@babel/types/7.15.4
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@babel/highlight/7.14.5:
@@ -3259,8 +3239,6 @@ packages:
       '@babel/core': registry.nlark.com/@babel/core/7.15.4
       '@babel/helper-create-class-features-plugin': registry.nlark.com/@babel/helper-create-class-features-plugin/7.15.4_@babel+core@7.15.4
       '@babel/helper-plugin-utils': registry.nlark.com/@babel/helper-plugin-utils/7.14.5
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@babel/plugin-proposal-dynamic-import/7.14.5_@babel+core@7.15.4:
@@ -3360,8 +3338,6 @@ packages:
       '@babel/core': registry.nlark.com/@babel/core/7.15.4
       '@babel/helper-create-class-features-plugin': registry.nlark.com/@babel/helper-create-class-features-plugin/7.15.4_@babel+core@7.15.4
       '@babel/helper-plugin-utils': registry.nlark.com/@babel/helper-plugin-utils/7.14.5
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@babel/plugin-proposal-private-property-in-object/7.15.4_@babel+core@7.15.4:
@@ -3378,8 +3354,6 @@ packages:
       '@babel/helper-create-class-features-plugin': registry.nlark.com/@babel/helper-create-class-features-plugin/7.15.4_@babel+core@7.15.4
       '@babel/helper-plugin-utils': registry.nlark.com/@babel/helper-plugin-utils/7.14.5
       '@babel/plugin-syntax-private-property-in-object': registry.nlark.com/@babel/plugin-syntax-private-property-in-object/7.14.5_@babel+core@7.15.4
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@babel/plugin-syntax-jsx/7.14.5:
@@ -3446,8 +3420,6 @@ packages:
       '@babel/helper-plugin-utils': registry.nlark.com/@babel/helper-plugin-utils/7.14.5
       '@babel/helper-simple-access': registry.nlark.com/@babel/helper-simple-access/7.15.4
       babel-plugin-dynamic-import-node: 2.3.3
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@babel/plugin-transform-typescript/7.15.4_@babel+core@7.15.4:
@@ -3463,8 +3435,6 @@ packages:
       '@babel/helper-create-class-features-plugin': registry.nlark.com/@babel/helper-create-class-features-plugin/7.15.4_@babel+core@7.15.4
       '@babel/helper-plugin-utils': registry.nlark.com/@babel/helper-plugin-utils/7.14.5
       '@babel/plugin-syntax-typescript': registry.nlark.com/@babel/plugin-syntax-typescript/7.14.5_@babel+core@7.15.4
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@babel/preset-typescript/7.15.0_@babel+core@7.15.4:
@@ -3480,8 +3450,6 @@ packages:
       '@babel/helper-plugin-utils': registry.nlark.com/@babel/helper-plugin-utils/7.14.5
       '@babel/helper-validator-option': registry.nlark.com/@babel/helper-validator-option/7.14.5
       '@babel/plugin-transform-typescript': registry.nlark.com/@babel/plugin-transform-typescript/7.15.4_@babel+core@7.15.4
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@babel/runtime/7.15.4:
@@ -3820,8 +3788,6 @@ packages:
       p-map: registry.nlark.com/p-map/4.0.0
       pacote: registry.nlark.com/pacote/11.3.5
       semver: 7.3.5
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@lerna/bootstrap/4.0.0:
@@ -4012,8 +3978,6 @@ packages:
       validate-npm-package-name: 3.0.0
       whatwg-url: registry.nlark.com/whatwg-url/8.7.0
       yargs-parser: registry.nlark.com/yargs-parser/20.2.4
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@lerna/describe-ref/4.0.0:
@@ -4245,8 +4209,6 @@ packages:
       npm-package-arg: registry.nlark.com/npm-package-arg/8.1.5
       npm-registry-fetch: registry.nlark.com/npm-registry-fetch/9.0.0
       npmlog: registry.nlark.com/npmlog/4.1.2
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@lerna/npm-install/4.0.0:
@@ -4278,8 +4240,6 @@ packages:
       npmlog: registry.nlark.com/npmlog/4.1.2
       pify: 5.0.0
       read-package-json: registry.nlark.com/read-package-json/3.0.1
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@lerna/npm-run-script/4.0.0:
@@ -4434,8 +4394,6 @@ packages:
       p-pipe: registry.nlark.com/p-pipe/3.1.0
       pacote: registry.nlark.com/pacote/11.3.5
       semver: 7.3.5
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/@lerna/pulse-till-done/4.0.0:
@@ -4962,6 +4920,14 @@ packages:
     version: 1.0.2
     dev: true
 
+  registry.nlark.com/@types/debug/4.1.7:
+    resolution: {integrity: sha1-fMDqdhUJEkcJuLLRCQ2PbBeq24I=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@types/debug/download/@types/debug-4.1.7.tgz}
+    name: '@types/debug'
+    version: 4.1.7
+    dependencies:
+      '@types/ms': registry.nlark.com/@types/ms/0.7.31
+    dev: true
+
   registry.nlark.com/@types/estree/0.0.39:
     resolution: {integrity: sha1-4Xfmme4bjCLSMXTKqnQiZEOJUJ8=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@types/estree/download/@types/estree-0.0.39.tgz?cache=0&sync_timestamp=1629708156183&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Festree%2Fdownload%2F%40types%2Festree-0.0.39.tgz}
     name: '@types/estree'
@@ -5040,6 +5006,12 @@ packages:
     resolution: {integrity: sha1-7nceK6Sz3Fs3KTXVSf2WF780W4w=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@types/minimist/download/@types/minimist-1.2.2.tgz?cache=0&sync_timestamp=1629708303108&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fminimist%2Fdownload%2F%40types%2Fminimist-1.2.2.tgz}
     name: '@types/minimist'
     version: 1.2.2
+    dev: true
+
+  registry.nlark.com/@types/ms/0.7.31:
+    resolution: {integrity: sha1-MbfKZAcSij0rvCf+LSGzRTl/YZc=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@types/ms/download/@types/ms-0.7.31.tgz?cache=0&sync_timestamp=1629708598084&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fms%2Fdownload%2F%40types%2Fms-0.7.31.tgz}
+    name: '@types/ms'
+    version: 0.7.31
     dev: true
 
   registry.nlark.com/@types/node/16.7.10:
@@ -6481,6 +6453,14 @@ packages:
     engines: {node: '>= 0.4.0'}
     dev: true
 
+  registry.nlark.com/fill-range/7.0.1:
+    resolution: {integrity: sha1-GRmmp8df44ssfHflGYU12prN2kA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/fill-range/download/fill-range-7.0.1.tgz}
+    name: fill-range
+    version: 7.0.1
+    engines: {node: '>=8'}
+    dependencies:
+      to-regex-range: 5.0.1
+
   registry.nlark.com/filter-obj/1.1.0:
     resolution: {integrity: sha1-mzERErxsYSehbgFsbF1/GeCAXFs=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/filter-obj/download/filter-obj-1.1.0.tgz}
     name: filter-obj
@@ -7092,8 +7072,6 @@ packages:
       '@lerna/version': registry.nlark.com/@lerna/version/4.0.0
       import-local: 3.0.2
       npmlog: registry.nlark.com/npmlog/4.1.2
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/libnpmaccess/4.0.3:
@@ -7106,8 +7084,6 @@ packages:
       minipass: 3.1.3
       npm-package-arg: registry.nlark.com/npm-package-arg/8.1.5
       npm-registry-fetch: registry.nlark.com/npm-registry-fetch/11.0.0
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/libnpmpublish/4.0.2:
@@ -7121,8 +7097,6 @@ packages:
       npm-registry-fetch: registry.nlark.com/npm-registry-fetch/11.0.0
       semver: 7.3.5
       ssri: registry.nlark.com/ssri/8.0.1
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/lint-staged/11.1.2:
@@ -7284,8 +7258,6 @@ packages:
       promise-retry: 2.0.1
       socks-proxy-agent: registry.nlark.com/socks-proxy-agent/5.0.1
       ssri: registry.nlark.com/ssri/8.0.1
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/make-fetch-happen/9.1.0:
@@ -7310,8 +7282,6 @@ packages:
       promise-retry: 2.0.1
       socks-proxy-agent: registry.nlark.com/socks-proxy-agent/6.0.0
       ssri: registry.nlark.com/ssri/8.0.1
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/meow/7.1.1:
@@ -7360,7 +7330,6 @@ packages:
     dependencies:
       braces: 3.0.2
       picomatch: registry.nlark.com/picomatch/2.3.0
-    dev: true
 
   registry.nlark.com/mime-db/1.49.0:
     resolution: {integrity: sha1-89/eYMmenPO8lwHWh3ePU3ABy+0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/mime-db/download/mime-db-1.49.0.tgz}
@@ -7613,8 +7582,6 @@ packages:
       minipass-json-stream: 1.0.1
       minizlib: registry.nlark.com/minizlib/2.1.2
       npm-package-arg: registry.nlark.com/npm-package-arg/8.1.5
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/npm-registry-fetch/9.0.0:
@@ -7631,8 +7598,6 @@ packages:
       minipass-json-stream: 1.0.1
       minizlib: registry.nlark.com/minizlib/2.1.2
       npm-package-arg: registry.nlark.com/npm-package-arg/8.1.5
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/npmlog/4.1.2:
@@ -7775,8 +7740,6 @@ packages:
       rimraf: 3.0.2
       ssri: registry.nlark.com/ssri/8.0.1
       tar: registry.nlark.com/tar/6.1.11
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/parse-url/6.0.0:
@@ -7815,7 +7778,6 @@ packages:
     name: picomatch
     version: 2.3.0
     engines: {node: '>=8.6'}
-    dev: true
 
   registry.nlark.com/pixelmatch/5.2.1:
     resolution: {integrity: sha1-nk5PSqWWSCCKMTEDBqW+1VIrDWU=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/pixelmatch/download/pixelmatch-5.2.1.tgz}
@@ -7868,7 +7830,6 @@ packages:
       yazl: registry.nlark.com/yazl/2.5.1
     transitivePeerDependencies:
       - bufferutil
-      - supports-color
       - utf-8-validate
     dev: false
 
@@ -8235,9 +8196,23 @@ packages:
       gzip-size: 6.0.0
       pacote: registry.nlark.com/pacote/11.3.5
       terser: registry.nlark.com/terser/5.7.2
-    transitivePeerDependencies:
-      - supports-color
     dev: true
+
+  registry.nlark.com/rollup-plugin-flat-dts/1.3.0_rollup@2.56.3+typescript@4.4.2:
+    resolution: {integrity: sha1-jks1BSevC8bJ6u7uYeBwQ0w4JBk=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rollup-plugin-flat-dts/download/rollup-plugin-flat-dts-1.3.0.tgz}
+    id: registry.nlark.com/rollup-plugin-flat-dts/1.3.0
+    name: rollup-plugin-flat-dts
+    version: 1.3.0
+    peerDependencies:
+      rollup: ^2.56.3
+      typescript: 4.3.5 - 4.5
+    dependencies:
+      is-glob: 4.0.1
+      micromatch: registry.nlark.com/micromatch/4.0.4
+      rollup: registry.nlark.com/rollup/2.56.3
+      source-map: 0.7.3
+      typescript: registry.nlark.com/typescript/4.4.2
+    dev: false
 
   registry.nlark.com/rollup-plugin-peer-deps-external/2.2.4_rollup@2.56.3:
     resolution: {integrity: sha1-ikILv9bczDCutoyb9XAR8vEJVw0=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/rollup-plugin-peer-deps-external/download/rollup-plugin-peer-deps-external-2.2.4.tgz}
@@ -8370,8 +8345,6 @@ packages:
       agent-base: 6.0.2
       debug: registry.nlark.com/debug/4.3.2
       socks: registry.nlark.com/socks/2.6.1
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/socks-proxy-agent/6.0.0:
@@ -8383,8 +8356,6 @@ packages:
       agent-base: 6.0.2
       debug: registry.nlark.com/debug/4.3.2
       socks: registry.nlark.com/socks/2.6.1
-    transitivePeerDependencies:
-      - supports-color
     dev: true
 
   registry.nlark.com/socks/2.6.1:
