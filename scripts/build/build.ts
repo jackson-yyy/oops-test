@@ -1,5 +1,6 @@
 import minimist from 'minimist'
-import { build, BuildConfig, getAllTargets } from './utils'
+import { build, BuildConfig, buildInject, getAllTargets } from './utils'
+import chalk from 'chalk'
 // import execa from 'execa'
 
 const args = minimist(process.argv.slice(2))
@@ -10,10 +11,6 @@ const targets = args._
 const buildConfigs: Record<string, Omit<BuildConfig, 'target'>> = {
   cli: {
     formats: ['cjs'],
-  },
-  inject: {
-    formats: ['global'],
-    globalName: '_oopsTestInject',
   },
   engine: {
     formats: ['esm-bundler', 'cjs'],
@@ -27,17 +24,28 @@ run()
 
 async function run() {
   let targetsToBuild: string[] = targets
+  let allTargets = getAllTargets()
   if (!targetsToBuild?.length) {
-    targetsToBuild = getAllTargets()
+    targetsToBuild = allTargets
   }
-  for (let target of targetsToBuild) {
-    await build({
-      ...buildConfigs[target],
-      target: target,
-    })
+
+  try {
+    for (let target of targetsToBuild) {
+      if (allTargets.includes(target)) {
+        await build({
+          ...buildConfigs[target],
+          target,
+        })
+      }
+
+      if (['engine', 'inject'].includes(target)) {
+        await buildInject()
+      }
+    }
+  } catch (error) {
+    console.log(chalk.red(error))
   }
 }
-
 // async function buildTypes(target: string) {
 //   const pkgDir = path.resolve(`packages/${target}`)
 //   const pkg = require(`${pkgDir}/package.json`)

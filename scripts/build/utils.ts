@@ -24,6 +24,11 @@ export function getPkgContent(target: string): Record<string, any> {
   return require(resolve(packagesRoot, target, 'package.json'))
 }
 
+export function getOutputDir(target: string) {
+  const pkgContent = getPkgContent(target)
+  return (pkgContent.main || pkgContent.module).split('/')[0]
+}
+
 export function getInputConfigs(target = '', config: RollupOptions = {}) {
   const pkgRoot = resolve(packagesRoot, target)
   const pkg = getPkgContent(target)
@@ -75,27 +80,60 @@ export type BuildConfig = {
   target: string
   formats?: BuildFormat[]
   globalName?: string
+  rollupConfig?: RollupOptions
 }
 
-export async function build(
-  { target, formats = ['esm-bundler', 'cjs'], globalName = '' }: BuildConfig,
-  config: RollupOptions = {},
-): Promise<void> {
-  const inputConfigs = getInputConfigs(target, config)
+export async function build({
+  target,
+  formats = ['esm-bundler', 'cjs'],
+  globalName = '',
+  rollupConfig = {},
+}: BuildConfig): Promise<void> {
+  const inputConfigs = getInputConfigs(target, rollupConfig)
   const outputConfigs = formats.map(format => getOutputConfigs(target, format, globalName))
   const pkgDir = resolve(packagesRoot, target)
 
-  try {
-    await fs.remove(`${pkgDir}/dist`)
+  await fs.remove(`${pkgDir}/${getOutputDir(target)}`)
 
-    console.log(chalk.yellow(`building package:${target}`))
-    const bundle = await rollup(inputConfigs)
+  console.log(chalk.yellow(`building package:${target}`))
+  const bundle = await rollup(inputConfigs)
 
-    for (let outputConfig of outputConfigs) {
-      await bundle.write(outputConfig as OutputOptions)
-      console.log(chalk.green(`Success: ${(outputConfig as OutputOptions).file}`))
-    }
-  } catch (error) {
-    console.log(chalk.red(error))
+  for (let outputConfig of outputConfigs) {
+    await bundle.write(outputConfig as OutputOptions)
+    console.log(chalk.green(`Success: ${(outputConfig as OutputOptions).file}`))
   }
+}
+
+export async function buildInject() {
+  const pkgRoot = resolve(packagesRoot, 'engine')
+  await fs.remove(`${pkgRoot}/inject`)
+
+  const inputConfig = {
+    input: `${pkgRoot}/src/inject.ts`,
+    plugins: [
+      nodeResolve({
+        extensions: ['.js', '.ts'],
+      }),
+      commonjs(),
+      typescript({
+        tsconfigOverride: {
+          include: [`${pkgRoot}/src/inject.ts`],
+          declaration: false,
+        },
+      }),
+    ],
+  }
+
+  const outputConfig = {
+    file: resolve(pkgRoot, `inject/index.js`),
+    format: `iife`,
+    name: '_oopsTestInject',
+  } as const
+
+  console.log(chalk.yellow(`building inject.js`))
+  const bundle = await rollup(inputConfig)
+
+  await bundle.write(outputConfig)
+
+  console.log(chalk.green(`Success: ${outputConfig.file}`))
 }
