@@ -1,6 +1,7 @@
 import Debug from 'debug'
 import { merge } from 'lodash'
-import { BrowserContext, Browser } from 'playwright'
+import path from 'path'
+import { BrowserContext, Browser, Page } from 'playwright'
 import { EventEmitter } from 'stream'
 import { BrowserName, Action } from './types'
 import { getUuid, getBrowser } from './utils'
@@ -37,6 +38,14 @@ class Recorder extends EventEmitter {
     this.context = await this.browser!.newContext()
     this.contextId = getUuid()
 
+    await this.context.addInitScript({
+      path: path.join(__dirname, '../inject/index.js'),
+    })
+
+    await this.context.exposeBinding('__oopsTestRecordAction', (_source, action: Action) => {
+      this.addAction(action)
+    })
+
     this.addAction({
       action: 'newContext',
       params: {
@@ -59,6 +68,21 @@ class Recorder extends EventEmitter {
     const page = await this.context!.newPage()
     const pageId = getUuid()
 
+    await this.preparePage(page, pageId)
+
+    await page.goto(url, { waitUntil: 'domcontentloaded' })
+
+    this.addAction({
+      action: 'newPage',
+      context: this.contextId!,
+      params: {
+        url,
+        id: pageId,
+      },
+    })
+  }
+
+  private async preparePage(page: Page, pageId = getUuid()) {
     page.on('close', () => {
       this.addAction({
         action: 'closePage',
@@ -69,33 +93,28 @@ class Recorder extends EventEmitter {
       })
     })
 
-    page.on('requestfinished', debug)
-    page.on('response', debug)
+    page.on('popup', async pg => {
+      let url: string = await pg.evaluate('location.href')
+      await this.preparePage(pg)
 
-    // FIXME:这里打包后，会找不到node_modules
-    await page.addInitScript({
-      path: '../inject/index.js',
-    })
-
-    await page.exposeBinding('_oopsTestRecordAction', (_source, action: Action) => {
       this.addAction({
-        ...action,
-        page: pageId,
+        action: 'assertion',
         context: this.contextId!,
+        page: pageId,
+        params: {
+          type: 'newPage',
+          url,
+        },
       })
     })
 
-    await page.goto(url, { waitUntil: 'domcontentloaded' })
+    page.on('requestfinished', debug)
+    page.on('response', debug)
 
-    await page.evaluate(`window._oopsTestInject._oopsTestInitScript()`)
-
-    this.addAction({
-      action: 'newPage',
-      context: this.contextId!,
-      params: {
-        url,
-        id: pageId,
-      },
+    page.on('domcontentloaded', async pg => {
+      pg.evaluate(`window.__oopsTestInject.initScript()`)
+      page.evaluate(`window.__oopsTestContextId = ${this.contextId}`)
+      page.evaluate(`window.__oopsTestPageId = ${pageId}`)
     })
   }
 

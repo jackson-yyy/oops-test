@@ -1,8 +1,9 @@
 import Debug from 'debug'
 import { merge } from 'lodash'
 import { LaunchOptions, Browser, BrowserContext, Page } from 'playwright'
-import { BrowserName, Action } from './types'
+import { BrowserName, Action, Assertion } from './types'
 import { getBrowser } from './utils'
+import expect from 'expect'
 
 const debug = Debug('oops-test:runner')
 
@@ -75,6 +76,9 @@ class Runner {
       return
     }
     switch (action.action) {
+      case 'assertion':
+        await this.runAssertion(action)
+        break
       case 'newContext':
         {
           const {
@@ -132,6 +136,16 @@ class Runner {
         break
       default:
         debug(`Action: action '${action.action}' is invalid.`)
+    }
+  }
+
+  private async runAssertion(action: Assertion) {
+    const page = this.getPage(action.context, action.page)
+
+    switch (action.params.type) {
+      case 'newPage':
+        expect(await page.evaluate('location.href')).toBe(action.params.url)
+        break
     }
   }
 

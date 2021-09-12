@@ -1,11 +1,11 @@
-import type { Action as ActionItem } from './types'
+import type { Action } from './types'
 import getCssSelector from 'css-selector-generator'
 
-type Action = Omit<ActionItem, 'context' | 'page'>
+declare let __oopsTestRecordAction: (action: Action) => void
+declare let __oopsTestContextId: string
+declare let __oopsTestPageId: string
 
-declare let _oopsTestRecordAction: (action: Action) => void
-
-export function addEventListener(
+function addEventListener(
   target: EventTarget,
   eventName: string,
   listener: (evt: Event) => void,
@@ -18,7 +18,7 @@ export function addEventListener(
   return remove
 }
 
-export function getSelector(target: EventTarget, document: Document) {
+function getSelector(target: EventTarget, document: Document) {
   const list = document.querySelectorAll(`[data-o-s-t]`)
   for (const tar of Array.from(list)) {
     if (tar.contains(target as Node)) {
@@ -67,8 +67,10 @@ class Recorder {
 
   private onClick(event: MouseEvent) {
     if (!event.target) return
-    _oopsTestRecordAction({
+    __oopsTestRecordAction({
       action: 'click',
+      context: __oopsTestContextId,
+      page: __oopsTestPageId,
       params: {
         selector: getSelector(event.target, document),
       },
@@ -76,9 +78,9 @@ class Recorder {
   }
 }
 
-function _oopsTestInitScript() {
+function initScript() {
   if (!document?.documentElement) {
-    _oopsTestRecordAction({
+    __oopsTestRecordAction({
       action: 'initScriptError',
     })
     return
@@ -86,4 +88,4 @@ function _oopsTestInitScript() {
   new Recorder().init()
 }
 
-export { _oopsTestInitScript }
+export { initScript }
