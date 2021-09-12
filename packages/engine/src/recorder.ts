@@ -1,8 +1,9 @@
 import Debug from 'debug'
 import { merge } from 'lodash'
-import { BrowserContext, Browser } from 'playwright'
+import path from 'path'
+import { BrowserContext, Browser, Page } from 'playwright'
 import { EventEmitter } from 'stream'
-import { BrowserName, Action } from './types'
+import { BrowserName, Action, Signal } from './types'
 import { getUuid, getBrowser } from './utils'
 
 const debug = Debug('oops-test:runner')
@@ -37,6 +38,14 @@ class Recorder extends EventEmitter {
     this.context = await this.browser!.newContext()
     this.contextId = getUuid()
 
+    await this.context.addInitScript({
+      path: path.join(__dirname, '../inject/index.js'),
+    })
+
+    await this.context.exposeBinding('__oopsTestRecordAction', (_source, action: Action) => {
+      this.addAction(action)
+    })
+
     this.addAction({
       action: 'newContext',
       params: {
@@ -59,35 +68,9 @@ class Recorder extends EventEmitter {
     const page = await this.context!.newPage()
     const pageId = getUuid()
 
-    page.on('close', () => {
-      this.addAction({
-        action: 'closePage',
-        context: this.contextId!,
-        params: {
-          id: pageId,
-        },
-      })
-    })
-
-    page.on('requestfinished', debug)
-    page.on('response', debug)
-
-    // FIXME:这里打包后，会找不到node_modules
-    await page.addInitScript({
-      path: '../inject/index.js',
-    })
-
-    await page.exposeBinding('_oopsTestRecordAction', (_source, action: Action) => {
-      this.addAction({
-        ...action,
-        page: pageId,
-        context: this.contextId!,
-      })
-    })
+    await this.preparePage(page, pageId)
 
     await page.goto(url, { waitUntil: 'domcontentloaded' })
-
-    await page.evaluate(`window._oopsTestInject._oopsTestInitScript()`)
 
     this.addAction({
       action: 'newPage',
@@ -99,9 +82,58 @@ class Recorder extends EventEmitter {
     })
   }
 
+  private async preparePage(page: Page, pageId = getUuid()) {
+    page.on('close', () => {
+      this.addAction({
+        action: 'closePage',
+        context: this.contextId!,
+        params: {
+          id: pageId,
+        },
+      })
+    })
+
+    page.on('popup', async pg => {
+      const url: string = await pg.evaluate('location.href')
+      const pId = getUuid()
+
+      await this.preparePage(pg, pageId)
+
+      this.setSignal({
+        name: 'popup',
+        pageId: pId,
+      })
+
+      this.addAction({
+        action: 'assertion',
+        context: this.contextId!,
+        page: pId,
+        params: {
+          type: 'newPage',
+          url,
+        },
+      })
+    })
+
+    page.on('requestfinished', debug)
+    page.on('response', debug)
+
+    page.on('domcontentloaded', async pg => {
+      pg.evaluate(`window.__oopsTestInject.initScript()`)
+      page.evaluate(`window.__oopsTestContextId = '${this.contextId}'`)
+      page.evaluate(`window.__oopsTestPageId = '${pageId}'`)
+    })
+  }
+
   private addAction(action: Action) {
     this.actionsRecord.push(action)
     this.emit('addAction', action)
+  }
+
+  private setSignal(signal: Signal) {
+    let action = this.actionsRecord[this.actionsRecord.length - 1]
+    if (!action) return
+    action.signals = [...(action?.signals ?? []), signal]
   }
 
   async start({ url = 'http://localhost:8080', browser = 'chromium' }: { url: string; browser?: BrowserName }) {

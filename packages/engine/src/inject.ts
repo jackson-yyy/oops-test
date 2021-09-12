@@ -1,11 +1,12 @@
-import type { Action as ActionItem } from './types'
+import type { Action } from './types'
 import getCssSelector from 'css-selector-generator'
+import { debounce } from 'lodash'
 
-type Action = Omit<ActionItem, 'context' | 'page'>
+declare let __oopsTestRecordAction: (action: Action) => void
+declare let __oopsTestContextId: string
+declare let __oopsTestPageId: string
 
-declare let _oopsTestRecordAction: (action: Action) => void
-
-export function addEventListener(
+function addEventListener(
   target: EventTarget,
   eventName: string,
   listener: (evt: Event) => void,
@@ -18,7 +19,7 @@ export function addEventListener(
   return remove
 }
 
-export function getSelector(target: EventTarget, document: Document) {
+function getSelector(target: EventTarget, document: Document) {
   const list = document.querySelectorAll(`[data-o-s-t]`)
   for (const tar of Array.from(list)) {
     if (tar.contains(target as Node)) {
@@ -49,7 +50,13 @@ class Recorder {
       // addEventListener(document, 'keyup', event => this._onKeyUp(event as KeyboardEvent), true),
       // addEventListener(document, 'mousedown', event => this._onMouseDown(event as MouseEvent), true),
       // addEventListener(document, 'mouseup', event => this._onMouseUp(event as MouseEvent), true),
-      // addEventListener(document, 'mousemove', event => this._onMouseMove(event as MouseEvent), true),
+      addEventListener(
+        document,
+        'mousemove',
+        // 这里给50ms的debounce还得再验证会不会有问题
+        debounce(event => this.onMousemove(event as MouseEvent), 50),
+        true,
+      ),
       // addEventListener(document, 'mouseleave', event => this._onMouseLeave(event as MouseEvent), true),
       // addEventListener(document, 'focus', () => this._onFocus(), true),
       // addEventListener(document, 'scroll', () => {
@@ -67,18 +74,32 @@ class Recorder {
 
   private onClick(event: MouseEvent) {
     if (!event.target) return
-    _oopsTestRecordAction({
+    __oopsTestRecordAction({
       action: 'click',
+      context: __oopsTestContextId,
+      page: __oopsTestPageId,
       params: {
         selector: getSelector(event.target, document),
       },
     })
   }
+
+  private onMousemove(event: MouseEvent) {
+    __oopsTestRecordAction({
+      action: 'mousemove',
+      context: __oopsTestContextId,
+      page: __oopsTestPageId,
+      params: {
+        x: event.x,
+        y: event.y,
+      },
+    })
+  }
 }
 
-function _oopsTestInitScript() {
+function initScript() {
   if (!document?.documentElement) {
-    _oopsTestRecordAction({
+    __oopsTestRecordAction({
       action: 'initScriptError',
     })
     return
@@ -86,4 +107,4 @@ function _oopsTestInitScript() {
   new Recorder().init()
 }
 
-export { _oopsTestInitScript }
+export { initScript }

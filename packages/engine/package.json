@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "debug": "^4.3.2",
+    "expect": "^27.1.1",
     "lodash": "^4.17.21",
     "playwright": "^1.14.1"
   },

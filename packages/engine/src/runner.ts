@@ -1,8 +1,9 @@
 import Debug from 'debug'
 import { merge } from 'lodash'
 import { LaunchOptions, Browser, BrowserContext, Page } from 'playwright'
-import { BrowserName, Action } from './types'
+import { BrowserName, Action, Assertion } from './types'
 import { getBrowser } from './utils'
+import expect from 'expect'
 
 const debug = Debug('oops-test:runner')
 
@@ -75,6 +76,9 @@ class Runner {
       return
     }
     switch (action.action) {
+      case 'assertion':
+        await this.runAssertion(action)
+        break
       case 'newContext':
         {
           const {
@@ -104,9 +108,7 @@ class Runner {
           const page = await context.newPage()
           await page.goto(url, { waitUntil: 'domcontentloaded' })
 
-          let pageMap = this.contextMap.get(context) ?? new Map()
-          pageMap.set(pageId, page)
-          this.contextMap.set(context, pageMap)
+          this.setPage(page, cxtId, pageId)
         }
         break
 
@@ -123,15 +125,44 @@ class Runner {
       case 'click':
         {
           const {
-            context,
-            page,
+            context: cxtId,
+            page: pageId,
+            signals,
             params: { selector },
           } = action
-          await this.getPage(context, page!).click(selector)
+          const page = this.getPage(cxtId, pageId)
+          await page.click(selector)
+
+          for (const signal of signals ?? [])
+            if (signal.name === 'popup') {
+              const popupPage = await page.waitForEvent('popup')
+              this.setPage(popupPage, cxtId, signal.pageId)
+            }
+        }
+        break
+
+      case 'mousemove':
+        {
+          const {
+            context,
+            page,
+            params: { x, y },
+          } = action
+          await this.getPage(context, page!).mouse.move(x, y)
         }
         break
       default:
         debug(`Action: action '${action.action}' is invalid.`)
+    }
+  }
+
+  private async runAssertion(action: Assertion) {
+    const page = this.getPage(action.context, action.page)
+
+    switch (action.params.type) {
+      case 'newPage':
+        expect(action.params.url).toBe(await page.evaluate('location.href'))
+        break
     }
   }
 
@@ -152,11 +183,16 @@ class Runner {
   private getPage(cxtId: string, pageId: string) {
     const page = this.contextMap.get(this.getContext(cxtId))?.get(pageId)
     if (!page) {
-      if (!page) {
-        throw new Error(`Page(${pageId}) under Context(${cxtId}) not found.`)
-      }
+      throw new Error(`Page(${pageId}) under Context(${cxtId}) not found.`)
     }
     return page
+  }
+
+  private setPage(page: Page, cxtId: string, pageId: string) {
+    const context = this.getContext(cxtId)
+    const pageMap = this.contextMap.get(context) ?? new Map()
+    pageMap.set(pageId, page)
+    this.contextMap.set(context, pageMap)
   }
 }
 

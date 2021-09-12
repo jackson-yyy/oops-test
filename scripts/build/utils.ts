@@ -127,7 +127,7 @@ export async function buildInject() {
   const outputConfig = {
     file: resolve(pkgRoot, `inject/index.js`),
     format: `iife`,
-    name: '_oopsTestInject',
+    name: '__oopsTestInject',
   } as const
 
   console.log(chalk.yellow(`building inject.js`))
