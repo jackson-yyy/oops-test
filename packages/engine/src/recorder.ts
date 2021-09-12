@@ -1,9 +1,11 @@
-import merge from 'lodash-es/merge'
-import path from 'path'
+import Debug from 'debug'
+import { merge } from 'lodash'
 import { BrowserContext, Browser } from 'playwright'
 import { EventEmitter } from 'stream'
 import { BrowserName, Action } from './types'
 import { getUuid, getBrowser } from './utils'
+
+const debug = Debug('oops-test:runner')
 
 interface RecorderOptions {
   // 开启时，recorder会自动记录页面的所有请求数据，当做用例重跑时的数据源
@@ -14,7 +16,9 @@ class Recorder extends EventEmitter {
   private browser?: Browser
   private context?: BrowserContext
   private contextId?: string
+
   private actionsRecord: Action[] = []
+  // private requestData
 
   private options: RecorderOptions = {
     saveMock: true,
@@ -24,7 +28,7 @@ class Recorder extends EventEmitter {
     return this.actionsRecord
   }
 
-  constructor(options: RecorderOptions) {
+  constructor(options?: RecorderOptions) {
     super()
     merge(this.options, options)
   }
@@ -65,9 +69,12 @@ class Recorder extends EventEmitter {
       })
     })
 
+    page.on('requestfinished', debug)
+    page.on('response', debug)
+
     // FIXME:这里打包后，会找不到node_modules
     await page.addInitScript({
-      path: path.join(__dirname, '../node_modules/@oops-test/inject/dist/index.global.js'),
+      path: '../inject/index.js',
     })
 
     await page.exposeBinding('_oopsTestRecordAction', (_source, action: Action) => {

@@ -1,5 +1,5 @@
 import Debug from 'debug'
-import merge from 'lodash/merge'
+import { merge } from 'lodash'
 import { LaunchOptions, Browser, BrowserContext, Page } from 'playwright'
 import { BrowserName, Action } from './types'
 import { getBrowser } from './utils'
