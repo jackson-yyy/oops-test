@@ -1,4 +1,5 @@
-export type BrowserName = 'chromium' | 'firefox' | 'webkit'
+import { Signal } from './../types'
+import { Assertion } from './assertion'
 
 export type Action =
   | Assertion
@@ -10,29 +11,12 @@ export type Action =
   | MousemoveAction
   | ErrorAction
 
-export type Assertion = NewPageAssertion
-
-export type Signal = PopupSignal
-
 export interface BaseAction {
   action: ActionType
   context?: string
   page?: string
   params?: Record<string, any>
   signals?: Signal[]
-}
-
-export interface BaseSignal {
-  name: SignalType
-}
-
-export interface BaseAssertion extends BaseAction {
-  action: 'assertion'
-  context: string
-  page: string
-  params: {
-    type: AssertionType
-  }
 }
 
 export type ActionType = HtmlType | ContextType | PageType | CustomType | ErrorType
@@ -42,14 +26,6 @@ export type PageType = 'newPage' | 'closePage'
 export type ContextType = 'newContext' | 'closeContext'
 export type CustomType = 'assertion'
 export type ErrorType = 'initScriptError'
-export type AssertionType = 'newPage' | 'text'
-
-export type SignalType = 'popup'
-
-export interface PopupSignal extends BaseSignal {
-  name: 'popup'
-  pageId: string
-}
 
 export interface NewContext extends BaseAction {
   action: 'newContext'
@@ -101,11 +77,4 @@ export interface MousemoveAction extends BaseAction {
 
 export interface ErrorAction extends BaseAction {
   action: ErrorType
-}
-
-export interface NewPageAssertion extends BaseAssertion {
-  params: {
-    type: 'newPage'
-    url: string
-  }
 }
