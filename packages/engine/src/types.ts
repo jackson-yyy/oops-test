@@ -9,17 +9,27 @@ export type Action =
   | ClickAction
   | MousemoveAction
   | ErrorAction
+
 export type Assertion = NewPageAssertion
+
+export type Signal = PopupSignal
 
 export interface BaseAction {
   action: ActionType
   context?: string
   page?: string
   params?: Record<string, any>
+  signals?: Signal[]
 }
 
-export interface BaseAssertion extends Required<BaseAction> {
+export interface BaseSignal {
+  name: SignalType
+}
+
+export interface BaseAssertion extends BaseAction {
   action: 'assertion'
+  context: string
+  page: string
   params: {
     type: AssertionType
   }
@@ -33,6 +43,13 @@ export type ContextType = 'newContext' | 'closeContext'
 export type CustomType = 'assertion'
 export type ErrorType = 'initScriptError'
 export type AssertionType = 'newPage' | 'text'
+
+export type SignalType = 'popup'
+
+export interface PopupSignal extends BaseSignal {
+  name: 'popup'
+  pageId: string
+}
 
 export interface NewContext extends BaseAction {
   action: 'newContext'

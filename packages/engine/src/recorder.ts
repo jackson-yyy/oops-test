@@ -3,7 +3,7 @@ import { merge } from 'lodash'
 import path from 'path'
 import { BrowserContext, Browser, Page } from 'playwright'
 import { EventEmitter } from 'stream'
-import { BrowserName, Action } from './types'
+import { BrowserName, Action, Signal } from './types'
 import { getUuid, getBrowser } from './utils'
 
 const debug = Debug('oops-test:runner')
@@ -99,6 +99,11 @@ class Recorder extends EventEmitter {
 
       await this.preparePage(pg, pageId)
 
+      this.setSignal({
+        name: 'popup',
+        pageId: pId,
+      })
+
       this.addAction({
         action: 'assertion',
         context: this.contextId!,
@@ -123,6 +128,12 @@ class Recorder extends EventEmitter {
   private addAction(action: Action) {
     this.actionsRecord.push(action)
     this.emit('addAction', action)
+  }
+
+  private setSignal(signal: Signal) {
+    let action = this.actionsRecord[this.actionsRecord.length - 1]
+    if (!action) return
+    action.signals = [...(action?.signals ?? []), signal]
   }
 
   async start({ url = 'http://localhost:8080', browser = 'chromium' }: { url: string; browser?: BrowserName }) {
