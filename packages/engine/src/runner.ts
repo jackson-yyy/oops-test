@@ -134,6 +134,17 @@ class Runner {
           await this.getPage(context, page!).click(selector)
         }
         break
+
+      case 'mousemove':
+        {
+          const {
+            context,
+            page,
+            params: { x, y },
+          } = action
+          await this.getPage(context, page!).mouse.move(x, y)
+        }
+        break
       default:
         debug(`Action: action '${action.action}' is invalid.`)
     }
@@ -144,7 +155,7 @@ class Runner {
 
     switch (action.params.type) {
       case 'newPage':
-        expect(await page.evaluate('location.href')).toBe(action.params.url)
+        expect(action.params.url).toBe(await page.evaluate('location.href'))
         break
     }
   }
@@ -166,9 +177,7 @@ class Runner {
   private getPage(cxtId: string, pageId: string) {
     const page = this.contextMap.get(this.getContext(cxtId))?.get(pageId)
     if (!page) {
-      if (!page) {
-        throw new Error(`Page(${pageId}) under Context(${cxtId}) not found.`)
-      }
+      throw new Error(`Page(${pageId}) under Context(${cxtId}) not found.`)
     }
     return page
   }

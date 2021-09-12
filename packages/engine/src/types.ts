@@ -1,6 +1,14 @@
 export type BrowserName = 'chromium' | 'firefox' | 'webkit'
 
-export type Action = Assertion | NewContext | CloseContext | NewPage | ClosePage | ClickAction | ErrorAction
+export type Action =
+  | Assertion
+  | NewContext
+  | CloseContext
+  | NewPage
+  | ClosePage
+  | ClickAction
+  | MousemoveAction
+  | ErrorAction
 export type Assertion = NewPageAssertion
 
 export interface BaseAction {
@@ -19,7 +27,7 @@ export interface BaseAssertion extends Required<BaseAction> {
 
 export type ActionType = HtmlType | ContextType | PageType | CustomType | ErrorType
 
-export type HtmlType = 'click' | 'dbClick' | 'press' | 'hover'
+export type HtmlType = 'click' | 'dbClick' | 'press' | 'hover' | 'mousemove'
 export type PageType = 'newPage' | 'closePage'
 export type ContextType = 'newContext' | 'closeContext'
 export type CustomType = 'assertion'
@@ -61,6 +69,16 @@ export interface ClickAction extends BaseAction {
   page: string
   params: {
     selector: string
+  }
+}
+
+export interface MousemoveAction extends BaseAction {
+  action: 'mousemove'
+  context: string
+  page: string
+  params: {
+    x: number
+    y: number
   }
 }
 

@@ -1,5 +1,6 @@
 import type { Action } from './types'
 import getCssSelector from 'css-selector-generator'
+import { debounce } from 'lodash'
 
 declare let __oopsTestRecordAction: (action: Action) => void
 declare let __oopsTestContextId: string
@@ -49,7 +50,13 @@ class Recorder {
       // addEventListener(document, 'keyup', event => this._onKeyUp(event as KeyboardEvent), true),
       // addEventListener(document, 'mousedown', event => this._onMouseDown(event as MouseEvent), true),
       // addEventListener(document, 'mouseup', event => this._onMouseUp(event as MouseEvent), true),
-      // addEventListener(document, 'mousemove', event => this._onMouseMove(event as MouseEvent), true),
+      addEventListener(
+        document,
+        'mousemove',
+        // 这里给50ms的debounce还得再验证会不会有问题
+        debounce(event => this.onMousemove(event as MouseEvent), 50),
+        true,
+      ),
       // addEventListener(document, 'mouseleave', event => this._onMouseLeave(event as MouseEvent), true),
       // addEventListener(document, 'focus', () => this._onFocus(), true),
       // addEventListener(document, 'scroll', () => {
@@ -73,6 +80,18 @@ class Recorder {
       page: __oopsTestPageId,
       params: {
         selector: getSelector(event.target, document),
+      },
+    })
+  }
+
+  private onMousemove(event: MouseEvent) {
+    __oopsTestRecordAction({
+      action: 'mousemove',
+      context: __oopsTestContextId,
+      page: __oopsTestPageId,
+      params: {
+        x: event.x,
+        y: event.y,
       },
     })
   }

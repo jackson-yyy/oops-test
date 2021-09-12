@@ -94,13 +94,15 @@ class Recorder extends EventEmitter {
     })
 
     page.on('popup', async pg => {
-      let url: string = await pg.evaluate('location.href')
-      await this.preparePage(pg)
+      const url: string = await pg.evaluate('location.href')
+      const pId = getUuid()
+
+      await this.preparePage(pg, pageId)
 
       this.addAction({
         action: 'assertion',
         context: this.contextId!,
-        page: pageId,
+        page: pId,
         params: {
           type: 'newPage',
           url,
@@ -113,8 +115,8 @@ class Recorder extends EventEmitter {
 
     page.on('domcontentloaded', async pg => {
       pg.evaluate(`window.__oopsTestInject.initScript()`)
-      page.evaluate(`window.__oopsTestContextId = ${this.contextId}`)
-      page.evaluate(`window.__oopsTestPageId = ${pageId}`)
+      page.evaluate(`window.__oopsTestContextId = '${this.contextId}'`)
+      page.evaluate(`window.__oopsTestPageId = '${pageId}'`)
     })
   }
 
