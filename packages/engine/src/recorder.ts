@@ -38,6 +38,10 @@ class Recorder extends EventEmitter {
     this.context = await this.browser!.newContext()
     this.contextId = getUuid()
 
+    this.context.on('page', page => {
+      this.onPage(page)
+    })
+
     await this.context.addInitScript({
       path: path.join(__dirname, '../inject/index.js'),
     })
@@ -64,40 +68,13 @@ class Recorder extends EventEmitter {
     })
   }
 
-  private async initPage(url: string) {
-    const page = await this.context!.newPage()
-    const pageId = getUuid()
+  private async onPage(page: Page, pageId = getUuid()) {
+    this.preparePage(page, pageId)
 
-    await this.preparePage(page, pageId)
+    await page.waitForEvent('domcontentloaded')
 
-    await page.goto(url, { waitUntil: 'domcontentloaded' })
-
-    this.addAction({
-      action: 'newPage',
-      context: this.contextId!,
-      params: {
-        url,
-        id: pageId,
-      },
-    })
-  }
-
-  private async preparePage(page: Page, pageId = getUuid()) {
-    page.on('close', () => {
-      this.addAction({
-        action: 'closePage',
-        context: this.contextId!,
-        params: {
-          id: pageId,
-        },
-      })
-    })
-
-    page.on('popup', async pg => {
-      const url: string = await pg.evaluate('location.href')
+    if (await page.opener()) {
       const pId = getUuid()
-
-      await this.preparePage(pg, pageId)
 
       this.setSignal({
         name: 'popup',
@@ -110,7 +87,28 @@ class Recorder extends EventEmitter {
         page: pId,
         params: {
           type: 'newPage',
-          url,
+          url: page.url(),
+        },
+      })
+    } else {
+      this.addAction({
+        action: 'newPage',
+        context: this.contextId!,
+        params: {
+          url: page.url(),
+          id: pageId,
+        },
+      })
+    }
+  }
+
+  private preparePage(page: Page, pageId = getUuid()) {
+    page.on('close', () => {
+      this.addAction({
+        action: 'closePage',
+        context: this.contextId!,
+        params: {
+          id: pageId,
         },
       })
     })
@@ -127,7 +125,6 @@ class Recorder extends EventEmitter {
 
   private addAction(action: Action) {
     this.actionsRecord.push(action)
-    this.emit('addAction', action)
   }
 
   private setSignal(signal: Signal) {
@@ -141,7 +138,9 @@ class Recorder extends EventEmitter {
     this.browser.on('disconnected', this.finish)
 
     await this.initContext()
-    await this.initPage(url)
+
+    const page = await this.context!.newPage()
+    await page.goto(url)
   }
 
   private finish() {
