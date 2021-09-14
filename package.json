@@ -31,14 +31,15 @@
     "@types/rollup-plugin-peer-deps-external": "^2.2.1",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
     "@typescript-eslint/parser": "^4.28.5",
-    "@vitejs/plugin-vue": "^1.2.5",
+    "@vitejs/plugin-vue": "^1.6.0",
     "@vitejs/plugin-vue-jsx": "^1.1.7",
     "@vue/babel-plugin-jsx": "^1.0.6",
-    "@vue/compiler-sfc": "^3.0.5",
+    "@vue/compiler-sfc": "^3.2.6",
     "@vue/composition-api": "^1.0.0-rc.1",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/test-utils": "^1.2.2",
     "chalk": "^4.1.1",
+    "css-selector-generator": "^3.4.4",
     "eslint": "^7.31.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
@@ -62,7 +63,9 @@
     "rollup-plugin-vue": "^6.0.0",
     "ts-node": "^10.2.1",
     "tslib": "^2.3.0",
-    "typescript": "^4.3.2"
+    "typescript": "^4.3.2",
+    "vite": "^2.5.2",
+    "vue-tsc": "^0.2.2"
   },
   "config": {
     "commitizen": {
@@ -70,6 +73,9 @@
     }
   },
   "dependencies": {
-    "rollup-plugin-flat-dts": "^1.3.0"
+    "@oops-test/cli": "file:packages\\cli",
+    "@oops-test/demo": "file:packages\\demo",
+    "@oops-test/engine": "file:packages\\engine",
+    "@oops-test/marker": "file:packages\\marker"
   }
 }

@@ -54,7 +54,7 @@ export function getInputConfigs(target = '', config: RollupOptions = {}) {
   }
 }
 
-export function getOutputConfigs(target = '', format: Format, globalName?: string) {
+export function getOutputConfigs(target = '', format: Format) {
   const pkg = getPkgContent(target)
   const config = {
     'esm-bundler': {
@@ -69,7 +69,6 @@ export function getOutputConfigs(target = '', format: Format, globalName?: strin
     global: {
       file: resolve(packagesRoot, target, `dist/index.global.js`),
       format: `iife`,
-      name: globalName,
     },
   } as const
   return { ...config[format] }
@@ -80,6 +79,7 @@ export type BuildConfig = {
   target: string
   formats?: BuildFormat[]
   globalName?: string
+  banner?: string
   rollupConfig?: RollupOptions
 }
 
@@ -87,10 +87,11 @@ export async function build({
   target,
   formats = ['esm-bundler', 'cjs'],
   globalName = '',
+  banner = '',
   rollupConfig = {},
 }: BuildConfig): Promise<void> {
   const inputConfigs = getInputConfigs(target, rollupConfig)
-  const outputConfigs = formats.map(format => getOutputConfigs(target, format, globalName))
+  const outputConfigs = formats.map(format => getOutputConfigs(target, format))
   const pkgDir = resolve(packagesRoot, target)
 
   await fs.remove(`${pkgDir}/${getOutputDir(target)}`)
@@ -99,7 +100,7 @@ export async function build({
   const bundle = await rollup(inputConfigs)
 
   for (let outputConfig of outputConfigs) {
-    await bundle.write(outputConfig as OutputOptions)
+    await bundle.write({ ...(outputConfig as OutputOptions), name: globalName, banner })
     console.log(chalk.green(`Success: ${(outputConfig as OutputOptions).file}`))
   }
 }

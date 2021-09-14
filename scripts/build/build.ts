@@ -11,6 +11,7 @@ const targets = args._
 const buildConfigs: Record<string, Omit<BuildConfig, 'target'>> = {
   cli: {
     formats: ['cjs'],
+    banner: '#!/usr/bin/env node',
   },
   engine: {
     formats: ['esm-bundler', 'cjs'],
