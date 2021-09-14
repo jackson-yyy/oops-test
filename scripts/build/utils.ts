@@ -7,10 +7,9 @@ import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import filesize from 'rollup-plugin-filesize'
 import typescript from 'rollup-plugin-typescript2'
+import { buildConfigs } from './config'
 // import flatDts from 'rollup-plugin-flat-dts'
 // import { terser } from 'rollup-plugin-terser'
-
-type Format = 'esm-bundler' | 'cjs' | 'global'
 
 const packagesRoot = resolve(__dirname, '../../', 'packages')
 
@@ -42,6 +41,7 @@ export function getInputConfigs(target = '', config: RollupOptions = {}) {
       }),
       commonjs(),
       typescript({
+        tsconfig: resolve(__dirname, '../../tsconfig.json'),
         tsconfigOverride: {
           include: [`${pkgRoot}/src/**/*`],
         },
@@ -54,46 +54,40 @@ export function getInputConfigs(target = '', config: RollupOptions = {}) {
   }
 }
 
-export function getOutputConfigs(target = '', format: Format, globalName?: string) {
+export function getOutputConfigs(target = ''): OutputOptions[] {
   const pkg = getPkgContent(target)
-  const config = {
-    'esm-bundler': {
-      file: resolve(packagesRoot, target, pkg.module),
-      format: `es`,
-    },
-    cjs: {
-      file: resolve(packagesRoot, target, pkg.main),
-      format: `cjs`,
-      exports: 'named',
-    },
-    global: {
-      file: resolve(packagesRoot, target, `dist/index.global.js`),
-      format: `iife`,
-      name: globalName,
-    },
-  } as const
-  return { ...config[format] }
+  return buildConfigs[target].formats.map(format => {
+    if (format === 'es') {
+      return {
+        file: resolve(packagesRoot, target, pkg.module),
+        format: `es`,
+      }
+    }
+    if (format === 'cjs') {
+      return {
+        file: resolve(packagesRoot, target, pkg.main),
+        format: `cjs`,
+        exports: 'named',
+      }
+    }
+    if (format === 'iife') {
+      return {
+        file: resolve(packagesRoot, target, `dist/index.global.js`),
+        format: `iife`,
+        name: buildConfigs[target]?.globalName,
+      }
+    }
+    throw Error('target is not valid!')
+  })
 }
 
-export type BuildFormat = 'esm-bundler' | 'cjs' | 'global'
-export type BuildConfig = {
-  target: string
-  formats?: BuildFormat[]
-  globalName?: string
-  rollupConfig?: RollupOptions
-}
-
-export async function build({
-  target,
-  formats = ['esm-bundler', 'cjs'],
-  globalName = '',
-  rollupConfig = {},
-}: BuildConfig): Promise<void> {
+export async function build(target: string, rollupConfig?: RollupOptions): Promise<void> {
   const inputConfigs = getInputConfigs(target, rollupConfig)
-  const outputConfigs = formats.map(format => getOutputConfigs(target, format, globalName))
-  const pkgDir = resolve(packagesRoot, target)
+  const outputConfigs = getOutputConfigs(target)
 
-  await fs.remove(`${pkgDir}/${getOutputDir(target)}`)
+  for (const { file } of outputConfigs) {
+    file && (await fs.remove(file))
+  }
 
   console.log(chalk.yellow(`building package:${target}`))
   const bundle = await rollup(inputConfigs)
@@ -102,38 +96,4 @@ export async function build({
     await bundle.write(outputConfig as OutputOptions)
     console.log(chalk.green(`Success: ${(outputConfig as OutputOptions).file}`))
   }
-}
-
-export async function buildInject() {
-  const pkgRoot = resolve(packagesRoot, 'engine')
-  await fs.remove(`${pkgRoot}/inject`)
-
-  const inputConfig = {
-    input: `${pkgRoot}/src/inject.ts`,
-    plugins: [
-      nodeResolve({
-        extensions: ['.js', '.ts'],
-      }),
-      commonjs(),
-      typescript({
-        tsconfigOverride: {
-          include: [`${pkgRoot}/src/inject.ts`],
-          declaration: false,
-        },
-      }),
-    ],
-  }
-
-  const outputConfig = {
-    file: resolve(pkgRoot, `inject/index.js`),
-    format: `iife`,
-    name: '__oopsTestInject',
-  } as const
-
-  console.log(chalk.yellow(`building inject.js`))
-  const bundle = await rollup(inputConfig)
-
-  await bundle.write(outputConfig)
-
-  console.log(chalk.green(`Success: ${outputConfig.file}`))
 }
