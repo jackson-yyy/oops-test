@@ -1,49 +1,26 @@
 import minimist from 'minimist'
-import { build, BuildConfig, buildInject, getAllTargets } from './utils'
+import { build, getAllTargets } from './utils'
 import chalk from 'chalk'
 // import execa from 'execa'
 
 const args = minimist(process.argv.slice(2))
 
-const targets = args._
+const allTargets = getAllTargets()
+const targetsToBuild = args._?.length ? args._ : allTargets
 // const commit = execa.sync('git', ['rev-parse', 'HEAD']).stdout.slice(0, 7)
-
-const buildConfigs: Record<string, Omit<BuildConfig, 'target'>> = {
-  cli: {
-    formats: ['cjs'],
-  },
-  engine: {
-    formats: ['esm-bundler', 'cjs'],
-  },
-  marker: {
-    formats: ['esm-bundler', 'cjs'],
-  },
-}
 
 run()
 
 async function run() {
-  let targetsToBuild: string[] = targets
-  let allTargets = getAllTargets()
-  if (!targetsToBuild?.length) {
-    targetsToBuild = allTargets
-  }
-
   try {
     for (let target of targetsToBuild) {
       if (allTargets.includes(target)) {
-        await build({
-          ...buildConfigs[target],
-          target,
-        })
-      }
-
-      if (['engine', 'inject'].includes(target)) {
-        await buildInject()
+        await build(target)
       }
     }
   } catch (error) {
     console.log(chalk.red(error))
+    process.exit(1)
   }
 }
 // async function buildTypes(target: string) {

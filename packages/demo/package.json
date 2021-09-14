@@ -8,15 +8,8 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@oops-test/marker": "^0.0.0",
-    "loadash": "^1.0.0",
+    "@oops-test/marker": "file:../marker",
+    "lodash": "^4.17.21",
     "vue": "^3.2.6"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^1.6.0",
-    "@vue/compiler-sfc": "^3.2.6",
-    "typescript": "^4.3.2",
-    "vite": "^2.5.2",
-    "vue-tsc": "^0.2.2"
   }
 }

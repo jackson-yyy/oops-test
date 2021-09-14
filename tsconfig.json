@@ -17,8 +17,11 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "paths": {
+      "@oops-test/engine": ["packages/engine/src"],
+      "@oops-test/engine/*": ["packages/engine/src/*"]
+    }
   },
-
   "exclude": ["**/node_modules/*", "**/dist/*"]
 }
