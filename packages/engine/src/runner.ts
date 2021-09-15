@@ -4,11 +4,12 @@ import { LaunchOptions, Browser, BrowserContext, Page } from 'playwright'
 import { BrowserName, Action, Assertion } from './types'
 import { getBrowser } from './utils'
 import expect from 'expect'
+import { EventEmitter } from 'stream'
 
 const debug = Debug('oops-test:runner')
 
 interface RunnerOptions {
-  browser: BrowserName
+  browser?: BrowserName
   browserLaunchOptions?: LaunchOptions
 }
 
@@ -48,7 +49,7 @@ class MultiRunner {
   }
 }
 
-class Runner {
+class Runner extends EventEmitter {
   private options: Required<RunnerOptions> = {
     browser: 'chromium',
     ...DefaultRunnerOptions,
@@ -60,6 +61,7 @@ class Runner {
   private contextMap: Map<BrowserContext, Map<string, Page>> = new Map()
 
   constructor(options?: RunnerOptions) {
+    super()
     merge(this.options, options)
   }
 
@@ -131,26 +133,29 @@ class Runner {
             params: { selector },
           } = action
           const page = this.getPage(cxtId, pageId)
-          await page.click(selector)
 
-          for (const signal of signals ?? [])
+          for (const signal of signals ?? []) {
             if (signal.name === 'popup') {
-              const popupPage = await page.waitForEvent('popup')
-              this.setPage(popupPage, cxtId, signal.pageId)
+              page.waitForEvent('popup').then(popupPage => {
+                this.setPage(popupPage, cxtId, signal.pageId)
+              })
             }
+          }
+
+          await page.click(selector)
         }
         break
 
-      case 'mousemove':
-        {
-          const {
-            context,
-            page,
-            params: { x, y },
-          } = action
-          await this.getPage(context, page!).mouse.move(x, y)
-        }
-        break
+      // case 'mousemove':
+      //   {
+      //     const {
+      //       context,
+      //       page,
+      //       params: { x, y },
+      //     } = action
+      //     await this.getPage(context, page!).mouse.move(x, y)
+      //   }
+      //   break
       default:
         debug(`Action: action '${action.action}' is invalid.`)
     }
@@ -159,10 +164,16 @@ class Runner {
   private async runAssertion(action: Assertion) {
     const page = this.getPage(action.context, action.page)
 
-    switch (action.params.type) {
-      case 'newPage':
-        expect(action.params.url).toBe(await page.evaluate('location.href'))
-        break
+    try {
+      switch (action.params.type) {
+        case 'newPage':
+          expect(action.params.url).toBe(await page.evaluate('location.href'))
+          break
+      }
+    } catch (error: any) {
+      console.log(error.message)
+
+      throw new Error(error.message)
     }
   }
 

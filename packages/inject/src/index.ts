@@ -1,12 +1,10 @@
 import type { Action } from '@oops-test/engine/types'
 import getCssSelector from 'css-selector-generator'
-import { debounce } from 'lodash-es'
+// import { debounce } from 'lodash-es'
 
 declare let __oopsTestRecordAction: (action: Action) => void
 declare let __oopsTestContextId: string
 declare let __oopsTestPageId: string
-
-console.log(123)
 
 function addEventListener(
   target: EventTarget,
@@ -52,13 +50,13 @@ class Recorder {
       // addEventListener(document, 'keyup', event => this._onKeyUp(event as KeyboardEvent), true),
       // addEventListener(document, 'mousedown', event => this._onMouseDown(event as MouseEvent), true),
       // addEventListener(document, 'mouseup', event => this._onMouseUp(event as MouseEvent), true),
-      addEventListener(
-        document,
-        'mousemove',
-        // 这里给50ms的debounce还得再验证会不会有问题
-        debounce(event => this.onMousemove(event as MouseEvent), 50),
-        true,
-      ),
+      // addEventListener(
+      //   document,
+      //   'mousemove',
+      //   // 这里给50ms的debounce还得再验证会不会有问题
+      //   debounce(event => this.onMousemove(event as MouseEvent), 50),
+      //   true,
+      // ),
       // addEventListener(document, 'mouseleave', event => this._onMouseLeave(event as MouseEvent), true),
       // addEventListener(document, 'focus', () => this._onFocus(), true),
       // addEventListener(document, 'scroll', () => {
@@ -86,17 +84,17 @@ class Recorder {
     })
   }
 
-  private onMousemove(event: MouseEvent) {
-    __oopsTestRecordAction({
-      action: 'mousemove',
-      context: __oopsTestContextId,
-      page: __oopsTestPageId,
-      params: {
-        x: event.x,
-        y: event.y,
-      },
-    })
-  }
+  // private onMousemove(event: MouseEvent) {
+  //   __oopsTestRecordAction({
+  //     action: 'mousemove',
+  //     context: __oopsTestContextId,
+  //     page: __oopsTestPageId,
+  //     params: {
+  //       x: event.x,
+  //       y: event.y,
+  //     },
+  //   })
+  // }
 }
 
 function initScript() {

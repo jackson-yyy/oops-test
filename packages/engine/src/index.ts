@@ -8,3 +8,6 @@
  */
 
 export * from './recorder'
+export * from './runner'
+
+export type { Action, Assertion, Signal, BrowserName } from './types'

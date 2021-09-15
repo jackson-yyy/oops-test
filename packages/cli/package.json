@@ -5,10 +5,10 @@
   "author": "jackson <247955056@qq.com>",
   "homepage": "",
   "license": "ISC",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
+  "exports": "./dist/index.esm.js",
+  "type": "module",
   "bin": {
-    "oops-test": "dist/index.js"
+    "oops-test": "dist/index.esm.js"
   },
   "directories": {
     "lib": "lib",
@@ -24,6 +24,10 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "@oops-test/engine": "file:..\\engine",
+    "chalk": "^4.1.2",
+    "commander": "^8.2.0",
+    "lodash": "^4.17.21",
+    "ora": "^6.0.1"
   }
 }
