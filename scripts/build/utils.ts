@@ -8,7 +8,7 @@ import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import filesize from 'rollup-plugin-filesize'
 import typescript from 'rollup-plugin-typescript2'
-import { buildConfigs, packagesRoot } from './config'
+import { buildConfigs, Format, packagesRoot } from './config'
 // import flatDts from 'rollup-plugin-flat-dts'
 import { terser } from 'rollup-plugin-terser'
 
@@ -22,7 +22,7 @@ export function getPkgContent(target: string): Record<string, any> {
   return require(resolve(packagesRoot, target, 'package.json'))
 }
 
-export function getInputConfigs(target = '', config: RollupOptions = {}) {
+export function getInputConfigs(target = '', config: RollupOptions = {}): RollupOptions {
   const pkgRoot = resolve(packagesRoot, target)
   const pkg = getPkgContent(target)
   const { plugins = [], ...others } = config
@@ -48,34 +48,37 @@ export function getInputConfigs(target = '', config: RollupOptions = {}) {
 
 export function getOutputConfigs(target = ''): OutputOptions[] {
   const pkg = getPkgContent(target)
+  const defaultConfig: Record<Format, OutputOptions> = {
+    es: {
+      file: resolve(packagesRoot, target, pkg.module ?? ''),
+    },
+    cjs: {
+      file: resolve(packagesRoot, target, pkg.main ?? ''),
+      exports: 'named',
+    },
+    iife: {
+      file: resolve(packagesRoot, target, `dist/index.global.js`),
+      name: buildConfigs[target]?.globalName,
+    },
+  }
   return buildConfigs[target].formats.map(format => {
-    let type = format
+    let type = format as Format
     let output: string | undefined
     if (typeof format !== 'string') {
       type = format.format
       output = format.output
     }
-    if (type === 'es') {
-      return {
-        file: output ?? resolve(packagesRoot, target, pkg.module),
-        format: `es`,
-      }
+
+    let config: OutputOptions = {
+      format: type as Format,
+      ...defaultConfig[type],
     }
-    if (type === 'cjs') {
-      return {
-        file: output ?? resolve(packagesRoot, target, pkg.main),
-        format: `cjs`,
-        exports: 'named',
-      }
+
+    if (output) {
+      config.file = output
     }
-    if (type === 'iife') {
-      return {
-        file: output ?? resolve(packagesRoot, target, `dist/index.global.js`),
-        format: `iife`,
-        name: buildConfigs[target]?.globalName,
-      }
-    }
-    throw Error('target is invalid!')
+
+    return config
   })
 }
 
