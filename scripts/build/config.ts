@@ -8,10 +8,12 @@ export const buildConfigs: {
   [target: string]: {
     formats: (Format | { format: Format; output?: string })[]
     globalName?: string
+    banner?: string
   }
 } = {
   cli: {
     formats: ['cjs'],
+    banner: '#!/usr/bin/env node',
   },
   engine: {
     formats: ['es', 'cjs'],
