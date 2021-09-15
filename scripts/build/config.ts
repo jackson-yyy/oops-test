@@ -1,8 +1,12 @@
+import { resolve } from 'path'
+
 export type Format = 'es' | 'cjs' | 'iife'
+
+export const packagesRoot = resolve(__dirname, '../../', 'packages')
 
 export const buildConfigs: {
   [target: string]: {
-    formats: Format[]
+    formats: (Format | { format: Format; output?: string })[]
     globalName?: string
   }
 } = {
@@ -13,7 +17,12 @@ export const buildConfigs: {
     formats: ['es', 'cjs'],
   },
   inject: {
-    formats: ['iife'],
+    formats: [
+      {
+        format: 'iife',
+        output: resolve(packagesRoot, 'engine/inject/index.global.js'),
+      },
+    ],
     globalName: '__oopsTestInject',
   },
   marker: {

@@ -1,5 +1,5 @@
 import minimist from 'minimist'
-import { build, getAllTargets } from './utils'
+import { build, develop, getAllTargets } from './utils'
 import chalk from 'chalk'
 // import execa from 'execa'
 
@@ -7,15 +7,21 @@ const args = minimist(process.argv.slice(2))
 
 const allTargets = getAllTargets()
 const targetsToBuild = args._?.length ? args._ : allTargets
+const isDev = args.d ?? args.dev
 // const commit = execa.sync('git', ['rev-parse', 'HEAD']).stdout.slice(0, 7)
+
+if (targetsToBuild.includes('engine') && !targetsToBuild.includes('inject')) {
+  targetsToBuild.push('inject')
+}
 
 run()
 
 async function run() {
+  const handler = isDev ? develop : build
   try {
     for (let target of targetsToBuild) {
       if (allTargets.includes(target)) {
-        await build(target)
+        await handler(target)
       }
     }
   } catch (error) {
