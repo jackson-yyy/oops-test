@@ -1,10 +1,12 @@
 import type { Action } from '@oops-test/engine/types'
 import getCssSelector from 'css-selector-generator'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 
 declare let __oopsTestRecordAction: (action: Action) => void
 declare let __oopsTestContextId: string
 declare let __oopsTestPageId: string
+
+console.log(123)
 
 function addEventListener(
   target: EventTarget,
