@@ -11,6 +11,7 @@ import typescript from 'rollup-plugin-typescript2'
 import { buildConfigs, Format, packagesRoot } from './config'
 // import flatDts from 'rollup-plugin-flat-dts'
 import { terser } from 'rollup-plugin-terser'
+import json from '@rollup/plugin-json'
 
 export function getAllTargets() {
   return readdirSync(packagesRoot).filter(
@@ -33,6 +34,7 @@ export function getInputConfigs(target = '', config: RollupOptions = {}): Rollup
       nodeResolve({
         extensions: ['.js', '.ts', '.tsx', '.vue'],
       }),
+      json(),
       commonjs(),
       typescript({
         tsconfig: resolve(__dirname, '../../tsconfig.json'),
@@ -50,7 +52,7 @@ export function getOutputConfigs(target = ''): OutputOptions[] {
   const pkg = getPkgContent(target)
   const defaultConfig: Record<Format, OutputOptions> = {
     es: {
-      file: resolve(packagesRoot, target, pkg.module ?? ''),
+      file: resolve(packagesRoot, target, pkg.module ?? pkg.exports ?? ''),
     },
     cjs: {
       file: resolve(packagesRoot, target, pkg.main ?? ''),
@@ -77,6 +79,7 @@ export function getOutputConfigs(target = ''): OutputOptions[] {
     if (output) {
       config.file = output
     }
+    config.banner = buildConfigs[target].banner
 
     return config
   })
@@ -113,7 +116,10 @@ export async function moveInject() {
 
 export async function develop(target: string) {
   const inputConfigs = getInputConfigs(target)
-  const outputConfigs = getOutputConfigs(target)
+  const outputConfigs = getOutputConfigs(target).map(item => ({
+    ...item,
+    sourcemap: true,
+  }))
 
   const watcher = watch({
     ...inputConfigs,
@@ -139,6 +145,9 @@ export async function develop(target: string) {
           console.log(chalk.green(`rebuild success: ${path}`))
         })
         console.log(chalk.green(`rebuild cases ${event.duration}ms`))
+        break
+      case 'ERROR':
+        console.log(chalk.red(event.error))
         break
     }
   })

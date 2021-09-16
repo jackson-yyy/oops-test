@@ -12,7 +12,7 @@ export const buildConfigs: {
   }
 } = {
   cli: {
-    formats: ['cjs'],
+    formats: ['es'],
     banner: '#!/usr/bin/env node',
   },
   engine: {
@@ -22,7 +22,7 @@ export const buildConfigs: {
     formats: [
       {
         format: 'iife',
-        output: resolve(packagesRoot, 'engine/inject/index.global.js'),
+        output: resolve(packagesRoot, 'engine/inject/index.js'),
       },
     ],
     globalName: '__oopsTestInject',

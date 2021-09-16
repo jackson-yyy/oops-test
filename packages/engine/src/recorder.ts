@@ -74,17 +74,15 @@ class Recorder extends EventEmitter {
     await page.waitForEvent('domcontentloaded')
 
     if (await page.opener()) {
-      const pId = getUuid()
-
       this.setSignal({
         name: 'popup',
-        pageId: pId,
+        pageId: pageId,
       })
 
       this.addAction({
         action: 'assertion',
         context: this.contextId!,
-        page: pId,
+        page: pageId,
         params: {
           type: 'newPage',
           url: page.url(),
@@ -145,7 +143,7 @@ class Recorder extends EventEmitter {
 
   private finish() {
     this.browser?.close()
-    this.emit('recordFinish')
+    this.emit('finish')
   }
 }
 
