@@ -21,7 +21,7 @@ export default async function run(casesDir: string, options: Options) {
 
   // TODO: 优化输出样式
   for (const fileName of fileList) {
-    const spinner = ora(`running case ${fileName} \n`)
+    const spinner = ora(chalk.yellow(`running case ${fileName} \n`))
     spinner.color = 'yellow'
 
     try {
@@ -29,9 +29,9 @@ export default async function run(casesDir: string, options: Options) {
       await runner.run(JSON.parse(readFileSync(join(casesDir, fileName), 'utf-8')))
     } catch (error) {
       errorList.push(error)
+      spinner.fail(chalk.red(fileName))
     } finally {
       spinner.stop()
-      spinner.fail(chalk.red(fileName))
     }
   }
 
