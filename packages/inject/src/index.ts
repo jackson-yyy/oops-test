@@ -1,6 +1,5 @@
 import type { Action } from '@oops-test/engine/types'
 import getCssSelector from 'css-selector-generator'
-// import { debounce } from 'lodash-es'
 
 declare let __oopsTestRecordAction: (action: Action) => void
 declare let __oopsTestContextId: string
@@ -100,11 +99,14 @@ class Recorder {
 function initScript() {
   if (!document?.documentElement) {
     __oopsTestRecordAction({
-      action: 'initScriptError',
+      action: 'error',
+      msg: 'error when calling initScript!',
     })
     return
   }
   new Recorder().init()
 }
+
+document.addEventListener('DOMContentLoaded', initScript)
 
 export { initScript }

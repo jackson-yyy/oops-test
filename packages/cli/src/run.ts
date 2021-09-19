@@ -29,6 +29,7 @@ export default async function run(casesDir: string, options: Options) {
       await runner.run(JSON.parse(readFileSync(join(casesDir, fileName), 'utf-8')))
     } catch (error) {
       errorList.push(error)
+      console.log(error)
       spinner.fail(chalk.red(fileName))
     } finally {
       spinner.stop()

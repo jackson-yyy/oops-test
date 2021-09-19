@@ -71,8 +71,6 @@ class Recorder extends EventEmitter {
   private async onPage(page: Page, pageId = getUuid()) {
     this.preparePage(page, pageId)
 
-    await page.waitForEvent('domcontentloaded')
-
     if (await page.opener()) {
       this.setSignal({
         name: 'popup',
@@ -89,6 +87,7 @@ class Recorder extends EventEmitter {
         },
       })
     } else {
+      await page.waitForEvent('domcontentloaded')
       this.addAction({
         action: 'newPage',
         context: this.contextId!,
@@ -115,9 +114,8 @@ class Recorder extends EventEmitter {
     page.on('response', debug)
 
     page.on('domcontentloaded', async pg => {
-      pg.evaluate(`window.__oopsTestInject.initScript()`)
-      page.evaluate(`window.__oopsTestContextId = '${this.contextId}'`)
-      page.evaluate(`window.__oopsTestPageId = '${pageId}'`)
+      pg.evaluate(`window.__oopsTestContextId = '${this.contextId}'`)
+      pg.evaluate(`window.__oopsTestPageId = '${pageId}'`)
     })
   }
 
@@ -128,7 +126,11 @@ class Recorder extends EventEmitter {
   private setSignal(signal: Signal) {
     let action = this.actionsRecord[this.actionsRecord.length - 1]
     if (!action) return
-    action.signals = [...(action?.signals ?? []), signal]
+    const { name, ...params } = signal
+    action.signals = {
+      [name]: params,
+      ...(action.signals ?? {}),
+    }
   }
 
   async start({ url = 'http://localhost:8080', browser = 'chromium' }: { url: string; browser?: BrowserName }) {

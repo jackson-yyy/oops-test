@@ -1,13 +1,12 @@
 import Debug from 'debug'
 import { merge } from 'lodash'
 import { LaunchOptions, Browser, BrowserContext, Page } from 'playwright'
-import { BrowserName, Action, Assertion } from './types'
+import { BrowserName, Action, Assertion, ManualAction } from './types'
 import { getBrowser } from './utils'
 import expect from 'expect'
 import { EventEmitter } from 'stream'
 
 const debug = Debug('oops-test:runner')
-
 interface RunnerOptions {
   browser?: BrowserName
   browserLaunchOptions?: LaunchOptions
@@ -77,87 +76,69 @@ class Runner extends EventEmitter {
       debug(`Action: browser not found.`)
       return
     }
-    switch (action.action) {
-      case 'assertion':
-        await this.runAssertion(action)
-        break
-      case 'newContext':
-        {
-          const {
-            params: { id },
-          } = action
-          const context = await this.browser.newContext()
-          this.contextIdMap.set(id, context)
-        }
-        break
+    if (action.action === 'assertion') {
+      await this.runAssertion(action)
+      return
+    }
+    if (action.action === 'newContext') {
+      const {
+        params: { id },
+      } = action
+      const context = await this.browser.newContext()
+      this.contextIdMap.set(id, context)
+      return
+    }
 
-      case 'closeContext':
-        {
-          const {
-            params: { id },
-          } = action
-          await this.getContext(id).close()
-        }
-        break
+    if (action.action === 'closeContext') {
+      const {
+        params: { id },
+      } = action
+      await this.getContext(id).close()
+      return
+    }
 
-      case 'newPage':
-        {
-          const {
-            context: cxtId,
-            params: { id: pageId, url },
-          } = action
-          const context = this.getContext(cxtId)
-          const page = await context.newPage()
-          await page.goto(url, { waitUntil: 'domcontentloaded' })
+    if (action.action === 'newPage') {
+      const {
+        context: cxtId,
+        params: { id: pageId, url },
+      } = action
+      const context = this.getContext(cxtId)
+      const page = await context.newPage()
+      await page.goto(url, { waitUntil: 'domcontentloaded' })
+      this.setPage(page, cxtId, pageId)
+      return
+    }
 
-          this.setPage(page, cxtId, pageId)
-        }
-        break
+    if (action.action === 'closePage') {
+      const {
+        context: cxtId,
+        params: { id: pageId },
+      } = action
+      await this.getPage(cxtId, pageId).close()
+      return
+    }
 
-      case 'closePage':
-        {
-          const {
-            context: cxtId,
-            params: { id: pageId },
-          } = action
-          await this.getPage(cxtId, pageId).close()
-        }
-        break
+    if (action.action === 'error') {
+      debug(`Action: action '${action.action}' is invalid.`)
+      return
+    }
 
-      case 'click':
-        {
-          const {
-            context: cxtId,
-            page: pageId,
-            signals,
-            params: { selector },
-          } = action
-          const page = this.getPage(cxtId, pageId)
+    await this.runManualAction(action)
+  }
 
-          for (const signal of signals ?? []) {
-            if (signal.name === 'popup') {
-              page.waitForEvent('popup').then(popupPage => {
-                this.setPage(popupPage, cxtId, signal.pageId)
-              })
-            }
-          }
+  private async runManualAction(action: ManualAction) {
+    const { context: cxtId, page: pageId, signals } = action
+    const page = this.getPage(cxtId, pageId)
 
-          await page.click(selector)
-        }
-        break
+    let actionPromise = () => Promise.resolve()
 
-      // case 'mousemove':
-      //   {
-      //     const {
-      //       context,
-      //       page,
-      //       params: { x, y },
-      //     } = action
-      //     await this.getPage(context, page!).mouse.move(x, y)
-      //   }
-      //   break
-      default:
-        debug(`Action: action '${action.action}' is invalid.`)
+    if (action.action === 'click') {
+      actionPromise = () => page.click(action.params.selector)
+    }
+
+    if (signals?.popup) {
+      const [popupPage] = await Promise.all([page.waitForEvent('popup'), actionPromise()])
+      this.setPage(popupPage, cxtId, signals.popup.pageId)
     }
   }
 
@@ -171,8 +152,6 @@ class Runner extends EventEmitter {
           break
       }
     } catch (error: any) {
-      console.log(error.message)
-
       throw new Error(error.message)
     }
   }
