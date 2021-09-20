@@ -18,6 +18,7 @@
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve",
+    "jsxFactory": "h",
     "paths": {
       "@oops-test/engine": ["packages/engine/src"],
       "@oops-test/engine/*": ["packages/engine/src/*"]

@@ -12,6 +12,7 @@ import { buildConfigs, Format, packagesRoot } from './config'
 // import flatDts from 'rollup-plugin-flat-dts'
 import { terser } from 'rollup-plugin-terser'
 import json from '@rollup/plugin-json'
+import Vue3JsxPlugin from '@vitejs/plugin-vue-jsx'
 
 export function getAllTargets() {
   return readdirSync(packagesRoot).filter(
@@ -36,12 +37,14 @@ export function getInputConfigs(target = '', config: RollupOptions = {}): Rollup
       }),
       json(),
       commonjs(),
+      Vue3JsxPlugin(),
       typescript({
         tsconfig: resolve(__dirname, '../../tsconfig.json'),
         tsconfigOverride: {
           include: [`${pkgRoot}/src/**/*`],
         },
       }),
+      ...(buildConfigs[target].plugins ?? []),
       ...plugins,
     ],
     ...others,

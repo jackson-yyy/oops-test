@@ -1,4 +1,6 @@
 import { resolve } from 'path'
+import replace from '@rollup/plugin-replace'
+import { Plugin } from 'rollup'
 
 export type Format = 'es' | 'cjs' | 'iife'
 
@@ -9,6 +11,7 @@ export const buildConfigs: {
     formats: (Format | { format: Format; output?: string })[]
     globalName?: string
     banner?: string
+    plugins?: Plugin[]
   }
 } = {
   cli: {
@@ -26,6 +29,12 @@ export const buildConfigs: {
       },
     ],
     globalName: '__oopsTestInject',
+    plugins: [
+      replace({
+        preventAssignment: true,
+        'process.env.NODE_ENV': JSON.stringify('production'),
+      }),
+    ],
   },
   marker: {
     formats: ['es', 'cjs'],

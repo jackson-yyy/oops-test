@@ -24,8 +24,5 @@
   },
   "bugs": {
     "url": "https://github.com/jackson-yyy/oops-test/issues"
-  },
-  "devDependencies": {
-    "lodash-es": "^4.17.21"
   }
 }
