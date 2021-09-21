@@ -1,22 +1,12 @@
 import type { Action } from '@oops-test/engine/types'
 import getCssSelector from 'css-selector-generator'
+import { addEventListener } from './utils'
+
+// TODO:hover高亮dom
 
 declare let __oopsTestRecordAction: (action: Action) => void
 declare let __oopsTestContextId: string
 declare let __oopsTestPageId: string
-
-function addEventListener(
-  target: EventTarget,
-  eventName: string,
-  listener: (evt: Event) => void,
-  useCapture?: boolean,
-): () => void {
-  target.addEventListener(eventName, listener, useCapture)
-  const remove = () => {
-    target.removeEventListener(eventName, listener, useCapture)
-  }
-  return remove
-}
 
 function getSelector(target: EventTarget, document: Document) {
   const list = document.querySelectorAll(`[data-o-s-t]`)
@@ -42,8 +32,8 @@ class Recorder {
 
   private initListeners() {
     this.listeners = [
-      addEventListener(document, 'click', event => this.onClick(event as MouseEvent), true),
-      addEventListener(document, 'auxclick', event => this.onClick(event as MouseEvent), true),
+      addEventListener(document, 'click', event => this.onClick(event as MouseEvent)),
+      addEventListener(document, 'auxclick', event => this.onClick(event as MouseEvent)),
       // addEventListener(document, 'input', event => this._onInput(event), true),
       // addEventListener(document, 'keydown', event => this._onKeyDown(event as KeyboardEvent), true),
       // addEventListener(document, 'keyup', event => this._onKeyUp(event as KeyboardEvent), true),
