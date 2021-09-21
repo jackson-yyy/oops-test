@@ -46,7 +46,7 @@ class Recorder extends EventEmitter {
       path: path.join(__dirname, '../inject/index.js'),
     })
 
-    await this.context.exposeBinding('__oopsTestRecordAction', (_source, action: Action) => {
+    await this.context.exposeBinding('__oopsTest_recordAction', (_source, action: Action) => {
       this.addAction(action)
     })
 
@@ -114,8 +114,8 @@ class Recorder extends EventEmitter {
     page.on('response', debug)
 
     page.on('domcontentloaded', async pg => {
-      pg.evaluate(`window.__oopsTestContextId = '${this.contextId}'`)
-      pg.evaluate(`window.__oopsTestPageId = '${pageId}'`)
+      pg.evaluate(`window.__oopsTest_contextId = '${this.contextId}'`)
+      pg.evaluate(`window.__oopsTest_pageId = '${pageId}'`)
     })
   }
 

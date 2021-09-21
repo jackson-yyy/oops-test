@@ -4,9 +4,9 @@ import { addEventListener } from './utils'
 
 // TODO:hover高亮dom
 
-declare let __oopsTestRecordAction: (action: Action) => void
-declare let __oopsTestContextId: string
-declare let __oopsTestPageId: string
+declare let __oopsTest_recordAction: (action: Action) => void
+declare let __oopsTest_contextId: string
+declare let __oopsTest_pageId: string
 
 function getSelector(target: EventTarget, document: Document) {
   const list = document.querySelectorAll(`[data-o-s-t]`)
@@ -63,10 +63,10 @@ class Recorder {
 
   private onClick(event: MouseEvent) {
     if (!event.target) return
-    __oopsTestRecordAction({
+    __oopsTest_recordAction({
       action: 'click',
-      context: __oopsTestContextId,
-      page: __oopsTestPageId,
+      context: __oopsTest_contextId,
+      page: __oopsTest_pageId,
       params: {
         selector: getSelector(event.target, document),
       },
@@ -74,10 +74,10 @@ class Recorder {
   }
 
   // private onMousemove(event: MouseEvent) {
-  //   __oopsTestRecordAction({
+  //   __oopsTest_recordAction({
   //     action: 'mousemove',
-  //     context: __oopsTestContextId,
-  //     page: __oopsTestPageId,
+  //     context: __oopsTest_contextId,
+  //     page: __oopsTest_pageId,
   //     params: {
   //       x: event.x,
   //       y: event.y,
@@ -88,7 +88,7 @@ class Recorder {
 
 export default function initScript() {
   if (!document?.documentElement) {
-    __oopsTestRecordAction({
+    __oopsTest_recordAction({
       action: 'error',
       msg: 'error when calling initScript!',
     })
