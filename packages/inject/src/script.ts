@@ -96,7 +96,7 @@ class Recorder {
   // }
 }
 
-function initScript() {
+export default function initScript() {
   if (!document?.documentElement) {
     __oopsTestRecordAction({
       action: 'error',
@@ -106,5 +106,3 @@ function initScript() {
   }
   new Recorder().init()
 }
-
-export { initScript }

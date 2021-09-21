@@ -65,6 +65,9 @@ export function getOutputConfigs(target = ''): OutputOptions[] {
       file: resolve(packagesRoot, target, `dist/index.global.js`),
       name: buildConfigs[target]?.globalName,
     },
+    amd: {
+      file: resolve(packagesRoot, target, `dist/index.amd.js`),
+    },
   }
   return buildConfigs[target].formats.map(format => {
     let type = format as Format

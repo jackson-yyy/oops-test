@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "lib": ["ESNext", "DOM"],
-    "target": "ES6",
+    "target": "ES5",
     "moduleResolution": "node",
     "sourceMap": true,
     "declaration": true,
