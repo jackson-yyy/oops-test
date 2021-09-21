@@ -3,7 +3,7 @@ import { Assertion } from './assertion'
 
 export type Action = Assertion | NewContext | CloseContext | NewPage | ClosePage | ErrorAction | ManualAction
 
-export type ManualAction = ClickAction | MousemoveAction
+export type ManualAction = ClickAction | MousemoveAction | HoverAction
 
 export interface BaseAction {
   action: ActionType
@@ -65,6 +65,15 @@ export interface MousemoveAction extends BaseAction {
   params: {
     x: number
     y: number
+  }
+}
+
+export interface HoverAction extends BaseAction {
+  action: 'hover'
+  context: string
+  page: string
+  params: {
+    selector: string
   }
 }
 
