@@ -29,7 +29,7 @@ export const buildConfigs: {
         output: resolve(packagesRoot, 'engine/inject/index.js'),
       },
     ],
-    globalName: '__oopsTestInject',
+    globalName: '__oopsTest_inject',
     plugins: [
       styleInjectPlugin(),
       replace({

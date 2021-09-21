@@ -15,7 +15,7 @@ export default async function run(casesDir: string, options: Options) {
       headless: options.headless,
     },
   })
-  const errorList = []
+  const errorList: Error[] = []
 
   const fileList = readdirSync(casesDir).filter(fileName => /(.*).spec.json/.test(fileName))
 
@@ -28,7 +28,7 @@ export default async function run(casesDir: string, options: Options) {
       spinner.start()
       await runner.run(JSON.parse(readFileSync(join(casesDir, fileName), 'utf-8')))
     } catch (error) {
-      errorList.push(error)
+      errorList.push(error as Error)
       console.log(error)
       spinner.fail(chalk.red(fileName))
     } finally {

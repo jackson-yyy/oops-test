@@ -19,6 +19,7 @@
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve",
     "jsxFactory": "h",
+    "noImplicitAny": false,
     "paths": {
       "@oops-test/engine": ["packages/engine/src"],
       "@oops-test/engine/*": ["packages/engine/src/*"]
