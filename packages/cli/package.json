@@ -24,7 +24,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
-    "@oops-test/engine": "file:..\\engine",
+    "@oops-test/engine": "file:../engine",
     "chalk": "^4.1.2",
     "commander": "^8.2.0",
     "lodash": "^4.17.21",

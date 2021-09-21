@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "lib": ["ESNext", "DOM"],
-    "target": "ES6",
+    "target": "ES5",
     "moduleResolution": "node",
     "sourceMap": true,
     "declaration": true,
@@ -18,6 +18,7 @@
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve",
+    "jsxFactory": "h",
     "paths": {
       "@oops-test/engine": ["packages/engine/src"],
       "@oops-test/engine/*": ["packages/engine/src/*"]
