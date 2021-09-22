@@ -21,6 +21,11 @@ export default defineComponent({
           toolsStatus.value.asserting = true
         },
       },
+      {
+        icon: '',
+        text: 'finish',
+        handler: window.__oopsTest_finish,
+      },
     ])
 
     return () =>
