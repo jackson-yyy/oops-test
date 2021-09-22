@@ -155,6 +155,9 @@ class Runner extends EventEmitter {
         case 'newPage':
           expect(action.params.url).toBe(await page.evaluate('location.href'))
           break
+        case 'innerText':
+          expect(await page.textContent(action.params.selector)).toBe(action.params.content)
+          break
       }
     } catch (error: any) {
       throw new Error(error.message)

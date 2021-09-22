@@ -1,16 +1,20 @@
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, h } from 'vue'
 import { addEventListener, getSelector } from './utils'
+// import { useModal } from '@idux/components/modal'
+import { Modal } from 'ant-design-vue/es'
 
 function getDefaultToolsStatus() {
   return {
     hovering: false,
-    expecting: false,
+    asserting: false,
   }
 }
 
 export function useRecorder() {
   const toolsStatus = ref(getDefaultToolsStatus())
   const listeners = ref<(() => void)[]>([])
+
+  const { onAssert } = useAssert()
 
   function initListeners() {
     listeners.value = [
@@ -51,6 +55,9 @@ export function useRecorder() {
     if (!event.target) return
     if (toolsStatus.value.hovering) {
       onHover(event)
+      event.preventDefault()
+    } else if (toolsStatus.value.asserting) {
+      onAssert(event)
       event.preventDefault()
     } else {
       window.__oopsTest_recordAction({
@@ -96,5 +103,41 @@ export function useRecorder() {
 
   return {
     toolsStatus,
+  }
+}
+
+export function useAssert() {
+  function onAssert(event: MouseEvent) {
+    if (!event.target) return
+    const assertValue = ref((event.target as HTMLElement).innerText)
+    Modal.confirm({
+      getContainer() {
+        return document.querySelector('.oops-test-toolbar') ?? document.body
+      },
+      title: '输入断言内容',
+      content: () =>
+        h('input', {
+          value: assertValue.value,
+          onInput(event: InputEvent) {
+            assertValue.value = (event.target as HTMLInputElement).value
+          },
+        }),
+      onOk() {
+        window.__oopsTest_recordAction({
+          action: 'assertion',
+          context: window.__oopsTest_contextId,
+          page: window.__oopsTest_pageId,
+          params: {
+            type: 'innerText',
+            selector: getSelector(event.target!, document),
+            content: assertValue.value,
+          },
+        })
+      },
+    })
+  }
+
+  return {
+    onAssert,
   }
 }

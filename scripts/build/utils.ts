@@ -31,6 +31,12 @@ export function getInputConfigs(target = '', config: RollupOptions = {}): Rollup
   return {
     input: resolve(pkgRoot, 'src/index.ts'),
     external: [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})],
+    onwarn(warning) {
+      // antd组件库会报this的错误
+      if (warning.code === 'THIS_IS_UNDEFINED') {
+        return
+      }
+    },
     plugins: [
       nodeResolve({
         extensions: ['.js', '.ts', '.tsx', '.vue'],
