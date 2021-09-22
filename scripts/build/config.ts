@@ -59,5 +59,8 @@ function styleInjectPlugin() {
       })
       `
     },
+    extensions: ['.css', '.less'],
+    // @ts-ignore
+    use: [['less', { javascriptEnabled: true }]],
   })
 }

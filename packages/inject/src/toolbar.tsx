@@ -15,12 +15,13 @@ export default defineComponent({
       },
       {
         icon: '',
-        text: 'Expect',
-        active: toolsStatus.value.expecting,
-        handler() {},
+        text: 'Assert',
+        active: toolsStatus.value.asserting,
+        handler() {
+          toolsStatus.value.asserting = true
+        },
       },
     ])
-    tools
 
     return () =>
       tools.value.map(tool => (

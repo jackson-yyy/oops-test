@@ -2,6 +2,10 @@ import { createApp } from 'vue'
 import { addEventListener } from './utils'
 import Toolbar from './toolbar'
 import './toolbar.less'
+import 'ant-design-vue/lib/modal/style'
+// import '@idux/components/modal/style'
+
+// TODO:用idux不知道为啥样式引不进来，postcss插件解析完变成空了
 
 document.addEventListener('DOMContentLoaded', () => {
   const toolbarElement = document.createElement('div')
