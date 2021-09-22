@@ -10,6 +10,20 @@ function getDefaultToolsStatus() {
   }
 }
 
+function preventEvent(event: Event) {
+  event.stopImmediatePropagation()
+  event.stopPropagation()
+  event.preventDefault()
+}
+
+function listenerWrapper(cb: (evt: MouseEvent) => void) {
+  return (evt: Event) => {
+    if (!(evt as any).path.includes(document.querySelector('.oops-test-toolbar'))) {
+      cb(evt as MouseEvent)
+    }
+  }
+}
+
 export function useRecorder() {
   const toolsStatus = ref(getDefaultToolsStatus())
   const listeners = ref<(() => void)[]>([])
@@ -18,8 +32,8 @@ export function useRecorder() {
 
   function initListeners() {
     listeners.value = [
-      addEventListener(document, 'click', event => onClick(event as MouseEvent)),
-      addEventListener(document, 'auxclick', event => onClick(event as MouseEvent)),
+      addEventListener(document, 'click', listenerWrapper(onClick), true),
+      addEventListener(document, 'auxclick', listenerWrapper(onClick), true),
       // addEventListener(document, 'input', event => _onInput(event), true),
       // addEventListener(document, 'keydown', event => _onKeyDown(event as KeyboardEvent), true),
       // addEventListener(document, 'keyup', event => _onKeyUp(event as KeyboardEvent), true),
@@ -55,10 +69,10 @@ export function useRecorder() {
     if (!event.target) return
     if (toolsStatus.value.hovering) {
       onHover(event)
-      event.preventDefault()
+      preventEvent(event)
     } else if (toolsStatus.value.asserting) {
       onAssert(event)
-      event.preventDefault()
+      preventEvent(event)
     } else {
       window.__oopsTest_recordAction({
         action: 'click',
@@ -73,8 +87,6 @@ export function useRecorder() {
   }
 
   function onHover(event: MouseEvent) {
-    console.log(event.target)
-
     if (!event.target) return
     window.__oopsTest_recordAction({
       action: 'hover',

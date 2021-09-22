@@ -69,6 +69,7 @@ class Runner extends EventEmitter {
     for (const action of actions) {
       await this.runAction(action)
     }
+    this.browser?.close()
   }
 
   private async runAction(action: Action) {
