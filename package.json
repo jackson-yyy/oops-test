@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "scripts": {
-    "bts": "pnpm clear && lerna bootstrap",
+    "bts": "lerna bootstrap",
     "clear": "rimraf node_modules && lerna clean --yes",
     "precommit": "ls-lint && lint-staged --no-stash",
     "dev:demo": "pnpm dev --filter @oops-test/demo",
