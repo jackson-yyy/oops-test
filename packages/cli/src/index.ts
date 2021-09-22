@@ -19,6 +19,7 @@ program
   .command('run <casesDir>')
   .description('run cases under <casesDir>')
   .option('-hl, --headless', 'headless mode', false)
+  .option('-ai, --action-interval <number>', 'interval between two actions')
   .action((casesDir: string, options) => {
     run(casesDir, options)
   })
