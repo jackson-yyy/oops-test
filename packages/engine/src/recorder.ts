@@ -50,6 +50,10 @@ class Recorder extends EventEmitter {
       this.addAction(action)
     })
 
+    await this.context.exposeBinding('__oopsTest_finish', () => {
+      this.finish()
+    })
+
     this.addAction({
       action: 'newContext',
       params: {
@@ -146,6 +150,7 @@ class Recorder extends EventEmitter {
   private finish() {
     this.browser?.close()
     this.emit('finish')
+    process.exit(1)
   }
 }
 
