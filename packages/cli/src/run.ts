@@ -6,13 +6,18 @@ import ora from 'ora'
 
 interface Options {
   headless?: boolean
+  actionInterval?: string
 }
 
 export default async function run(casesDir: string, options: Options) {
   casesDir = resolve(process.cwd(), casesDir)
+  console.log(options)
+
+  const actionInterval = Number(options.actionInterval ?? (options.headless ? 0 : 1000))
   const runner = new Runner({
     browserLaunchOptions: {
       headless: options.headless,
+      slowMo: actionInterval,
     },
   })
   const errorList: Error[] = []
