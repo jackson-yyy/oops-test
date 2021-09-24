@@ -1,7 +1,7 @@
 import Debug from 'debug'
 import { merge } from 'lodash'
 import { LaunchOptions, Browser, BrowserContext, Page } from 'playwright'
-import { BrowserName, Action, Assertion, ManualAction } from './types'
+import { BrowserName, Action, Assertion, ManualAction, Case } from './types'
 import { getBrowser } from './utils'
 import expect from 'expect'
 import { EventEmitter } from 'stream'
@@ -43,8 +43,12 @@ class MultiRunner {
     }
   }
 
-  run(actions: Action[]) {
-    this.runners.forEach(runner => runner.run(actions))
+  runCase(ca: Case) {
+    this.runners.forEach(runner => runner.runCase(ca))
+  }
+
+  finish() {
+    this.runners.forEach(runner => runner.finish())
   }
 }
 
@@ -64,12 +68,14 @@ class Runner extends EventEmitter {
     merge(this.options, options)
   }
 
-  async run(actions: Action[]) {
-    await this.initBrowser()
-    for (const action of actions) {
+  async runCase(cas: Case) {
+    if (!this.browser) {
+      await this.initBrowser()
+    }
+
+    for (const action of cas.actions) {
       await this.runAction(action)
     }
-    this.browser?.close()
   }
 
   private async runAction(action: Action) {
@@ -192,6 +198,10 @@ class Runner extends EventEmitter {
     const pageMap = this.contextMap.get(context) ?? new Map()
     pageMap.set(pageId, page)
     this.contextMap.set(context, pageMap)
+  }
+
+  finish() {
+    this.browser?.close()
   }
 }
 

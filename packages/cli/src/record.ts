@@ -1,4 +1,4 @@
-import { Recorder, BrowserName, Action } from '@oops-test/engine'
+import { Recorder, BrowserName, Case } from '@oops-test/engine'
 import { writeFileSync, existsSync, mkdirSync } from 'fs'
 import { join, resolve } from 'path'
 
@@ -14,14 +14,15 @@ export default function record(url: string, options: Options) {
     browser: options.browser,
   })
   recorder.on('finish', () => {
-    writeCase(recorder.actions, resolve(process.cwd(), options.output))
+    writeCase(recorder.case, resolve(process.cwd(), options.output))
+    process.exit(1)
   })
 }
 
-function writeCase(actions: Action[], outputDir: string) {
+function writeCase(cas: Case, outputDir: string) {
   if (!existsSync(outputDir)) {
     mkdirSync(outputDir)
   }
 
-  writeFileSync(join(outputDir, `${new Date().getTime()}.spec.json`), JSON.stringify(actions, null, 2), { flag: 'a+' })
+  writeFileSync(join(outputDir, `${new Date().getTime()}.spec.json`), JSON.stringify(cas, null, 2), { flag: 'a+' })
 }
