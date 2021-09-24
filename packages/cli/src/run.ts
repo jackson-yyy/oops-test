@@ -11,7 +11,6 @@ interface Options {
 
 export default async function run(casesDir: string, options: Options) {
   casesDir = resolve(process.cwd(), casesDir)
-  console.log(options)
 
   const actionInterval = Number(options.actionInterval ?? (options.headless ? 0 : 1000))
   const runner = new Runner({
@@ -31,7 +30,7 @@ export default async function run(casesDir: string, options: Options) {
 
     try {
       spinner.start()
-      await runner.run(JSON.parse(readFileSync(join(casesDir, fileName), 'utf-8')))
+      await runner.runCase(JSON.parse(readFileSync(join(casesDir, fileName), 'utf-8')))
     } catch (error) {
       errorList.push(error as Error)
       console.log(error)
@@ -40,6 +39,8 @@ export default async function run(casesDir: string, options: Options) {
       spinner.stop()
     }
   }
+
+  runner.finish()
 
   console.log(chalk.blue('finish running cases!'))
   console.log(chalk.green(`pass: ${fileList.length - errorList.length}`))

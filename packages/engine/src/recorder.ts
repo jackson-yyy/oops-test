@@ -3,7 +3,7 @@ import { merge } from 'lodash'
 import path from 'path'
 import { BrowserContext, Browser, Page } from 'playwright'
 import { EventEmitter } from 'stream'
-import { BrowserName, Action, Signal } from './types'
+import { BrowserName, Action, Signal, Case } from './types'
 import { getUuid, getBrowser } from './utils'
 
 const debug = Debug('oops-test:runner')
@@ -15,18 +15,14 @@ interface RecorderOptions {
 
 class Recorder extends EventEmitter {
   private browser?: Browser
-  private context?: BrowserContext
-  private contextId?: string
 
-  private actionsRecord: Action[] = []
-  // private requestData
+  case: Case = {
+    url: '',
+    actions: [],
+  }
 
   private options: RecorderOptions = {
     saveMock: true,
-  }
-
-  get actions() {
-    return this.actionsRecord
   }
 
   constructor(options?: RecorderOptions) {
@@ -34,46 +30,35 @@ class Recorder extends EventEmitter {
     merge(this.options, options)
   }
 
-  private async initContext() {
-    this.context = await this.browser!.newContext()
-    this.contextId = getUuid()
-
-    this.context.on('page', page => {
-      this.onPage(page)
+  private async prepareContext(context: BrowserContext, ctxId = getUuid()) {
+    context.on('page', page => {
+      this.onPage(page, ctxId)
     })
 
-    await this.context.addInitScript({
+    await context.addInitScript({
       path: path.join(__dirname, '../inject/index.js'),
     })
 
-    await this.context.exposeBinding('__oopsTest_recordAction', (_source, action: Action) => {
+    await context.exposeBinding('__oopsTest_recordAction', (_source, action: Action) => {
       this.addAction(action)
     })
 
-    await this.context.exposeBinding('__oopsTest_finish', () => {
+    await context.exposeBinding('__oopsTest_finish', () => {
       this.finish()
     })
 
-    this.addAction({
-      action: 'newContext',
-      params: {
-        id: this.contextId!,
-      },
-    })
-
-    this.context?.on('close', () => {
+    context.on('close', () => {
       this.addAction({
         action: 'closeContext',
         params: {
-          id: this.contextId!,
+          id: ctxId,
         },
       })
-      this.finish()
     })
   }
 
-  private async onPage(page: Page, pageId = getUuid()) {
-    this.preparePage(page, pageId)
+  private async onPage(page: Page, ctxId: string, pageId = getUuid()) {
+    this.preparePage(page, ctxId, pageId)
 
     if (await page.opener()) {
       this.setSignal({
@@ -83,7 +68,7 @@ class Recorder extends EventEmitter {
 
       this.addAction({
         action: 'assertion',
-        context: this.contextId!,
+        context: ctxId,
         page: pageId,
         params: {
           type: 'newPage',
@@ -94,7 +79,7 @@ class Recorder extends EventEmitter {
       await page.waitForEvent('domcontentloaded')
       this.addAction({
         action: 'newPage',
-        context: this.contextId!,
+        context: ctxId,
         params: {
           url: page.url(),
           id: pageId,
@@ -103,11 +88,11 @@ class Recorder extends EventEmitter {
     }
   }
 
-  private preparePage(page: Page, pageId = getUuid()) {
+  private preparePage(page: Page, ctxId: string, pageId = getUuid()) {
     page.on('close', () => {
       this.addAction({
         action: 'closePage',
-        context: this.contextId!,
+        context: ctxId,
         params: {
           id: pageId,
         },
@@ -118,17 +103,17 @@ class Recorder extends EventEmitter {
     page.on('response', debug)
 
     page.on('domcontentloaded', async pg => {
-      pg.evaluate(`window.__oopsTest_contextId = '${this.contextId}'`)
+      pg.evaluate(`window.__oopsTest_contextId = '${ctxId}'`)
       pg.evaluate(`window.__oopsTest_pageId = '${pageId}'`)
     })
   }
 
   private addAction(action: Action) {
-    this.actionsRecord.push(action)
+    this.case.actions.push(action)
   }
 
   private setSignal(signal: Signal) {
-    let action = this.actionsRecord[this.actionsRecord.length - 1]
+    let action = this.case.actions[this.case.actions.length - 1]
     if (!action) return
     const { name, ...params } = signal
     action.signals = {
@@ -138,19 +123,30 @@ class Recorder extends EventEmitter {
   }
 
   async start({ url = 'http://localhost:8080', browser = 'chromium' }: { url: string; browser?: BrowserName }) {
+    this.case.url = url
+
     this.browser = await getBrowser(browser).launch({ headless: false })
     this.browser.on('disconnected', this.finish)
 
-    await this.initContext()
+    const contextId = getUuid()
+    const context = await this.browser.newContext()
+    await this.prepareContext(context, contextId)
 
-    const page = await this.context!.newPage()
+    this.addAction({
+      action: 'newContext',
+      params: {
+        id: contextId,
+      },
+    })
+
+    const page = await context.newPage()
     await page.goto(url)
   }
 
-  private finish() {
+  private async finish() {
+    await Promise.all(this.browser?.contexts().map(ctx => ctx.close()) ?? [])
     this.browser?.close()
     this.emit('finish')
-    process.exit(1)
   }
 }
 
