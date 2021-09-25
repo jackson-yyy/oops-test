@@ -13,7 +13,8 @@ export function addEventListener(
   return remove
 }
 
-export function getSelector(target: EventTarget, document: Document) {
+export function getSelector(target: EventTarget | null, document: Document) {
+  if (!target) return 'body'
   const list = document.querySelectorAll(`[data-o-s-t]`)
   for (const tar of Array.from(list)) {
     if (tar.contains(target as Node)) {

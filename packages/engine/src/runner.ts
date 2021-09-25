@@ -145,6 +145,9 @@ class Runner extends EventEmitter {
     if (action.action === 'hover') {
       actionPromise = () => page.hover(action.params.selector)
     }
+    if (action.action === 'input') {
+      actionPromise = () => page.fill(action.params.selector, action.params.content)
+    }
 
     if (signals?.popup) {
       const [popupPage] = await Promise.all([page.waitForEvent('popup'), actionPromise()])

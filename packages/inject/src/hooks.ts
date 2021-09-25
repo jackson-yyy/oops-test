@@ -1,3 +1,4 @@
+import { Modifier } from '@oops-test/engine'
 import { ref, onMounted, onUnmounted, h } from 'vue'
 import { addEventListener, getSelector } from './utils'
 // import { useModal } from '@idux/components/modal'
@@ -16,27 +17,67 @@ function preventEvent(event: Event) {
   event.preventDefault()
 }
 
-function listenerWrapper(cb: (evt: MouseEvent) => void) {
+function listenerWrapper<T extends Event>(cb: (evt: T) => void) {
   return (evt: Event) => {
     if (!(evt as any).path.includes(document.querySelector('.oops-test-toolbar'))) {
-      cb(evt as MouseEvent)
+      cb(evt as T)
     }
   }
+}
+
+function getModifierByEvent(event: MouseEvent | KeyboardEvent): Modifier | undefined {
+  let modifier: Modifier | undefined = undefined
+  if (event.ctrlKey) {
+    modifier = 'Control'
+  }
+  if (event.altKey) {
+    modifier = 'Alt'
+  }
+  if (event.shiftKey) {
+    modifier = 'Shift'
+  }
+  if (event.metaKey) {
+    modifier = 'Meta'
+  }
+
+  return modifier
+}
+
+function canPress(event: KeyboardEvent): boolean {
+  // 这三个键属于文本输入，在input处处理
+  if (['Backspace', 'Delete', 'AltGraph'].includes(event.key)) return false
+
+  // 忽略ctrl+v，在input处理
+  if (/macintosh|mac os x/i.test(navigator.userAgent)) {
+    if (event.key === 'v' && event.metaKey) return false
+  } else {
+    if (event.key === 'v' && event.ctrlKey) return false
+    if (event.key === 'Insert' && event.shiftKey) return false
+  }
+
+  if (['Shift', 'Control', 'Meta', 'Alt'].includes(event.key)) return false
+
+  // 单字符且没有修饰符的，当做input处理
+  if (event.key.length <= 1 && !getModifierByEvent(event)) return false
+
+  return true
 }
 
 export function useRecorder() {
   const toolsStatus = ref(getDefaultToolsStatus())
   const listeners = ref<(() => void)[]>([])
 
-  const { onAssert } = useAssert()
+  const onAssert = useAssert()
+  const onInput = useInput()
+  const { onKeydown } = useKeyboard()
 
   function initListeners() {
     listeners.value = [
       addEventListener(document, 'click', listenerWrapper(onClick), true),
       addEventListener(document, 'auxclick', listenerWrapper(onClick), true),
-      // addEventListener(document, 'input', event => _onInput(event), true),
-      // addEventListener(document, 'keydown', event => _onKeyDown(event as KeyboardEvent), true),
-      // addEventListener(document, 'keyup', event => _onKeyUp(event as KeyboardEvent), true),
+      addEventListener(document, 'input', listenerWrapper(onInput), true),
+      addEventListener(document, 'keydown', listenerWrapper(onKeydown), true),
+      // addEventListener(document, 'keyup', listenerWrapper(onKeyup), true),
       // addEventListener(document, 'mousedown', event => _onMouseDown(event as MouseEvent), true),
       // addEventListener(document, 'mouseup', event => _onMouseUp(event as MouseEvent), true),
       // addEventListener(
@@ -80,6 +121,7 @@ export function useRecorder() {
         page: window.__oopsTest_pageId,
         params: {
           selector: getSelector(event.target, document),
+          modifier: getModifierByEvent(event),
         },
       })
     }
@@ -119,7 +161,7 @@ export function useRecorder() {
 }
 
 export function useAssert() {
-  function onAssert(event: MouseEvent) {
+  return function onAssert(event: MouseEvent) {
     if (!event.target) return
     const assertValue = ref((event.target as HTMLElement).innerText)
     Modal.confirm({
@@ -148,8 +190,39 @@ export function useAssert() {
       },
     })
   }
+}
 
+export function useInput() {
+  return function onInput(event: InputEvent) {
+    window.__oopsTest_recordAction({
+      action: 'input',
+      context: window.__oopsTest_contextId,
+      page: window.__oopsTest_pageId,
+      params: {
+        selector: getSelector(event.target, document),
+        content: (event.target as HTMLInputElement).value,
+      },
+    })
+  }
+}
+
+// TODO:keyboard这里会比较复杂，需要处理奇奇怪怪的按键，后续优化
+export function useKeyboard() {
+  function onKeydown(event: KeyboardEvent) {
+    if (canPress(event)) {
+      window.__oopsTest_recordAction({
+        action: 'press',
+        context: window.__oopsTest_contextId,
+        page: window.__oopsTest_pageId,
+        params: {
+          selector: getSelector(event.target, document),
+          key: event.key,
+          modifier: getModifierByEvent(event),
+        },
+      })
+    }
+  }
   return {
-    onAssert,
+    onKeydown,
   }
 }

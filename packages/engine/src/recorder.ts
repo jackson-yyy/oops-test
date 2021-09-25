@@ -7,7 +7,6 @@ import { BrowserName, Action, Signal, Case } from './types'
 import { getUuid, getBrowser } from './utils'
 
 const debug = Debug('oops-test:runner')
-
 interface RecorderOptions {
   // 开启时，recorder会自动记录页面的所有请求数据，当做用例重跑时的数据源
   saveMock: boolean
@@ -25,6 +24,8 @@ class Recorder extends EventEmitter {
     saveMock: true,
   }
 
+  private lastAction: Action | null = null
+
   constructor(options?: RecorderOptions) {
     super()
     merge(this.options, options)
@@ -40,7 +41,7 @@ class Recorder extends EventEmitter {
     })
 
     await context.exposeBinding('__oopsTest_recordAction', (_source, action: Action) => {
-      this.addAction(action)
+      this.recordAction(action)
     })
 
     await context.exposeBinding('__oopsTest_finish', () => {
@@ -48,7 +49,7 @@ class Recorder extends EventEmitter {
     })
 
     context.on('close', () => {
-      this.addAction({
+      this.recordAction({
         action: 'closeContext',
         params: {
           id: ctxId,
@@ -66,7 +67,7 @@ class Recorder extends EventEmitter {
         pageId: pageId,
       })
 
-      this.addAction({
+      this.recordAction({
         action: 'assertion',
         context: ctxId,
         page: pageId,
@@ -77,7 +78,7 @@ class Recorder extends EventEmitter {
       })
     } else {
       await page.waitForEvent('domcontentloaded')
-      this.addAction({
+      this.recordAction({
         action: 'newPage',
         context: ctxId,
         params: {
@@ -90,7 +91,7 @@ class Recorder extends EventEmitter {
 
   private preparePage(page: Page, ctxId: string, pageId = getUuid()) {
     page.on('close', () => {
-      this.addAction({
+      this.recordAction({
         action: 'closePage',
         context: ctxId,
         params: {
@@ -108,17 +109,25 @@ class Recorder extends EventEmitter {
     })
   }
 
-  private addAction(action: Action) {
+  private recordAction(action: Action) {
+    if (
+      this.lastAction?.action === 'input' &&
+      action.action === 'input' &&
+      this.lastAction.params.selector === action.params.selector
+    ) {
+      this.case.actions.pop()
+    }
+
+    this.lastAction = action
     this.case.actions.push(action)
   }
 
   private setSignal(signal: Signal) {
-    let action = this.case.actions[this.case.actions.length - 1]
-    if (!action) return
+    if (!this.lastAction) return
     const { name, ...params } = signal
-    action.signals = {
+    this.lastAction.signals = {
       [name]: params,
-      ...(action.signals ?? {}),
+      ...(this.lastAction.signals ?? {}),
     }
   }
 
@@ -132,7 +141,7 @@ class Recorder extends EventEmitter {
     const context = await this.browser.newContext()
     await this.prepareContext(context, contextId)
 
-    this.addAction({
+    this.recordAction({
       action: 'newContext',
       params: {
         id: contextId,

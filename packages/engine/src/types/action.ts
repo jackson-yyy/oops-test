@@ -3,10 +3,10 @@ import { Assertion } from './assertion'
 
 export type Action = Assertion | NewContext | CloseContext | NewPage | ClosePage | ErrorAction | ManualAction
 
-export type ManualAction = ClickAction | MousemoveAction | HoverAction
+export type ManualAction = ClickAction | MousemoveAction | HoverAction | PressAction | InputAction
 
 export interface BaseAction {
-  action: ActionType
+  action: string
   context?: string
   page?: string
   params?: Record<string, any>
@@ -19,6 +19,8 @@ export type HtmlType = 'click' | 'dbClick' | 'press' | 'hover' | 'mousemove'
 export type PageType = 'newPage' | 'closePage'
 export type ContextType = 'newContext' | 'closeContext'
 export type CustomType = 'assertion'
+
+export type Modifier = 'Shift' | 'Control' | 'Alt' | 'Meta'
 
 export interface NewContext extends BaseAction {
   action: 'newContext'
@@ -55,6 +57,7 @@ export interface ClickAction extends BaseAction {
   page: string
   params: {
     selector: string
+    modifier?: string
   }
 }
 
@@ -74,6 +77,27 @@ export interface HoverAction extends BaseAction {
   page: string
   params: {
     selector: string
+  }
+}
+
+export interface PressAction extends BaseAction {
+  action: 'press'
+  context: string
+  page: string
+  params: {
+    selector: string
+    key: string
+    modifier?: Modifier
+  }
+}
+
+export interface InputAction extends BaseAction {
+  action: 'input'
+  context: string
+  page: string
+  params: {
+    selector: string
+    content: string
   }
 }
 

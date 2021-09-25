@@ -10,4 +10,4 @@
 export * from './recorder'
 export * from './runner'
 
-export type { Case, Action, Assertion, Signal, BrowserName } from './types'
+export type { Case, Action, Assertion, Signal, Modifier, BrowserName } from './types'
