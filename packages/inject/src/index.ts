@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { addEventListener } from './utils'
 import Toolbar from './toolbar'
 import './toolbar.less'
+// FIXME:这里引入的一些样式会改变默认样式，比如body会被overflow hidden
 import 'ant-design-vue/lib/modal/style'
 // import '@idux/components/modal/style'
 
