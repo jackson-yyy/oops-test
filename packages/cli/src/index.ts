@@ -2,6 +2,8 @@ import { Command } from 'commander'
 import record from './record'
 import run from './run'
 import * as pkg from '../package.json'
+import dayjs from 'dayjs'
+
 const program = new Command()
 
 program.version(`oops-test ${pkg.version}`).usage('<command> [options]')
@@ -10,6 +12,7 @@ program
   .command('record <url>')
   .description('open a browser to record cases')
   .requiredOption('-o, --output [path]', 'output of cases', process.cwd())
+  .requiredOption('-cn, --case-name <name>', 'name of case', dayjs().format('YYYYMMDD_HHmmss'))
   .option('-b, --browser [browser]', 'output of cases')
   .action((url: string, options) => {
     record(url, options)
