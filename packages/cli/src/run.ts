@@ -21,7 +21,7 @@ export default async function run(casesDir: string, options: Options) {
   })
   const errorList: Error[] = []
 
-  const fileList = readdirSync(casesDir).filter(fileName => /(.*).spec.json/.test(fileName))
+  const fileList = readdirSync(casesDir)
 
   // TODO: 优化输出样式
   for (const fileName of fileList) {
@@ -30,7 +30,7 @@ export default async function run(casesDir: string, options: Options) {
 
     try {
       spinner.start()
-      await runner.runCase(JSON.parse(readFileSync(join(casesDir, fileName), 'utf-8')))
+      await runner.runCase(JSON.parse(readFileSync(join(casesDir, fileName, 'case.json'), 'utf-8')))
     } catch (error) {
       errorList.push(error as Error)
       console.log(error)
