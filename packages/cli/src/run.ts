@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from 'fs'
+import { readdirSync } from 'fs'
 import { join, resolve } from 'path'
 import { Runner } from '@oops-test/engine'
 import chalk from 'chalk'
@@ -7,6 +7,7 @@ import ora from 'ora'
 interface Options {
   headless?: boolean
   actionInterval?: string
+  errorOutput: string
 }
 
 export default async function run(casesDir: string, options: Options) {
@@ -30,7 +31,7 @@ export default async function run(casesDir: string, options: Options) {
 
     try {
       spinner.start()
-      await runner.runCase(JSON.parse(readFileSync(join(casesDir, fileName, 'case.json'), 'utf-8')))
+      await runner.runCase(join(casesDir, fileName))
     } catch (error) {
       errorList.push(error as Error)
       console.log(error)

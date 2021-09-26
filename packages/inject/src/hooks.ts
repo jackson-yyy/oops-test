@@ -1,12 +1,16 @@
 import { Modifier } from '@oops-test/engine'
-import { ref, onMounted, onUnmounted, h } from 'vue'
+import { ref, onMounted, onUnmounted, h, computed, Ref } from 'vue'
 import { addEventListener, getSelector } from './utils'
 import { useDialog, NInput } from 'naive-ui'
+import dayjs from 'dayjs'
 
 function getDefaultToolsStatus() {
   return {
+    visible: true,
     hovering: false,
-    asserting: false,
+    asserting: {
+      text: false,
+    },
   }
 }
 
@@ -18,7 +22,7 @@ function preventEvent(event: Event) {
 
 function listenerWrapper<T extends Event>(cb: (evt: T) => void) {
   return (evt: Event) => {
-    if (!(evt as any).path.includes(document.querySelector('.oops-test-toolbar'))) {
+    if (!(evt as any).path.includes(document.querySelector('.oops-test'))) {
       cb(evt as T)
     }
   }
@@ -62,8 +66,13 @@ function canPress(event: KeyboardEvent): boolean {
   return true
 }
 
-export function useRecorder() {
-  const toolsStatus = ref(getDefaultToolsStatus())
+export function useRecorder({
+  status: toolsStatus,
+  resetStatus: resetToolsStatus,
+}: {
+  status: Ref<ReturnType<typeof getDefaultToolsStatus>>
+  resetStatus: () => void
+}) {
   const listeners = ref<(() => void)[]>([])
 
   const onAssert = useAssert()
@@ -101,16 +110,12 @@ export function useRecorder() {
     listeners.value = []
   }
 
-  function resetToolsStatus() {
-    toolsStatus.value = getDefaultToolsStatus()
-  }
-
   function onClick(event: MouseEvent) {
     if (!event.target) return
     if (toolsStatus.value.hovering) {
       onHover(event)
       preventEvent(event)
-    } else if (toolsStatus.value.asserting) {
+    } else if (toolsStatus.value.asserting.text) {
       onAssert(event)
       preventEvent(event)
     } else {
@@ -153,11 +158,6 @@ export function useRecorder() {
 
   onMounted(initListeners)
   onUnmounted(removeEventListeners)
-
-  return {
-    toolsStatus,
-    resetToolsStatus,
-  }
 }
 
 export function useAssert() {
@@ -224,5 +224,81 @@ export function useKeyboard() {
   }
   return {
     onKeydown,
+  }
+}
+
+export function useToolbar() {
+  function toolHandlerWrapper(handler: () => void) {
+    return () => {
+      resetToolsStatus()
+      handler()
+    }
+  }
+
+  function resetToolsStatus() {
+    toolsStatus.value = getDefaultToolsStatus()
+  }
+
+  const toolsStatus = ref(getDefaultToolsStatus())
+  const tools = computed(() =>
+    [
+      {
+        icon: '',
+        text: 'Hover',
+        active: toolsStatus.value.hovering,
+        handler() {
+          toolsStatus.value.hovering = !toolsStatus.value.hovering
+        },
+      },
+      {
+        icon: '',
+        text: 'TextAssert',
+        active: toolsStatus.value.asserting.text,
+        handler() {
+          toolsStatus.value.asserting.text = !toolsStatus.value.asserting.text
+        },
+      },
+      {
+        icon: '',
+        text: 'ScreenshotAssert',
+        active: false,
+        handler() {
+          toolsStatus.value.visible = false
+          window.__oopsTest_recordAction({
+            action: 'assertion',
+            context: window.__oopsTest_contextId,
+            page: window.__oopsTest_pageId,
+            params: {
+              type: 'screenshot',
+              name: `assertion_${dayjs().valueOf()}.png`,
+            },
+          })
+        },
+      },
+      {
+        icon: '',
+        text: 'finish',
+        handler: window.__oopsTest_finish,
+      },
+    ].map(tool => ({
+      ...tool,
+      handler: toolHandlerWrapper(tool.handler),
+    })),
+  )
+
+  const style = computed(() => ({
+    visibility: toolsStatus.value.visible ? ('initial' as const) : ('hidden' as const),
+  }))
+
+  useRecorder({
+    status: toolsStatus,
+    resetStatus: resetToolsStatus,
+  })
+
+  window.__oopsTest_resetToolbar = resetToolsStatus
+
+  return {
+    tools,
+    style,
   }
 }

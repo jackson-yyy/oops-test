@@ -2,9 +2,12 @@ import Debug from 'debug'
 import { merge } from 'lodash'
 import { LaunchOptions, Browser, BrowserContext, Page } from 'playwright'
 import { BrowserName, Action, Assertion, ManualAction, Case } from './types'
-import { getBrowser } from './utils'
+import { getBrowser, readJson } from './utils'
 import expect from 'expect'
 import { EventEmitter } from 'stream'
+import { join, resolve } from 'path'
+import odiff from 'odiff-bin'
+import chalk from 'chalk'
 
 const debug = Debug('oops-test:runner')
 interface RunnerOptions {
@@ -43,8 +46,8 @@ class MultiRunner {
     }
   }
 
-  runCase(ca: Case) {
-    this.runners.forEach(runner => runner.runCase(ca))
+  runCase(caseDir: string) {
+    this.runners.forEach(runner => runner.runCase(caseDir))
   }
 
   finish() {
@@ -63,16 +66,21 @@ class Runner extends EventEmitter {
   private contextIdMap: Map<string, BrowserContext> = new Map()
   private contextMap: Map<BrowserContext, Map<string, Page>> = new Map()
 
+  private caseDir = ''
+
   constructor(options?: RunnerOptions) {
     super()
     merge(this.options, options)
   }
 
-  async runCase(cas: Case) {
+  async runCase(caseDir: string) {
     if (!this.browser) {
       await this.initBrowser()
     }
 
+    this.caseDir = caseDir
+
+    const cas = readJson<Case>(join(caseDir, 'case.json'))
     for (const action of cas.actions) {
       await this.runAction(action)
     }
@@ -131,6 +139,7 @@ class Runner extends EventEmitter {
     }
 
     await this.runManualAction(action)
+    await this.compareScreenshot(action)
   }
 
   private async runManualAction(action: ManualAction) {
@@ -168,10 +177,31 @@ class Runner extends EventEmitter {
         case 'innerText':
           expect(await page.textContent(action.params.selector)).toBe(action.params.content)
           break
+        case 'screenshot': {
+          const page = this.getPage(action.context, action.page)
+          const runtimeDir = resolve(this.caseDir, 'runtime', 'screenshots')
+          await page.waitForLoadState('domcontentloaded')
+
+          // FIXME:odiff暂时不支持buffer对比和输出，官方近期会开始支持，这里先简单处理
+          await this.getPage(action.context, action.page)?.screenshot({
+            path: join(runtimeDir, action.params.name),
+          })
+          const { match } = await odiff.compare(
+            resolve(this.caseDir, 'screenshots', action.params.name),
+            join(runtimeDir, action.params.name),
+            join(runtimeDir, `diff_${action.params.name}`),
+          )
+
+          if (!match) throw new Error(chalk.red(`screenshot ${action.params.name} compare fail!`))
+        }
       }
     } catch (error: any) {
       throw new Error(error.message)
     }
+  }
+
+  private async compareScreenshot(action: Action) {
+    if (!action.screenShot) return
   }
 
   private async initBrowser() {

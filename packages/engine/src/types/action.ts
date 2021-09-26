@@ -10,6 +10,7 @@ export interface BaseAction {
   context?: string
   page?: string
   params?: Record<string, any>
+  screenShot?: string
   signals?: Record<SignalType, Omit<Signal, 'name'>>
 }
 

@@ -6,5 +6,6 @@ declare global {
     __oopsTest_finish: () => void
     __oopsTest_contextId: string
     __oopsTest_pageId: string
+    __oopsTest_resetToolbar: () => void
   }
 }

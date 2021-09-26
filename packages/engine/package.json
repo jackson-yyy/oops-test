@@ -21,9 +21,12 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
+    "dayjs": "^1.10.7",
     "debug": "^4.3.2",
     "expect": "^27.1.1",
     "lodash": "^4.17.21",
+    "odiff-bin": "^2.4.2",
+    "pixelmatch": "^5.2.1",
     "playwright": "^1.14.1"
   }
 }
