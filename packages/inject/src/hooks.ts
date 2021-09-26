@@ -157,6 +157,7 @@ export function useRecorder() {
 
   return {
     toolsStatus,
+    resetToolsStatus,
   }
 }
 
