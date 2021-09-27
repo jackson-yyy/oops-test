@@ -1,8 +1,7 @@
 import { Modifier } from '@oops-test/engine'
 import { ref, onMounted, onUnmounted, h } from 'vue'
 import { addEventListener, getSelector } from './utils'
-// import { useModal } from '@idux/components/modal'
-import { Modal } from 'ant-design-vue/es'
+import { useDialog, NInput } from 'naive-ui'
 
 function getDefaultToolsStatus() {
   return {
@@ -162,22 +161,22 @@ export function useRecorder() {
 }
 
 export function useAssert() {
+  const dialog = useDialog()
+
   return function onAssert(event: MouseEvent) {
     if (!event.target) return
     const assertValue = ref((event.target as HTMLElement).innerText)
-    Modal.confirm({
-      getContainer() {
-        return document.querySelector('.oops-test-toolbar') ?? document.body
-      },
+    dialog.info({
       title: '输入断言内容',
       content: () =>
-        h('input', {
+        h(NInput, {
           value: assertValue.value,
-          onInput(event: InputEvent) {
-            assertValue.value = (event.target as HTMLInputElement).value
+          onInput(value: string) {
+            assertValue.value = value
           },
         }),
-      onOk() {
+      positiveText: '确认',
+      onPositiveClick() {
         window.__oopsTest_recordAction({
           action: 'assertion',
           context: window.__oopsTest_contextId,
