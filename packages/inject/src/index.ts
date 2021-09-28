@@ -11,6 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 阻止toolbar的点击冒泡，防止记录无用的action
   addEventListener(toolbarElement, 'click', (e: Event) => e.stopPropagation())
 
-  createApp(h(NDialogProvider, null, [h(Toolbar)])).mount(toolbarElement)
+  createApp(h(NDialogProvider, { to: '.oops-test-toolbar' }, [h(Toolbar)])).mount(toolbarElement)
   document.body.appendChild(toolbarElement)
 })
