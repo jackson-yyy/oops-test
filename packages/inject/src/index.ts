@@ -4,7 +4,7 @@ import Toolbar from './toolbar'
 import './toolbar.less'
 import { NDialogProvider } from 'naive-ui'
 
-document.addEventListener('DOMContentLoaded', () => {
+export function injectToolbar() {
   const toolbarElement = document.createElement('div')
   toolbarElement.classList.add('oops-test-toolbar')
 
@@ -13,4 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   createApp(h(NDialogProvider, { to: '.oops-test-toolbar' }, [h(Toolbar)])).mount(toolbarElement)
   document.body.appendChild(toolbarElement)
-})
+}
+
+export function initInjectScript() {
+  if (document.readyState === 'complete') {
+    injectToolbar()
+    return
+  }
+  document.addEventListener('readystatechange', event => {
+    if ((event.target as Document).readyState === 'complete') {
+      injectToolbar()
+    }
+  })
+}

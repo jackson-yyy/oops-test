@@ -1,4 +1,4 @@
-import { Signal, SignalType } from './../types'
+import { Signal } from './../types'
 import { Assertion } from './assertion'
 
 export type Action = Assertion | NewContext | CloseContext | NewPage | ClosePage | ErrorAction | ManualAction
@@ -10,7 +10,7 @@ export interface BaseAction {
   context?: string
   page?: string
   params?: Record<string, any>
-  signals?: Record<SignalType, Omit<Signal, 'name'>>
+  signals?: Partial<Record<Signal['name'], Omit<Signal, 'name'>>>
 }
 
 export type ActionType = HtmlType | ContextType | PageType | CustomType | 'error'

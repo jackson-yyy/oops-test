@@ -100,10 +100,22 @@ class Recorder extends EventEmitter {
       })
     })
 
+    page.on('framenavigated', async frame => {
+      this.setSignal({
+        name: 'navigate',
+        pageId,
+      })
+      await frame.waitForLoadState('domcontentloaded')
+      console.log('framenavigated')
+
+      await page.evaluate('window.__oopsTest_inject.initInjectScript()')
+    })
+
     page.on('requestfinished', debug)
     page.on('response', debug)
 
     page.on('domcontentloaded', async pg => {
+      pg.evaluate('window.__oopsTest_inject.initInjectScript()')
       pg.evaluate(`window.__oopsTest_contextId = '${ctxId}'`)
       pg.evaluate(`window.__oopsTest_pageId = '${pageId}'`)
     })
