@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted, h, computed, Ref } from 'vue'
 import { addEventListener, getSelector } from './utils'
 import { useDialog, NInput } from 'naive-ui'
 import dayjs from 'dayjs'
+import { debounce } from 'lodash-es'
 
 function getDefaultToolsStatus() {
   return {
@@ -78,6 +79,7 @@ export function useRecorder({
   const onAssert = useAssert()
   const onInput = useInput()
   const { onKeydown } = useKeyboard()
+  const onScroll = useScroll()
 
   function initListeners() {
     listeners.value = [
@@ -97,11 +99,7 @@ export function useRecorder({
       // ),
       // addEventListener(document, 'mouseleave', event => _onMouseLeave(event as MouseEvent), true),
       // addEventListener(document, 'focus', () => _onFocus(), true),
-      // addEventListener(document, 'scroll', () => {
-      //   _hoveredModel = null;
-      //   _actionPointElement.hidden = true;
-      //   _updateHighlight();
-      // }, true),
+      addEventListener(document, 'scroll', listenerWrapper(onScroll), true),
     ]
   }
 
@@ -165,7 +163,7 @@ export function useAssert() {
 
   return function onAssert(event: MouseEvent) {
     if (!event.target) return
-    const assertValue = ref((event.target as HTMLElement).innerText)
+    const assertValue = ref((event.target as HTMLElement).textContent)
     dialog.info({
       title: '输入断言内容',
       content: () =>
@@ -225,6 +223,20 @@ export function useKeyboard() {
   return {
     onKeydown,
   }
+}
+
+export function useScroll() {
+  return debounce(() => {
+    window.__oopsTest_recordAction({
+      action: 'scroll',
+      context: window.__oopsTest_contextId,
+      page: window.__oopsTest_pageId,
+      params: {
+        x: document.documentElement.scrollLeft || window.pageXOffset || document.body.scrollLeft,
+        y: document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop,
+      },
+    })
+  }, 100)
 }
 
 export function useToolbar() {

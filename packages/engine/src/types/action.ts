@@ -3,7 +3,7 @@ import { Assertion } from './assertion'
 
 export type Action = Assertion | NewContext | CloseContext | NewPage | ClosePage | ErrorAction | ManualAction
 
-export type ManualAction = ClickAction | MousemoveAction | HoverAction | PressAction | InputAction
+export type ManualAction = ClickAction | MousemoveAction | HoverAction | PressAction | InputAction | ScrollAction
 
 export interface BaseAction {
   action: string
@@ -12,6 +12,11 @@ export interface BaseAction {
   params?: Record<string, any>
   screenShot?: string
   signals?: Record<SignalType, Omit<Signal, 'name'>>
+}
+
+export interface BaseManualAction extends BaseAction {
+  context: string
+  page: string
 }
 
 export type ActionType = HtmlType | ContextType | PageType | CustomType | 'error'
@@ -52,39 +57,31 @@ export interface ClosePage extends BaseAction {
   }
 }
 
-export interface ClickAction extends BaseAction {
+export interface ClickAction extends BaseManualAction {
   action: 'click' | 'dbClick'
-  context: string
-  page: string
   params: {
     selector: string
     modifier?: string
   }
 }
 
-export interface MousemoveAction extends BaseAction {
+export interface MousemoveAction extends BaseManualAction {
   action: 'mousemove'
-  context: string
-  page: string
   params: {
     x: number
     y: number
   }
 }
 
-export interface HoverAction extends BaseAction {
+export interface HoverAction extends BaseManualAction {
   action: 'hover'
-  context: string
-  page: string
   params: {
     selector: string
   }
 }
 
-export interface PressAction extends BaseAction {
+export interface PressAction extends BaseManualAction {
   action: 'press'
-  context: string
-  page: string
   params: {
     selector: string
     key: string
@@ -92,13 +89,19 @@ export interface PressAction extends BaseAction {
   }
 }
 
-export interface InputAction extends BaseAction {
+export interface InputAction extends BaseManualAction {
   action: 'input'
-  context: string
-  page: string
   params: {
     selector: string
     content: string
+  }
+}
+
+export interface ScrollAction extends BaseManualAction {
+  action: 'scroll'
+  params: {
+    x: number
+    y: number
   }
 }
 

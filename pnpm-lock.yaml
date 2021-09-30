@@ -178,9 +178,11 @@ importers:
   packages/inject:
     specifiers:
       dayjs: ^1.10.7
+      lodash-es: ^4.17.21
       naive-ui: ^2.19.2
     devDependencies:
       dayjs: registry.npmmirror.com/dayjs/1.10.7
+      lodash-es: 4.17.21
       naive-ui: registry.npmmirror.com/naive-ui/2.19.2_vue@3.2.12
 
   packages/marker:
@@ -4180,7 +4182,7 @@ packages:
     dev: false
 
   registry.nlark.com/@types/yauzl/2.9.2:
-    resolution: {integrity: sha1-xI5dVq/xREQJ45+hZLC01FUqe3o=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@types/yauzl/download/@types/yauzl-2.9.2.tgz}
+    resolution: {integrity: sha1-xI5dVq/xREQJ45+hZLC01FUqe3o=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/@types/yauzl/download/@types/yauzl-2.9.2.tgz?cache=0&sync_timestamp=1629709990261&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fyauzl%2Fdownload%2F%40types%2Fyauzl-2.9.2.tgz}
     name: '@types/yauzl'
     version: 2.9.2
     requiresBuild: true

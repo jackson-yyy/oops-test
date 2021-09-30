@@ -157,6 +157,12 @@ class Runner extends EventEmitter {
     if (action.action === 'input') {
       actionPromise = () => page.fill(action.params.selector, action.params.content)
     }
+    if (action.action === 'scroll') {
+      actionPromise = async () => {
+        await page.evaluate(`window.scrollTo(${action.params.x}, ${action.params.y})`)
+        await page.waitForTimeout(1000)
+      }
+    }
 
     if (signals?.popup) {
       const [popupPage] = await Promise.all([page.waitForEvent('popup'), actionPromise()])
@@ -180,7 +186,7 @@ class Runner extends EventEmitter {
         case 'screenshot': {
           const page = this.getPage(action.context, action.page)
           const runtimeDir = resolve(this.caseDir, 'runtime', 'screenshots')
-          await page.waitForLoadState('domcontentloaded')
+          await page.waitForLoadState('networkidle')
 
           // FIXME:odiff暂时不支持buffer对比和输出，官方近期会开始支持，这里先简单处理
           await this.getPage(action.context, action.page)?.screenshot({
