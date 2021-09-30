@@ -1,34 +1,45 @@
 import Debug from 'debug'
 import { merge } from 'lodash'
-import path from 'path'
+import path, { join } from 'path'
 import { BrowserContext, Browser, Page } from 'playwright'
 import { EventEmitter } from 'stream'
 import { BrowserName, Action, Signal, Case } from './types'
-import { getUuid, getBrowser } from './utils'
+import { getUuid, getBrowser, createDir, writeJson } from './utils'
 
 const debug = Debug('oops-test:runner')
 interface RecorderOptions {
   // 开启时，recorder会自动记录页面的所有请求数据，当做用例重跑时的数据源
   saveMock: boolean
+  output: string
 }
 
 class Recorder extends EventEmitter {
   private browser?: Browser
+
+  private options: RecorderOptions = {
+    saveMock: false,
+    output: process.cwd(),
+  }
+
+  private lastAction: Action | null = null
+
+  private get output() {
+    return {
+      rootDir: this.options.output,
+      screenshotDir: join(this.options.output, 'screenshots'),
+      caseFile: join(this.options.output, 'case.json'),
+    }
+  }
 
   case: Case = {
     url: '',
     actions: [],
   }
 
-  private options: RecorderOptions = {
-    saveMock: true,
-  }
-
-  private lastAction: Action | null = null
-
-  constructor(options?: RecorderOptions) {
+  constructor(options?: Partial<RecorderOptions>) {
     super()
     merge(this.options, options)
+    createDir([this.output.rootDir, this.output.screenshotDir])
   }
 
   private async prepareContext(context: BrowserContext, ctxId = getUuid()) {
@@ -40,8 +51,9 @@ class Recorder extends EventEmitter {
       path: path.join(__dirname, '../inject/index.js'),
     })
 
-    await context.exposeBinding('__oopsTest_recordAction', (_source, action: Action) => {
+    await context.exposeBinding('__oopsTest_recordAction', async ({ page }, action: Action) => {
       this.recordAction(action)
+      await this.handleScreenshotAssert(action, page)
     })
 
     await context.exposeBinding('__oopsTest_finish', () => {
@@ -109,7 +121,7 @@ class Recorder extends EventEmitter {
     })
   }
 
-  private recordAction(action: Action) {
+  private async recordAction(action: Action) {
     if (
       this.lastAction?.action === 'input' &&
       action.action === 'input' &&
@@ -128,6 +140,15 @@ class Recorder extends EventEmitter {
     this.lastAction.signals = {
       [name]: params,
       ...(this.lastAction.signals ?? {}),
+    }
+  }
+
+  private async handleScreenshotAssert(action: Action, page: Page) {
+    if (action.action === 'assertion' && action.params.type === 'screenshot') {
+      await page.screenshot({
+        path: join(this.output.screenshotDir, action.params.name),
+      })
+      await page.evaluate(`window.__oopsTest_resetToolbar()`)
     }
   }
 
@@ -155,6 +176,7 @@ class Recorder extends EventEmitter {
   private async finish() {
     await Promise.all(this.browser?.contexts().map(ctx => ctx.close()) ?? [])
     this.browser?.close()
+    writeJson(this.case, this.output.caseFile)
     this.emit('finish')
   }
 }

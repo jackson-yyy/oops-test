@@ -23,6 +23,7 @@ program
   .description('run cases under <casesDir>')
   .option('-hl, --headless', 'headless mode', false)
   .option('-ai, --action-interval <number>', 'interval between two actions')
+  .requiredOption('-eo, --error-output <dir>', 'output dir of error result', process.cwd())
   .action((casesDir: string, options) => {
     run(casesDir, options)
   })

@@ -159,20 +159,28 @@ importers:
 
   packages/engine:
     specifiers:
+      dayjs: ^1.10.7
       debug: ^4.3.2
       expect: ^27.1.1
       lodash: ^4.17.21
+      odiff-bin: ^2.4.2
+      pixelmatch: ^5.2.1
       playwright: ^1.14.1
     dependencies:
+      dayjs: registry.nlark.com/dayjs/1.10.7
       debug: registry.nlark.com/debug/4.3.2
       expect: registry.nlark.com/expect/27.2.0
       lodash: registry.nlark.com/lodash/4.17.21
+      odiff-bin: registry.npmmirror.com/odiff-bin/2.4.2
+      pixelmatch: registry.nlark.com/pixelmatch/5.2.1
       playwright: registry.nlark.com/playwright/1.14.1
 
   packages/inject:
     specifiers:
+      dayjs: ^1.10.7
       naive-ui: ^2.19.2
     devDependencies:
+      dayjs: registry.npmmirror.com/dayjs/1.10.7
       naive-ui: registry.npmmirror.com/naive-ui/2.19.2_vue@3.2.12
 
   packages/marker:
@@ -1328,6 +1336,11 @@ packages:
     dependencies:
       find-up: registry.nlark.com/find-up/2.1.0
     dev: true
+
+  /pngjs/4.0.1:
+    resolution: {integrity: sha1-+AOGm7L8G/4b+Zqk7CHBCBF8/b4=, tarball: pngjs/download/pngjs-4.0.1.tgz}
+    engines: {node: '>=8.0.0'}
+    dev: false
 
   /postcss-modules-scope/3.0.0:
     resolution: {integrity: sha1-nvMVFFbTu/oSDKRImN/Kby+gHwY=, tarball: postcss-modules-scope/download/postcss-modules-scope-3.0.0.tgz}
@@ -8537,6 +8550,15 @@ packages:
       node-modules-regexp: 1.0.0
     dev: true
 
+  registry.nlark.com/pixelmatch/5.2.1:
+    resolution: {integrity: sha1-nk5PSqWWSCCKMTEDBqW+1VIrDWU=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/pixelmatch/download/pixelmatch-5.2.1.tgz}
+    name: pixelmatch
+    version: 5.2.1
+    hasBin: true
+    dependencies:
+      pngjs: 4.0.1
+    dev: false
+
   registry.nlark.com/playwright/1.14.1:
     resolution: {integrity: sha1-c5E9MESoWljt8TFIJFJ5IxByUy4=, registry: https://registry.npm.taobao.org/, tarball: https://registry.nlark.com/playwright/download/playwright-1.14.1.tgz}
     name: playwright
@@ -10926,6 +10948,12 @@ packages:
     version: 16.9.3
     dev: true
 
+  registry.npmmirror.com/dayjs/1.10.7:
+    resolution: {integrity: sha1-LPX5Gt0oEWdIRAhmoKHSbzps5Gg=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/dayjs/download/dayjs-1.10.7.tgz}
+    name: dayjs
+    version: 1.10.7
+    dev: true
+
   registry.npmmirror.com/jest-diff/26.6.2:
     resolution: {integrity: sha1-GqdGi1LDpo19XF/c381eSb0WQ5Q=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/jest-diff/download/jest-diff-26.6.2.tgz?cache=0&sync_timestamp=1632576927430&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fjest-diff%2Fdownload%2Fjest-diff-26.6.2.tgz}
     name: jest-diff
@@ -10966,6 +10994,14 @@ packages:
       vue: registry.nlark.com/vue/3.2.12
       vueuc: registry.npmmirror.com/vueuc/0.4.12_b85fc147c070ee7a3bfd8771a1dc03b8
     dev: true
+
+  registry.npmmirror.com/odiff-bin/2.4.2:
+    resolution: {integrity: sha1-2qztkHL744gSkzlw93sEN4+TFDA=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/odiff-bin/download/odiff-bin-2.4.2.tgz}
+    name: odiff-bin
+    version: 2.4.2
+    hasBin: true
+    requiresBuild: true
+    dev: false
 
   registry.npmmirror.com/pretty-format/26.6.2:
     resolution: {integrity: sha1-41wnBfFMt/4v6U+geDRbREEg/JM=, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/pretty-format/download/pretty-format-26.6.2.tgz?cache=0&sync_timestamp=1632576926171&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fpretty-format%2Fdownload%2Fpretty-format-26.6.2.tgz}

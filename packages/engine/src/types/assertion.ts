@@ -1,6 +1,6 @@
 import { BaseAction } from './action'
 
-export type Assertion = NewPageAssertion | InnerTextAssertion
+export type Assertion = NewPageAssertion | InnerTextAssertion | ScreenshotAssertion
 
 export interface BaseAssertion extends BaseAction {
   action: 'assertion'
@@ -23,5 +23,12 @@ export interface InnerTextAssertion extends BaseAssertion {
     type: 'innerText'
     selector: string
     content: string
+  }
+}
+
+export interface ScreenshotAssertion extends BaseAssertion {
+  params: {
+    type: 'screenshot'
+    name: string
   }
 }
