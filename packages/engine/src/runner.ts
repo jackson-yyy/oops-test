@@ -2,7 +2,7 @@ import Debug from 'debug'
 import { merge } from 'lodash'
 import { LaunchOptions, Browser, BrowserContext, Page } from 'playwright'
 import { BrowserName, Action, Assertion, ManualAction, Case } from './types'
-import { getBrowser, readJson } from './utils'
+import { formatSignals, getBrowser, readJson } from './utils'
 import expect from 'expect'
 import { EventEmitter } from 'stream'
 import { join, resolve } from 'path'
@@ -139,12 +139,12 @@ class Runner extends EventEmitter {
     }
 
     await this.runManualAction(action)
-    await this.compareScreenshot(action)
   }
 
   private async runManualAction(action: ManualAction) {
-    const { context: cxtId, page: pageId, signals } = action
+    const { context: cxtId, page: pageId, signals = [] } = action
     const page = this.getPage(cxtId, pageId)
+    const signalsFormatted = formatSignals(signals)
 
     let actionPromise = () => Promise.resolve()
 
@@ -164,9 +164,9 @@ class Runner extends EventEmitter {
       }
     }
 
-    if (signals?.popup) {
+    if (signalsFormatted.popup) {
       const [popupPage] = await Promise.all([page.waitForEvent('popup'), actionPromise()])
-      this.setPage(popupPage, cxtId, signals.popup.pageId)
+      this.setPage(popupPage, cxtId, signalsFormatted.popup.pageId)
     } else {
       await actionPromise()
     }
@@ -177,12 +177,12 @@ class Runner extends EventEmitter {
 
     try {
       switch (action.params.type) {
-        case 'newPage':
+        case 'url':
           expect(action.params.url).toBe(await page.evaluate('location.href'))
           break
-        case 'innerText':
-          expect(await page.textContent(action.params.selector)).toBe(action.params.content)
-          break
+        // case 'innerText':
+        //   expect(await page.textContent(action.params.selector)).toBe(action.params.content)
+        //   break
         case 'screenshot': {
           const page = this.getPage(action.context, action.page)
           const runtimeDir = resolve(this.caseDir, 'runtime', 'screenshots')
@@ -204,10 +204,6 @@ class Runner extends EventEmitter {
     } catch (error: any) {
       throw new Error(error.message)
     }
-  }
-
-  private async compareScreenshot(action: Action) {
-    if (!action.screenShot) return
   }
 
   private async initBrowser() {

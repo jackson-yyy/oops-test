@@ -1,47 +1,49 @@
-import { Signal, SignalType } from './../types'
+import { Signal } from './../types'
 import { Assertion } from './assertion'
 
 export type Action = Assertion | NewContext | CloseContext | NewPage | ClosePage | ErrorAction | ManualAction
 
 export type ManualAction = ClickAction | MousemoveAction | HoverAction | PressAction | InputAction | ScrollAction
 
+export type Modifier = 'Shift' | 'Control' | 'Alt' | 'Meta'
+
 export interface BaseAction {
   action: string
-  context?: string
-  page?: string
   params?: Record<string, any>
+  signals?: Signal[]
+}
+
+// 浏览器行为
+export interface BrowserAction extends BaseAction {
+  action: 'newContext' | 'closeContext' | 'newPage' | 'closePage'
+  context?: string
   screenShot?: string
-  signals?: Record<SignalType, Omit<Signal, 'name'>>
 }
 
 export interface BaseManualAction extends BaseAction {
+  action: 'click' | 'dbClick' | 'hover' | 'press' | 'input' | 'mousemove' | 'scroll' | 'assertion'
   context: string
   page: string
+  screenShot?: string
+  scroll?: {
+    x: number
+    y: number
+  }
 }
-
-export type ActionType = HtmlType | ContextType | PageType | CustomType | 'error'
-
-export type HtmlType = 'click' | 'dbClick' | 'press' | 'hover' | 'mousemove'
-export type PageType = 'newPage' | 'closePage'
-export type ContextType = 'newContext' | 'closeContext'
-export type CustomType = 'assertion'
-
-export type Modifier = 'Shift' | 'Control' | 'Alt' | 'Meta'
-
-export interface NewContext extends BaseAction {
+export interface NewContext extends BrowserAction {
   action: 'newContext'
   params: {
     id: string
   }
 }
 
-export interface CloseContext extends BaseAction {
+export interface CloseContext extends BrowserAction {
   action: 'closeContext'
   params: {
     id: string
   }
 }
-export interface NewPage extends BaseAction {
+export interface NewPage extends BrowserAction {
   action: 'newPage'
   context: string
   params: {
@@ -49,7 +51,7 @@ export interface NewPage extends BaseAction {
     url: string
   }
 }
-export interface ClosePage extends BaseAction {
+export interface ClosePage extends BrowserAction {
   action: 'closePage'
   context: string
   params: {
@@ -61,7 +63,7 @@ export interface ClickAction extends BaseManualAction {
   action: 'click' | 'dbClick'
   params: {
     selector: string
-    modifier?: string
+    modifier?: Modifier
   }
 }
 

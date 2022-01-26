@@ -1,8 +1,8 @@
-import { BaseAction } from './action'
+import { BaseManualAction } from './action'
 
-export type Assertion = NewPageAssertion | InnerTextAssertion | ScreenshotAssertion
+export type Assertion = UrlAssertion | SnapshotAssertion | ScreenshotAssertion
 
-export interface BaseAssertion extends BaseAction {
+export interface BaseAssertion extends BaseManualAction {
   action: 'assertion'
   context: string
   page: string
@@ -11,18 +11,18 @@ export interface BaseAssertion extends BaseAction {
   }
 }
 
-export interface NewPageAssertion extends BaseAssertion {
+export interface UrlAssertion extends BaseAssertion {
   params: {
-    type: 'newPage'
+    type: 'url'
     url: string
   }
 }
 
-export interface InnerTextAssertion extends BaseAssertion {
+export interface SnapshotAssertion extends BaseAssertion {
   params: {
-    type: 'innerText'
+    type: 'snapShot'
     selector: string
-    content: string
+    snapshot: string
   }
 }
 
@@ -30,5 +30,10 @@ export interface ScreenshotAssertion extends BaseAssertion {
   params: {
     type: 'screenshot'
     name: string
+    selector?: string
+    area?: {
+      x: number
+      y: number
+    }[]
   }
 }
