@@ -78,16 +78,6 @@ class Recorder extends EventEmitter {
         name: 'popup',
         pageId: pageId,
       })
-
-      this.recordAction({
-        action: 'assertion',
-        context: ctxId,
-        page: pageId,
-        params: {
-          type: 'newPage',
-          url: page.url(),
-        },
-      })
     } else {
       await page.waitForEvent('domcontentloaded')
       this.recordAction({
@@ -136,10 +126,17 @@ class Recorder extends EventEmitter {
 
   private setSignal(signal: Signal) {
     if (!this.lastAction) return
-    const { name, ...params } = signal
-    this.lastAction.signals = {
-      [name]: params,
-      ...(this.lastAction.signals ?? {}),
+
+    if (!this.lastAction.signals) {
+      this.lastAction.signals = []
+    }
+
+    const signalExistIdx = this.lastAction.signals.findIndex(item => item.name === signal.name)
+
+    if (signalExistIdx >= 0) {
+      this.lastAction.signals[signalExistIdx] = signal
+    } else {
+      this.lastAction.signals.push(signal)
     }
   }
 

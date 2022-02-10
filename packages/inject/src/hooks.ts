@@ -1,7 +1,7 @@
 import { Modifier } from '@oops-test/engine'
-import { ref, onMounted, onUnmounted, h, computed, Ref } from 'vue'
+import { ref, onMounted, onUnmounted, computed, Ref } from 'vue'
 import { addEventListener, getSelector } from './utils'
-import { useDialog, NInput } from 'naive-ui'
+// import { useDialog, NInput } from 'naive-ui'
 import dayjs from 'dayjs'
 import { debounce } from 'lodash-es'
 
@@ -76,7 +76,7 @@ export function useRecorder({
 }) {
   const listeners = ref<(() => void)[]>([])
 
-  const onAssert = useAssert()
+  // const onAssert = useAssert()
   const onInput = useInput()
   const { onKeydown } = useKeyboard()
   const onScroll = useScroll()
@@ -114,7 +114,7 @@ export function useRecorder({
       onHover(event)
       preventEvent(event)
     } else if (toolsStatus.value.asserting.text) {
-      onAssert(event)
+      // onAssert(event)
       preventEvent(event)
     } else {
       window.__oopsTest_recordAction({
@@ -158,37 +158,37 @@ export function useRecorder({
   onUnmounted(removeEventListeners)
 }
 
-export function useAssert() {
-  const dialog = useDialog()
+// export function useAssert() {
+//   const dialog = useDialog()
 
-  return function onAssert(event: MouseEvent) {
-    if (!event.target) return
-    const assertValue = ref((event.target as HTMLElement).textContent)
-    dialog.info({
-      title: '输入断言内容',
-      content: () =>
-        h(NInput, {
-          value: assertValue.value,
-          onInput(value: string) {
-            assertValue.value = value
-          },
-        }),
-      positiveText: '确认',
-      onPositiveClick() {
-        window.__oopsTest_recordAction({
-          action: 'assertion',
-          context: window.__oopsTest_contextId,
-          page: window.__oopsTest_pageId,
-          params: {
-            type: 'innerText',
-            selector: getSelector(event.target!, document),
-            content: assertValue.value,
-          },
-        })
-      },
-    })
-  }
-}
+//   return function onAssert(event: MouseEvent) {
+//     if (!event.target) return
+//     const assertValue = ref((event.target as HTMLElement).textContent)
+//     dialog.info({
+//       title: '输入断言内容',
+//       content: () =>
+//         h(NInput, {
+//           value: assertValue.value,
+//           onInput(value: string) {
+//             assertValue.value = value
+//           },
+//         }),
+//       positiveText: '确认',
+//       onPositiveClick() {
+//         window.__oopsTest_recordAction({
+//           action: 'assertion',
+//           context: window.__oopsTest_contextId,
+//           page: window.__oopsTest_pageId,
+//           params: {
+//             type: 'innerText',
+//             selector: getSelector(event.target!, document),
+//             content: assertValue.value,
+//           },
+//         })
+//       },
+//     })
+//   }
+// }
 
 export function useInput() {
   return function onInput(event: InputEvent) {
