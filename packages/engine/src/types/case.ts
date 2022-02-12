@@ -1,6 +1,8 @@
 import { Action } from './action'
 
 export interface Case {
-  url: string
+  name: string
+  saveMock: boolean
+  skip: boolean
   actions: Action[]
 }

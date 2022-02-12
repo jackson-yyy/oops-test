@@ -1,5 +1,5 @@
-import { Signal } from './../types'
-import { Assertion } from './assertion'
+import type { Assertion } from './assertion'
+import type { Signal } from './signal'
 
 export type Action = Assertion | NewContext | CloseContext | NewPage | ClosePage | ErrorAction | ManualAction
 
@@ -10,7 +10,7 @@ export type Modifier = 'Shift' | 'Control' | 'Alt' | 'Meta'
 export interface BaseAction {
   action: string
   params?: Record<string, any>
-  signals?: Signal[]
+  signals?: Partial<Record<Signal['name'], Omit<Signal, 'name'>>>
 }
 
 // 浏览器行为
@@ -46,6 +46,7 @@ export interface CloseContext extends BrowserAction {
 export interface NewPage extends BrowserAction {
   action: 'newPage'
   context: string
+  screenShot?: string
   params: {
     id: string
     url: string

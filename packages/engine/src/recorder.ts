@@ -1,5 +1,6 @@
+import { existsSync } from 'fs'
 import Debug from 'debug'
-import { merge } from 'lodash'
+import merge from 'lodash-es/merge'
 import path, { join } from 'path'
 import { BrowserContext, Browser, Page } from 'playwright'
 import { EventEmitter } from 'stream'
@@ -8,38 +9,45 @@ import { getUuid, getBrowser, createDir, writeJson } from './utils'
 
 const debug = Debug('oops-test:runner')
 interface RecorderOptions {
-  // 开启时，recorder会自动记录页面的所有请求数据，当做用例重跑时的数据源
-  saveMock: boolean
   output: string
+  caseName: string
+}
+
+function getInitCase(): Case {
+  return {
+    name: '',
+    saveMock: true,
+    skip: false,
+    actions: [],
+  }
 }
 
 class Recorder extends EventEmitter {
   private browser?: Browser
 
   private options: RecorderOptions = {
-    saveMock: false,
     output: process.cwd(),
+    caseName: '',
   }
 
   private lastAction: Action | null = null
 
   private get output() {
+    const rootDir = join(this.options.output, this.case.name)
     return {
-      rootDir: this.options.output,
-      screenshotDir: join(this.options.output, 'screenshots'),
-      caseFile: join(this.options.output, 'case.json'),
+      rootDir: join(this.options.output, this.case.name),
+      screenshotDir: join(rootDir, 'screenshots'),
+      caseFile: join(rootDir, 'case.json'),
     }
   }
 
-  case: Case = {
-    url: '',
-    actions: [],
-  }
+  private recording = false
+
+  case: Case = getInitCase()
 
   constructor(options?: Partial<RecorderOptions>) {
     super()
     merge(this.options, options)
-    createDir([this.output.rootDir, this.output.screenshotDir])
   }
 
   private async prepareContext(context: BrowserContext, ctxId = getUuid()) {
@@ -56,8 +64,14 @@ class Recorder extends EventEmitter {
       await this.handleScreenshotAssert(action, page)
     })
 
-    await context.exposeBinding('__oopsTest_finish', () => {
-      this.finish()
+    await context.exposeBinding('__oopsTest_startRecord', (_, params) => {
+      return this.startRecord(params)
+    })
+    await context.exposeBinding('__oopsTest_finishRecord', (_, params) => {
+      this.finishRecord(params)
+    })
+    await context.exposeBinding('__oopsTest_exit', () => {
+      this.exit()
     })
 
     context.on('close', () => {
@@ -112,6 +126,7 @@ class Recorder extends EventEmitter {
   }
 
   private async recordAction(action: Action) {
+    if (!this.recording) return
     if (
       this.lastAction?.action === 'input' &&
       action.action === 'input' &&
@@ -126,18 +141,12 @@ class Recorder extends EventEmitter {
 
   private setSignal(signal: Signal) {
     if (!this.lastAction) return
+    const { name, ...params } = signal
 
     if (!this.lastAction.signals) {
-      this.lastAction.signals = []
+      this.lastAction.signals = {}
     }
-
-    const signalExistIdx = this.lastAction.signals.findIndex(item => item.name === signal.name)
-
-    if (signalExistIdx >= 0) {
-      this.lastAction.signals[signalExistIdx] = signal
-    } else {
-      this.lastAction.signals.push(signal)
-    }
+    this.lastAction.signals[name] = params
   }
 
   private async handleScreenshotAssert(action: Action, page: Page) {
@@ -150,31 +159,79 @@ class Recorder extends EventEmitter {
   }
 
   async start({ url = 'http://localhost:8080', browser = 'chromium' }: { url: string; browser?: BrowserName }) {
-    this.case.url = url
-
     this.browser = await getBrowser(browser).launch({ headless: false })
-    this.browser.on('disconnected', this.finish)
+    this.browser.on('disconnected', this.exit)
 
     const contextId = getUuid()
     const context = await this.browser.newContext()
     await this.prepareContext(context, contextId)
 
-    this.recordAction({
-      action: 'newContext',
-      params: {
-        id: contextId,
-      },
-    })
-
     const page = await context.newPage()
     await page.goto(url)
   }
 
-  private async finish() {
+  startRecord({
+    context,
+    page,
+    url,
+    name,
+    saveMock,
+  }: {
+    context: string
+    page: string
+    url: string
+    name: string
+    saveMock: boolean
+  }): 'success' | 'exist' | 'fail' {
+    this.case.name = name
+    this.case.saveMock = saveMock
+    if (existsSync(this.output.rootDir)) {
+      this.case = getInitCase()
+      return 'exist'
+    }
+
+    try {
+      createDir([this.output.rootDir, this.output.screenshotDir])
+    } catch (error) {
+      console.error(error)
+      return 'fail'
+    }
+
+    this.recording = true
+    this.recordAction({
+      action: 'newContext',
+      params: {
+        id: context,
+      },
+    })
+    this.recordAction({
+      action: 'newPage',
+      context,
+      params: {
+        id: page,
+        url,
+      },
+    })
+
+    return 'success'
+  }
+
+  async finishRecord({ context }: { context: string }) {
+    this.recordAction({
+      action: 'closeContext',
+      params: {
+        id: context,
+      },
+    })
+    this.recording = false
+    writeJson(this.case, this.output.caseFile)
+    this.case = getInitCase()
+  }
+
+  private async exit() {
     await Promise.all(this.browser?.contexts().map(ctx => ctx.close()) ?? [])
     this.browser?.close()
-    writeJson(this.case, this.output.caseFile)
-    this.emit('finish')
+    this.emit('exit')
   }
 }
 

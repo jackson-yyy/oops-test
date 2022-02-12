@@ -2,7 +2,7 @@ import Debug from 'debug'
 import { merge } from 'lodash'
 import { LaunchOptions, Browser, BrowserContext, Page } from 'playwright'
 import { BrowserName, Action, Assertion, ManualAction, Case } from './types'
-import { formatSignals, getBrowser, readJson } from './utils'
+import { getBrowser, readJson } from './utils'
 import expect from 'expect'
 import { EventEmitter } from 'stream'
 import { join, resolve } from 'path'
@@ -142,9 +142,8 @@ class Runner extends EventEmitter {
   }
 
   private async runManualAction(action: ManualAction) {
-    const { context: cxtId, page: pageId, signals = [] } = action
+    const { context: cxtId, page: pageId, signals = {} } = action
     const page = this.getPage(cxtId, pageId)
-    const signalsFormatted = formatSignals(signals)
 
     let actionPromise = () => Promise.resolve()
 
@@ -164,9 +163,9 @@ class Runner extends EventEmitter {
       }
     }
 
-    if (signalsFormatted.popup) {
+    if (signals.popup) {
       const [popupPage] = await Promise.all([page.waitForEvent('popup'), actionPromise()])
-      this.setPage(popupPage, cxtId, signalsFormatted.popup.pageId)
+      this.setPage(popupPage, cxtId, signals.popup.pageId)
     } else {
       await actionPromise()
     }
@@ -180,9 +179,6 @@ class Runner extends EventEmitter {
         case 'url':
           expect(action.params.url).toBe(await page.evaluate('location.href'))
           break
-        // case 'innerText':
-        //   expect(await page.textContent(action.params.selector)).toBe(action.params.content)
-        //   break
         case 'screenshot': {
           const page = this.getPage(action.context, action.page)
           const runtimeDir = resolve(this.caseDir, 'runtime', 'screenshots')

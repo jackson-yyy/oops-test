@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import { chromium, firefox, webkit } from 'playwright'
-import { BrowserName, Case, Signal } from './types'
+import { BrowserName, Case } from './types'
 
 let uuid = 1000
 export function getUuid() {
@@ -32,13 +32,4 @@ export function writeJson(cas: Case, output: string) {
 
 export function readJson<T extends Record<string, any>>(path: string): T {
   return JSON.parse(readFileSync(path, 'utf-8'))
-}
-
-export function formatSignals(signals: Signal[]): Partial<Record<Signal['name'], Omit<Signal, 'name'>>> {
-  return signals.reduce((res, signal) => {
-    // eslint-disable-next-line no-unused-vars
-    const { name, ...params } = signal
-    res[signal.name] = params
-    return res
-  }, {})
 }

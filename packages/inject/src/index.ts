@@ -1,8 +1,7 @@
 import { createApp, h } from 'vue'
 import { addEventListener } from './utils'
-import Toolbar from './toolbar'
+import Inject from './inject'
 import './toolbar.less'
-import { NDialogProvider } from 'naive-ui'
 
 document.addEventListener('DOMContentLoaded', () => {
   const toolbarElement = document.createElement('div')
@@ -11,6 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 阻止toolbar的点击冒泡，防止记录无用的action
   addEventListener(toolbarElement, 'click', (e: Event) => e.stopPropagation())
 
-  createApp(h(NDialogProvider, { to: '.oops-test' }, [h(Toolbar)])).mount(toolbarElement)
+  createApp(h(Inject)).mount(toolbarElement)
   document.body.appendChild(toolbarElement)
 })

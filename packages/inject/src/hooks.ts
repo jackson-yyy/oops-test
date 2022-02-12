@@ -1,16 +1,18 @@
 import { Modifier } from '@oops-test/engine'
-import { ref, onMounted, onUnmounted, computed, Ref } from 'vue'
+import { ref, onMounted, onUnmounted, computed, Ref, h } from 'vue'
 import { addEventListener, getSelector } from './utils'
-// import { useDialog, NInput } from 'naive-ui'
 import dayjs from 'dayjs'
 import { debounce } from 'lodash-es'
+import { NInput, useDialog, useNotification } from 'naive-ui'
 
 function getDefaultToolsStatus() {
   return {
+    recording: false,
     visible: true,
     hovering: false,
     asserting: {
-      text: false,
+      screenshot: false,
+      snapshot: false,
     },
   }
 }
@@ -69,14 +71,12 @@ function canPress(event: KeyboardEvent): boolean {
 
 export function useRecorder({
   status: toolsStatus,
-  resetStatus: resetToolsStatus,
 }: {
   status: Ref<ReturnType<typeof getDefaultToolsStatus>>
   resetStatus: () => void
 }) {
   const listeners = ref<(() => void)[]>([])
 
-  // const onAssert = useAssert()
   const onInput = useInput()
   const { onKeydown } = useKeyboard()
   const onScroll = useScroll()
@@ -113,9 +113,6 @@ export function useRecorder({
     if (toolsStatus.value.hovering) {
       onHover(event)
       preventEvent(event)
-    } else if (toolsStatus.value.asserting.text) {
-      // onAssert(event)
-      preventEvent(event)
     } else {
       window.__oopsTest_recordAction({
         action: 'click',
@@ -127,7 +124,6 @@ export function useRecorder({
         },
       })
     }
-    resetToolsStatus()
   }
 
   function onHover(event: MouseEvent) {
@@ -157,38 +153,6 @@ export function useRecorder({
   onMounted(initListeners)
   onUnmounted(removeEventListeners)
 }
-
-// export function useAssert() {
-//   const dialog = useDialog()
-
-//   return function onAssert(event: MouseEvent) {
-//     if (!event.target) return
-//     const assertValue = ref((event.target as HTMLElement).textContent)
-//     dialog.info({
-//       title: '输入断言内容',
-//       content: () =>
-//         h(NInput, {
-//           value: assertValue.value,
-//           onInput(value: string) {
-//             assertValue.value = value
-//           },
-//         }),
-//       positiveText: '确认',
-//       onPositiveClick() {
-//         window.__oopsTest_recordAction({
-//           action: 'assertion',
-//           context: window.__oopsTest_contextId,
-//           page: window.__oopsTest_pageId,
-//           params: {
-//             type: 'innerText',
-//             selector: getSelector(event.target!, document),
-//             content: assertValue.value,
-//           },
-//         })
-//       },
-//     })
-//   }
-// }
 
 export function useInput() {
   return function onInput(event: InputEvent) {
@@ -239,35 +203,106 @@ export function useScroll() {
   }, 100)
 }
 
-export function useToolbar() {
-  function toolHandlerWrapper(handler: () => void) {
-    return () => {
-      resetToolsStatus()
-      handler()
-    }
+function useStartRecord(): () => Promise<void> {
+  const dialog = useDialog()
+  const notice = useNotification()
+  const caseName = ref('')
+  const saveMock = ref(true)
+
+  const errorMsg = {
+    fail: '创建用例失败，请重试！',
+    exist: '用例已存在，请删除用例或者更改用例名！',
   }
+
+  return function () {
+    return new Promise((res, rej) => {
+      dialog.info({
+        title: '请输入用例名称',
+        content: () =>
+          h(NInput, {
+            value: caseName.value,
+            onInput(value: string) {
+              caseName.value = value
+            },
+          }),
+        positiveText: '确认',
+        onNegativeClick: rej,
+        async onPositiveClick() {
+          const result = await window.__oopsTest_startRecord({
+            context: window.__oopsTest_contextId,
+            page: window.__oopsTest_pageId,
+            url: location.href,
+            name: caseName.value,
+            saveMock: saveMock.value,
+          })
+
+          if (result === 'success') {
+            res()
+            return true
+          }
+
+          notice.error({
+            content: errorMsg[result],
+            duration: 3000,
+          })
+          rej()
+          return false
+        },
+      })
+    })
+  }
+}
+
+export function useToolbar() {
+  // function toolHandlerWrapper(handler: () => void) {
+  //   return () => {
+  //     resetToolsStatus()
+  //     handler()
+  //   }
+  // }
 
   function resetToolsStatus() {
     toolsStatus.value = getDefaultToolsStatus()
   }
 
-  const toolsStatus = ref(getDefaultToolsStatus())
+  function reloadPage() {
+    localStorage.setItem('__oopsTest_toolsStatus', JSON.stringify(toolsStatus.value))
+    window.location.reload()
+  }
+
+  const toolsStatusHistory = localStorage.getItem('__oopsTest_toolsStatus')
+
+  const toolsStatus = ref((toolsStatusHistory && JSON.parse(toolsStatusHistory)) ?? getDefaultToolsStatus())
+
+  localStorage.removeItem('__oopsTest_toolsStatus')
+
+  const startRecord = useStartRecord()
+
   const tools = computed(() =>
     [
+      {
+        icon: '',
+        text: toolsStatus.value.recording ? '停止' : '开始',
+        active: toolsStatus.value.recording,
+        async handler() {
+          if (!toolsStatus.value.recording) {
+            await startRecord()
+            toolsStatus.value.recording = true
+            reloadPage()
+          } else {
+            window.__oopsTest_finishRecord({
+              context: window.__oopsTest_contextId,
+            })
+            toolsStatus.value.recording = false
+          }
+        },
+      },
       {
         icon: '',
         text: 'Hover',
         active: toolsStatus.value.hovering,
         handler() {
           toolsStatus.value.hovering = !toolsStatus.value.hovering
-        },
-      },
-      {
-        icon: '',
-        text: 'TextAssert',
-        active: toolsStatus.value.asserting.text,
-        handler() {
-          toolsStatus.value.asserting.text = !toolsStatus.value.asserting.text
         },
       },
       {
@@ -289,12 +324,12 @@ export function useToolbar() {
       },
       {
         icon: '',
-        text: 'finish',
-        handler: window.__oopsTest_finish,
+        text: 'exit',
+        handler: window.__oopsTest_exit,
       },
     ].map(tool => ({
       ...tool,
-      handler: toolHandlerWrapper(tool.handler),
+      handler: tool.handler,
     })),
   )
 
