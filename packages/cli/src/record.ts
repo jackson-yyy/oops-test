@@ -3,19 +3,17 @@ import { resolve } from 'path'
 interface Options {
   output: string
   browser?: BrowserName
-  caseName: string
-  screenshot: boolean
 }
 
 export default function record(url: string, options: Options) {
   const recorder = new Recorder({
-    output: resolve(process.cwd(), options.output, options.caseName),
+    output: resolve(process.cwd(), options.output),
   })
   recorder.start({
     url,
     browser: options.browser,
   })
-  recorder.on('finish', () => {
+  recorder.on('exit', () => {
     process.exit(1)
   })
 }

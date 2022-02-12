@@ -18,6 +18,7 @@ run()
 
 async function run() {
   const handler = isDev ? develop : build
+  console.log(chalk.green(isDev ? 'develop...' : 'start building'))
   try {
     for (let target of targetsToBuild) {
       if (allTargets.includes(target)) {

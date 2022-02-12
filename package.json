@@ -11,11 +11,13 @@
     "clear": "rimraf node_modules && lerna clean --yes",
     "precommit": "ls-lint && lint-staged --no-stash",
     "dev:demo": "pnpm dev --filter @oops-test/demo",
-    "build": "ts-node ./scripts/build/build.ts"
+    "build": "ts-node ./scripts/build/build.ts",
+    "dev": "npm run build -- -d"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.17.2",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
     "@ls-lint/ls-lint": "^1.10.0",
@@ -38,7 +40,6 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/runtime-core": "^3.2.12",
     "@vue/runtime-dom": "^3.2.12",
-    "@vue/test-utils": "^1.2.2",
     "chalk": "^4.1.1",
     "css-selector-generator": "^3.4.4",
     "eslint": "^7.31.0",
@@ -54,6 +55,7 @@
     "lint-staged": "^11.1.1",
     "lodash-es": "^4.17.21",
     "minimist": "^1.2.5",
+    "postcss": "^8.2.15",
     "prettier": "^2.3.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.53.1",
