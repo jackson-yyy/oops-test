@@ -164,7 +164,7 @@ importers:
       dayjs: ^1.10.7
       debug: ^4.3.2
       expect: ^27.1.1
-      lodash-es: ^4.17.21
+      lodash: ^4.17.21
       odiff-bin: ^2.4.2
       pixelmatch: ^5.2.1
       playwright: ^1.14.1
@@ -173,7 +173,7 @@ importers:
       dayjs: 1.10.7
       debug: 4.3.3
       expect: 27.5.1
-      lodash-es: 4.17.21
+      lodash: 4.17.21
       odiff-bin: 2.5.0
       pixelmatch: 5.2.1
       playwright: 1.19.0
@@ -5744,6 +5744,7 @@ packages:
 
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: true
 
   /lodash._reinterpolate/3.0.0:
     resolution: {integrity: sha1-DM8tiRZq8Ds2Y8eWU4t1rG4RTZ0=}

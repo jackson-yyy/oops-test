@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue'
 import { NDialogProvider, NNotificationProvider } from 'naive-ui'
-import Toolbar from './toolbar'
+import Toolbar from './components/toolbar/index'
 
 export default defineComponent({
   render() {

@@ -1,3 +1,4 @@
+import { Modifier } from '@oops-test/engine'
 import getCssSelector from 'css-selector-generator'
 
 export function addEventListener(
@@ -24,4 +25,41 @@ export function getSelector(target: EventTarget | null, document: Document) {
 
   // 没有找到的时候，要用兜底的css选择器
   return getCssSelector(target)
+}
+
+/**
+ * 获取修饰符
+ *
+ * @export
+ * @param {(MouseEvent | KeyboardEvent)} event
+ * @returns {(Modifier | undefined)}
+ */
+export function getModifierByEvent(event: MouseEvent | KeyboardEvent): Modifier | undefined {
+  let modifier: Modifier | undefined = undefined
+  if (event.ctrlKey) {
+    modifier = 'Control'
+  }
+  if (event.altKey) {
+    modifier = 'Alt'
+  }
+  if (event.shiftKey) {
+    modifier = 'Shift'
+  }
+  if (event.metaKey) {
+    modifier = 'Meta'
+  }
+
+  return modifier
+}
+
+/**
+ * 让事件失效
+ *
+ * @export
+ * @param {Event} event
+ */
+export function preventEvent(event: Event) {
+  event.stopImmediatePropagation()
+  event.stopPropagation()
+  event.preventDefault()
 }
