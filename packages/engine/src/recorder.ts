@@ -1,6 +1,6 @@
 import { existsSync } from 'fs'
 import Debug from 'debug'
-import merge from 'lodash-es/merge'
+import { merge } from 'lodash'
 import path, { join } from 'path'
 import { BrowserContext, Browser, Page } from 'playwright'
 import { EventEmitter } from 'stream'
@@ -151,10 +151,11 @@ class Recorder extends EventEmitter {
 
   private async handleScreenshotAssert(action: Action, page: Page) {
     if (action.action === 'assertion' && action.params.type === 'screenshot') {
+      await page.evaluate('document.querySelector(".oops-test").style.visibility = "hidden"')
       await page.screenshot({
         path: join(this.output.screenshotDir, action.params.name),
       })
-      await page.evaluate(`window.__oopsTest_resetToolbar()`)
+      await page.evaluate('document.querySelector(".oops-test").style.visibility = "initial"')
     }
   }
 

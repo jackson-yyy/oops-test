@@ -1,7 +1,6 @@
 import { createApp, h } from 'vue'
 import { addEventListener } from './utils'
 import Inject from './inject'
-import './toolbar.less'
 
 document.addEventListener('DOMContentLoaded', () => {
   const toolbarElement = document.createElement('div')
