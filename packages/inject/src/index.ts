@@ -1,5 +1,5 @@
 import { createApp, h } from 'vue'
-import { addEventListener } from './utils'
+import { addEventListener } from './utils/dom'
 import Inject from './inject'
 
 document.addEventListener('DOMContentLoaded', () => {
