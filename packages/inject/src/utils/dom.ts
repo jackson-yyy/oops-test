@@ -16,6 +16,7 @@ export function addEventListener(
 
 export function getSelector(target: EventTarget | null, document: Document) {
   if (!target) return 'body'
+  if (target === document) return 'body'
   const list = document.querySelectorAll(`[data-o-s-t]`)
   for (const tar of Array.from(list)) {
     if (tar.contains(target as Node)) {
@@ -62,4 +63,21 @@ export function preventEvent(event: Event) {
   event.stopImmediatePropagation()
   event.stopPropagation()
   event.preventDefault()
+}
+
+export function getScrollOffset(target: EventTarget): {
+  x: number
+  y: number
+} {
+  if (target === document) {
+    return {
+      x: document.documentElement.scrollLeft ?? window.pageXOffset ?? document.body.scrollLeft,
+      y: document.documentElement.scrollTop ?? window.pageYOffset ?? document.body.scrollTop,
+    }
+  }
+
+  return {
+    x: (target as HTMLElement).scrollLeft,
+    y: (target as HTMLElement).scrollTop,
+  }
 }

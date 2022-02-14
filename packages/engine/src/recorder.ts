@@ -41,8 +41,6 @@ class Recorder extends EventEmitter {
     }
   }
 
-  private recording = false
-
   case: Case = getInitCase()
 
   constructor(options?: Partial<RecorderOptions>) {
@@ -126,15 +124,6 @@ class Recorder extends EventEmitter {
   }
 
   private async recordAction(action: Action) {
-    if (!this.recording) return
-    if (
-      this.lastAction?.action === 'input' &&
-      action.action === 'input' &&
-      this.lastAction.params.selector === action.params.selector
-    ) {
-      this.case.actions.pop()
-    }
-
     this.lastAction = action
     this.case.actions.push(action)
   }
@@ -198,7 +187,6 @@ class Recorder extends EventEmitter {
       return 'fail'
     }
 
-    this.recording = true
     this.recordAction({
       action: 'newContext',
       params: {
@@ -224,7 +212,6 @@ class Recorder extends EventEmitter {
         id: context,
       },
     })
-    this.recording = false
     writeJson(this.case, this.output.caseFile)
     this.case = getInitCase()
   }

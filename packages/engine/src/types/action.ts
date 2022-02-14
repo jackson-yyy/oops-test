@@ -25,10 +25,6 @@ export interface BaseManualAction extends BaseAction {
   context: string
   page: string
   screenShot?: string
-  scroll?: {
-    x: number
-    y: number
-  }
 }
 export interface NewContext extends BrowserAction {
   action: 'newContext'
@@ -103,6 +99,7 @@ export interface InputAction extends BaseManualAction {
 export interface ScrollAction extends BaseManualAction {
   action: 'scroll'
   params: {
+    selector: string
     x: number
     y: number
   }
