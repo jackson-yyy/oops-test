@@ -2,6 +2,8 @@ import { createApp, h } from 'vue'
 import { addEventListener } from './utils/dom'
 import Inject from './inject'
 
+console.log(document)
+
 document.addEventListener('DOMContentLoaded', () => {
   const toolbarElement = document.createElement('div')
   toolbarElement.classList.add('oops-test')

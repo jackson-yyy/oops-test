@@ -1,4 +1,5 @@
 import type { Action, Case } from '@oops-test/engine/types'
+import { ToolsStatus } from './types'
 
 type StartRecordParams = {
   context: string
@@ -8,12 +9,18 @@ type StartRecordParams = {
 
 declare global {
   interface Window {
-    __oopsTest_recordAction: (action: Action) => Promise<void>
-    __oopsTest_exit: () => Promise<void>
-    __oopsTest_startRecord: (params: StartRecordParams) => Promise<'success' | 'exist' | 'fail'>
-    __oopsTest_finishRecord: (params: { context: string }) => Promise<void>
+    // 给inject模块使用
+    __oopsTest_isRecording(): Promise<boolean>
+    __oopsTest_recordAction(action: Action): Promise<void>
+    __oopsTest_exit(): Promise<void>
+    __oopsTest_startRecord(params: StartRecordParams): Promise<'success' | 'exist' | 'fail'>
+    __oopsTest_finishRecord(params: { context: string }): Promise<void>
+    __oopsTest_reloadPage(): void
     __oopsTest_contextId: string
     __oopsTest_pageId: string
-    __oopsTest_resetToolbar: () => Promise<void>
+
+    // 给engine模块使用
+    __oopsTest_syncStatus(isRecording: boolean): void
+    __oopsTest_toggleShowToolbar(visible: boolean): void
   }
 }

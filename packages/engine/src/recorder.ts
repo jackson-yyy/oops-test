@@ -32,6 +32,8 @@ class Recorder extends EventEmitter {
 
   private lastAction: Action | null = null
 
+  private recording = false
+
   private get output() {
     const rootDir = join(this.options.output, this.case.name)
     return {
@@ -56,6 +58,8 @@ class Recorder extends EventEmitter {
     await context.addInitScript({
       path: path.join(__dirname, '../inject/index.js'),
     })
+
+    await context.exposeFunction('__oopsTest_isRecording', () => this.recording)
 
     await context.exposeBinding('__oopsTest_recordAction', async ({ page }, action: Action) => {
       this.recordAction(action)
@@ -117,13 +121,14 @@ class Recorder extends EventEmitter {
     page.on('requestfinished', debug)
     page.on('response', debug)
 
-    page.on('domcontentloaded', async pg => {
-      pg.evaluate(`window.__oopsTest_contextId = '${ctxId}'`)
-      pg.evaluate(`window.__oopsTest_pageId = '${pageId}'`)
+    page.on('load', () => {
+      page.evaluate(`window.__oopsTest_contextId = '${ctxId}'`)
+      page.evaluate(`window.__oopsTest_pageId = '${pageId}'`)
     })
   }
 
   private async recordAction(action: Action) {
+    if (!this.recording) return
     this.lastAction = action
     this.case.actions.push(action)
   }
@@ -140,11 +145,11 @@ class Recorder extends EventEmitter {
 
   private async handleScreenshotAssert(action: Action, page: Page) {
     if (action.action === 'assertion' && action.params.type === 'screenshot') {
-      await page.evaluate('document.querySelector(".oops-test").style.visibility = "hidden"')
+      await page.evaluate('window.__oopsTest_toggleShowToolbar(false)')
       await page.screenshot({
         path: join(this.output.screenshotDir, action.params.name),
       })
-      await page.evaluate('document.querySelector(".oops-test").style.visibility = "initial"')
+      await page.evaluate('window.__oopsTest_toggleShowToolbar(true)')
     }
   }
 
@@ -160,6 +165,7 @@ class Recorder extends EventEmitter {
     await page.goto(url)
   }
 
+  // TODO:这里拆出来一个判断case是否存在的函数
   startRecord({
     context,
     page,
@@ -187,6 +193,8 @@ class Recorder extends EventEmitter {
       return 'fail'
     }
 
+    this.recording = true
+
     this.recordAction({
       action: 'newContext',
       params: {
@@ -202,6 +210,8 @@ class Recorder extends EventEmitter {
       },
     })
 
+    this.syncStatus()
+
     return 'success'
   }
 
@@ -212,14 +222,24 @@ class Recorder extends EventEmitter {
         id: context,
       },
     })
+    this.recording = false
     writeJson(this.case, this.output.caseFile)
     this.case = getInitCase()
+    this.syncStatus()
   }
 
   private async exit() {
     await Promise.all(this.browser?.contexts().map(ctx => ctx.close()) ?? [])
     this.browser?.close()
     this.emit('exit')
+  }
+
+  private syncStatus() {
+    this.browser?.contexts().forEach(cxt => {
+      cxt.pages().forEach(page => {
+        page.evaluate(`window.__oopsTest_syncStatus(${this.recording})`)
+      })
+    })
   }
 }
 

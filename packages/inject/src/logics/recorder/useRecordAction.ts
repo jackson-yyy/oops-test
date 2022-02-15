@@ -18,14 +18,17 @@ export function useRecordAction(toolsStatus: Ref<ToolsStatus>): {
   function recordAction(action: Action) {
     if (!toolsStatus.value.recording) return
 
-    // 如果是input，修改上次的action内容
-    if (action.action === 'input') {
-      if (!preventedAction) {
+    // input/scroll先暂存
+    if (action.action === 'input' || action.action === 'scroll') {
+      const preventCondition =
+        !preventedAction ||
+        (preventedAction.action === action.action &&
+          preventedAction.context === action.context &&
+          preventedAction.page === action.page &&
+          preventedAction.params.selector === action.params.selector)
+
+      if (preventCondition) {
         preventedAction = action
-        return
-      }
-      if (preventedAction.action === 'input' && preventedAction.params.selector === action.params.selector) {
-        preventedAction.params.content = action.params.content
         return
       }
     }
