@@ -1,6 +1,6 @@
 import { resolve } from 'path'
 import replace from '@rollup/plugin-replace'
-import { Plugin } from 'rollup'
+import { OutputOptions, Plugin } from 'rollup'
 import postcss from 'rollup-plugin-postcss'
 
 export type Format = 'es' | 'cjs' | 'iife' | 'amd'
@@ -10,14 +10,15 @@ export const packagesRoot = resolve(__dirname, '../../', 'packages')
 export const buildConfigs: {
   [target: string]: {
     formats: (Format | { format: Format; output?: string })[]
-    globalName?: string
-    banner?: string
     plugins?: Plugin[]
+    output?: OutputOptions
   }
 } = {
   cli: {
     formats: ['es'],
-    banner: '#!/usr/bin/env node',
+    output: {
+      banner: '#!/usr/bin/env node',
+    },
   },
   engine: {
     formats: ['es', 'cjs'],
@@ -29,7 +30,10 @@ export const buildConfigs: {
         output: resolve(packagesRoot, 'engine/inject/index.js'),
       },
     ],
-    globalName: '__oopsTest_inject',
+    output: {
+      banner: `document.addEventListener('DOMContentLoaded', function(){`,
+      footer: `})`,
+    },
     plugins: [
       styleInjectPlugin(),
       replace({
@@ -51,14 +55,6 @@ export const buildConfigs: {
  */
 function styleInjectPlugin() {
   return postcss({
-    inject(cssVariableName) {
-      return `
-      import styleInject from 'style-inject'
-      document.addEventListener('DOMContentLoaded', () => {
-        styleInject(${cssVariableName})
-      })
-      `
-    },
     extensions: ['.css', '.less'],
     // @ts-ignore
     use: [['less', { javascriptEnabled: true }]],

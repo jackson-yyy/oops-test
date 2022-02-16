@@ -28,6 +28,7 @@
   "devDependencies": {
     "dayjs": "^1.10.7",
     "lodash-es": "^4.17.21",
-    "naive-ui": "^2.19.2"
+    "naive-ui": "^2.19.2",
+    "vue-types": "^4.1.1"
   }
 }

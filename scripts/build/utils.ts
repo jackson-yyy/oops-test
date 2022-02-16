@@ -69,7 +69,6 @@ export function getOutputConfigs(target = ''): OutputOptions[] {
     },
     iife: {
       file: resolve(packagesRoot, target, `dist/index.global.js`),
-      name: buildConfigs[target]?.globalName,
     },
     amd: {
       file: resolve(packagesRoot, target, `dist/index.amd.js`),
@@ -86,12 +85,12 @@ export function getOutputConfigs(target = ''): OutputOptions[] {
     let config: OutputOptions = {
       format: type as Format,
       ...defaultConfig[type],
+      ...buildConfigs[target].output,
     }
 
     if (output) {
       config.file = output
     }
-    config.banner = buildConfigs[target].banner
 
     return config
   })
