@@ -1,5 +1,13 @@
 import { getModifierByEvent, getScrollOffset, getSelector } from './dom'
-import { ClickAction, HoverAction, InputAction, PressAction, ScrollAction } from '@oops-test/engine'
+import {
+  ClickAction,
+  HoverAction,
+  InputAction,
+  PressAction,
+  ScreenshotAssertion,
+  ScrollAction,
+} from '@oops-test/engine'
+import dayjs from 'dayjs'
 
 export function getHoverAction(event: MouseEvent): HoverAction | null {
   if (!event.target) return null
@@ -69,7 +77,32 @@ export function getScrollAction(event: MouseEvent): ScrollAction | null {
   }
 }
 
-export function canPress(event: KeyboardEvent): boolean {
+export function getScreenshotAction(event?: MouseEvent): ScreenshotAssertion {
+  if (!event?.target) {
+    return {
+      action: 'assertion',
+      context: window.__oopsTest_contextId,
+      page: window.__oopsTest_pageId,
+      params: {
+        type: 'screenshot',
+        name: `full_screenshot_${dayjs().valueOf()}.png`,
+      },
+    }
+  }
+
+  return {
+    action: 'assertion',
+    context: window.__oopsTest_contextId,
+    page: window.__oopsTest_pageId,
+    params: {
+      selector: getSelector(event.target, document),
+      type: 'screenshot',
+      name: `element_screenshot_${dayjs().valueOf()}.png`,
+    },
+  }
+}
+
+function canPress(event: KeyboardEvent): boolean {
   // 只拦截input上的键盘输入
   if ((event.target as HTMLElement).tagName !== 'INPUT') {
     return true

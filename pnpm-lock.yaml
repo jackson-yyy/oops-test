@@ -184,10 +184,12 @@ importers:
       dayjs: ^1.10.7
       lodash-es: ^4.17.21
       naive-ui: ^2.19.2
+      vue-types: ^4.1.1
     devDependencies:
       dayjs: 1.10.7
       lodash-es: 4.17.21
       naive-ui: 2.25.2_vue@3.2.31
+      vue-types: 4.1.1_vue@3.2.31
 
   packages/marker:
     specifiers: {}
@@ -8929,6 +8931,16 @@ packages:
     dependencies:
       typescript: 4.5.5
       vscode-vue-languageservice: 0.27.30
+    dev: true
+
+  /vue-types/4.1.1_vue@3.2.31:
+    resolution: {integrity: sha512-Jq2GZ/w6rExJbLA/h7nHBFLciu+YNekgox0DB64wN1snZ4IIJMq+qnqp1/vE4fc7vEjZcP5KGhLzkkSjIHLRzw==}
+    engines: {node: '>=12.16.0'}
+    peerDependencies:
+      vue: ^2.0.0 || ^3.0.0
+    dependencies:
+      is-plain-object: 5.0.0
+      vue: 3.2.31
     dev: true
 
   /vue/3.2.31:
