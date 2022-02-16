@@ -73,6 +73,6 @@ function useClick(toolsStatus: Ref<ToolsStatus>, recordAction: (action: Action) 
       recordAction(getHoverAction(event)!)
       return
     }
-    getClickAction(event)
+    recordAction(getClickAction(event)!)
   }
 }

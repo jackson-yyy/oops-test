@@ -42,6 +42,8 @@ export function getInputAction(event: InputEvent): InputAction | null {
 // TODO:keyboard这里会比较复杂，需要处理奇奇怪怪的按键，后续优化
 export function getPressAction(event: KeyboardEvent): PressAction | null {
   if (!canPress(event) || !event.target) return null
+  console.log(event, 'event')
+
   return {
     action: 'press',
     context: window.__oopsTest_contextId,
@@ -68,6 +70,13 @@ export function getScrollAction(event: MouseEvent): ScrollAction | null {
 }
 
 export function canPress(event: KeyboardEvent): boolean {
+  // 只拦截input上的键盘输入
+  if ((event.target as HTMLElement).tagName !== 'INPUT') {
+    return true
+  }
+
+  const modifier = getModifierByEvent(event)
+
   // 这三个键属于文本输入，在input处处理
   if (['Backspace', 'Delete', 'AltGraph'].includes(event.key)) return false
 
@@ -79,10 +88,14 @@ export function canPress(event: KeyboardEvent): boolean {
     if (event.key === 'Insert' && event.shiftKey) return false
   }
 
-  if (['Shift', 'Control', 'Meta', 'Alt'].includes(event.key)) return false
+  // process为过程中，比如中文输入法在选词之前的阶段，这里不记录
+  if (['Shift', 'Control', 'Meta', 'Alt', 'Process', 'CapsLock'].includes(event.key)) return false
 
   // 单字符且没有修饰符的，当做input处理
-  if (event.key.length <= 1 && !getModifierByEvent(event)) return false
+  if (event.key.length <= 1 && !modifier) return false
+
+  // shift加单个英文字符当做大小写转换，当做input处理
+  if (/[a-zA-z]/.test(event.key) && modifier === 'Shift') return false
 
   return true
 }

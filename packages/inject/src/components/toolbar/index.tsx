@@ -5,6 +5,7 @@ import { useRecordAction } from '../../logics/recorder/useRecordAction'
 import { useRecorder } from '../../logics/recorder/useRecorder'
 import { ToolsStatus } from '../../types'
 import './index.less'
+// import { addEventListener } from '../../utils/dom'
 
 function getDefaultToolsStatus(): ToolsStatus {
   return {
@@ -18,11 +19,19 @@ function getDefaultToolsStatus(): ToolsStatus {
 }
 
 function useToolsStatus() {
-  const toolsStatusHistory = localStorage.getItem('__oopsTest_toolsStatus')
+  const toolsStatus = ref<ToolsStatus>(getDefaultToolsStatus())
+  window.__oopsTest_isRecording().then(isRecording => (toolsStatus.value.recording = isRecording))
 
-  const toolsStatus = ref<ToolsStatus>(toolsStatusHistory ? JSON.parse(toolsStatusHistory) : getDefaultToolsStatus())
+  // FIXME:这里不知道为啥visibilitychange不生效，需要提个issue问一下，暂时采用__oopsTest_syncStatus规避
+  // addEventListener(document, 'visibilitychange', async () => {
+  //   if (document.visibilityState === 'visible') {
+  //     window.__oopsTest_isRecording().then(isRecording => (toolsStatus.value.recording = isRecording))
+  //   }
+  // })
 
-  localStorage.removeItem('__oopsTest_toolsStatus')
+  window.__oopsTest_syncStatus = (isRecording: boolean) => {
+    toolsStatus.value.recording = isRecording
+  }
 
   return toolsStatus
 }
@@ -98,8 +107,13 @@ export default defineComponent({
   setup() {
     const { tools } = useToolbar()
 
+    const toolbarVisible = ref(true)
+    window.__oopsTest_toggleShowToolbar = (visible: boolean) => {
+      toolbarVisible.value = visible
+    }
+
     return () => (
-      <div class="oops-test-toolbar">
+      <div class="oops-test-toolbar" v-show={toolbarVisible.value}>
         {tools.value.map(tool => (
           <div
             class={[

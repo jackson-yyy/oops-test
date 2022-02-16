@@ -58,7 +58,6 @@ export function useRecord(toolsStatus: Ref<ToolsStatus>): () => Promise<void> {
     if (!toolsStatus.value.recording) {
       await startRecord()
       toolsStatus.value.recording = true
-      localStorage.setItem('__oopsTest_toolsStatus', JSON.stringify(toolsStatus.value))
       window.location.reload()
     } else {
       window.__oopsTest_finishRecord({
