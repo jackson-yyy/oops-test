@@ -1,26 +1,12 @@
-import type { Action, Case } from '@oops-test/engine/types'
+import type { EngineApis, InjectApis } from '@oops-test/engine'
 
-type StartRecordParams = {
-  context: string
-  page: string
-  url: string
+type PromisifyFunc<T extends (...args: any[]) => any> = (...args: Parameters<T>) => Promise<ReturnType<T>>
+
+// 将object里的函数promise化
+type PromisifyObject<T extends Object> = {
+  [k in keyof T]: T[k] extends (...args: any[]) => any ? PromisifyFunc<T[k]> : T[k]
 }
 
 declare global {
-  interface Window {
-    // 给inject模块使用
-    __oopsTest_isRecording(): Promise<boolean>
-    __oopsTest_recordAction(action: Action): Promise<void>
-    __oopsTest_createCase(caseInfo: Pick<Case, 'name' | 'saveMock'>): Promise<'success' | 'exist' | 'fail'>
-    __oopsTest_exit(): Promise<void>
-    __oopsTest_startRecord(params: StartRecordParams): Promise<void>
-    __oopsTest_finishRecord(params: { context: string }): Promise<void>
-    __oopsTest_reloadPage(): void
-    __oopsTest_contextId: string
-    __oopsTest_pageId: string
-
-    // 给engine模块使用
-    __oopsTest_syncStatus(isRecording: boolean): void
-    __oopsTest_toggleShowToolbar(visible: boolean): void
-  }
+  interface Window extends PromisifyObject<EngineApis>, InjectApis {}
 }
