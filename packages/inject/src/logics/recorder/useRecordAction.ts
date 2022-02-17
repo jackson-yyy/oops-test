@@ -8,14 +8,14 @@ export function useRecordAction(toolsStatus: Ref<ToolsStatus>): {
 } {
   let preventedAction: Action | null = null
 
-  function recordPreventedAction() {
+  async function recordPreventedAction() {
     if (preventedAction) {
-      window.__oopsTest_recordAction(preventedAction)
+      await window.__oopsTest_recordAction(preventedAction)
       preventedAction = null
     }
   }
 
-  function recordAction(action: Action) {
+  async function recordAction(action: Action) {
     if (!toolsStatus.value.recording) return
 
     // input/scroll先暂存
@@ -34,7 +34,7 @@ export function useRecordAction(toolsStatus: Ref<ToolsStatus>): {
     }
 
     // 先将上一个action推送过去
-    recordPreventedAction()
+    await recordPreventedAction()
     window.__oopsTest_recordAction(action)
   }
 

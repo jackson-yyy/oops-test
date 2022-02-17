@@ -4,7 +4,7 @@ import { merge } from 'lodash'
 import path, { join } from 'path'
 import { BrowserContext, Browser, Page } from 'playwright'
 import { EventEmitter } from 'stream'
-import { BrowserName, Action, Signal, Case } from './types'
+import { BrowserName, Action, Signal, Case, EngineApis } from './types'
 import { getBrowser, screenshot } from './utils/common'
 import { getUuid } from './utils/uuid'
 import { createDir, writeJson } from './utils/fs'
@@ -65,26 +65,30 @@ class Recorder extends EventEmitter {
     // TODO:这里后期做成可配置
     await context.exposeFunction('__oopsTest_transformSnapshot', (snapShot: string) => snapShot)
 
-    await context.exposeFunction('__oopsTest_isRecording', () => this.recording)
+    await context.exposeFunction(
+      '__oopsTest_isRecording',
+      (() => this.recording) as EngineApis['__oopsTest_isRecording'],
+    )
 
     await context.exposeBinding('__oopsTest_recordAction', async ({ page }, action: Action) => {
       this.recordAction(action)
       await this.handleScreenshotAssert(action, page)
     })
 
-    await context.exposeFunction('__oopsTest_createCase', (caseInfo: Pick<Case, 'name' | 'saveMock'>) =>
-      this.createCase(caseInfo),
+    await context.exposeFunction(
+      '__oopsTest_createCase',
+      this.createCase.bind(this) as EngineApis['__oopsTest_createCase'],
     )
 
-    await context.exposeBinding('__oopsTest_startRecord', (_, params) => {
-      return this.startRecord(params)
-    })
-    await context.exposeBinding('__oopsTest_finishRecord', (_, params) => {
-      this.finishRecord(params)
-    })
-    await context.exposeBinding('__oopsTest_exit', () => {
-      this.exit()
-    })
+    await context.exposeFunction(
+      '__oopsTest_startRecord',
+      this.startRecord.bind(this) as EngineApis['__oopsTest_startRecord'],
+    )
+    await context.exposeFunction(
+      '__oopsTest_finishRecord',
+      this.finishRecord.bind(this) as EngineApis['__oopsTest_finishRecord'],
+    )
+    await context.exposeFunction('__oopsTest_exit', this.exit.bind(this) as EngineApis['__oopsTest_exit'])
 
     context.on('close', () => {
       this.recordAction({

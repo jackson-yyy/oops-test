@@ -1,7 +1,7 @@
-import { chromium, firefox, webkit, PageScreenshotOptions, Page } from 'playwright'
+import { chromium, firefox, webkit, PageScreenshotOptions, Page, BrowserType } from 'playwright'
 import { BrowserName } from '../types'
 
-export function getBrowser(browser: BrowserName) {
+export function getBrowser(browser: BrowserName): BrowserType {
   return {
     chromium,
     firefox,
