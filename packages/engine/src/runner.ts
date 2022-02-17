@@ -2,12 +2,14 @@ import Debug from 'debug'
 import { merge } from 'lodash'
 import { LaunchOptions, Browser, BrowserContext, Page } from 'playwright'
 import { BrowserName, Action, Assertion, ManualAction, Case } from './types'
-import { getBrowser, readJson } from './utils'
+import { getBrowser } from './utils/common'
 import expect from 'expect'
 import { EventEmitter } from 'stream'
 import { join, resolve } from 'path'
 import odiff from 'odiff-bin'
 import chalk from 'chalk'
+import { screenshot } from './utils/common'
+import { readJson } from './utils/fs'
 
 const debug = Debug('oops-test:runner')
 interface RunnerOptions {
@@ -184,10 +186,11 @@ class Runner extends EventEmitter {
           const runtimeDir = resolve(this.caseDir, 'runtime', 'screenshots')
           await page.waitForLoadState('networkidle')
 
-          // FIXME:odiff暂时不支持buffer对比和输出，官方近期会开始支持，这里先简单处理
-          await this.getPage(action.context, action.page)?.screenshot({
+          await screenshot(page, {
             path: join(runtimeDir, action.params.name),
+            selector: action.params.selector,
           })
+
           const { match } = await odiff.compare(
             resolve(this.caseDir, 'screenshots', action.params.name),
             join(runtimeDir, action.params.name),

@@ -7,6 +7,7 @@ import {
   getHoverAction,
   getInputAction,
   getPressAction,
+  getScreenshotAssertion,
   getScrollAction,
 } from '../../utils/actionsFormatter'
 import { addEventListener, preventEvent } from '../../utils/dom'
@@ -67,10 +68,18 @@ export function useRecorder(toolsStatus: Ref<ToolsStatus>, recordAction: (action
 function useClick(toolsStatus: Ref<ToolsStatus>, recordAction: (action: Action) => void): (event: MouseEvent) => void {
   return function (event: MouseEvent) {
     if (!event.target) return
+    // hovering
     if (toolsStatus.value.hovering) {
       preventEvent(event)
       toolsStatus.value.hovering = false
       recordAction(getHoverAction(event)!)
+      return
+    }
+    // 元素截图中
+    if (toolsStatus.value.asserting.elementScreenshot) {
+      preventEvent(event)
+      toolsStatus.value.asserting.elementScreenshot = false
+      recordAction(getScreenshotAssertion(event)!)
       return
     }
     recordAction(getClickAction(event)!)

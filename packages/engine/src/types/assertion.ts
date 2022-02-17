@@ -34,6 +34,8 @@ export interface ScreenshotAssertion extends BaseAssertion {
     area?: {
       x: number
       y: number
-    }[]
+      height: number
+      width: number
+    }
   }
 }

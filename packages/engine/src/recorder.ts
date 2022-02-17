@@ -5,7 +5,9 @@ import path, { join } from 'path'
 import { BrowserContext, Browser, Page } from 'playwright'
 import { EventEmitter } from 'stream'
 import { BrowserName, Action, Signal, Case } from './types'
-import { getUuid, getBrowser, createDir, writeJson } from './utils'
+import { getBrowser, screenshot } from './utils/common'
+import { getUuid } from './utils/uuid'
+import { createDir, writeJson } from './utils/fs'
 
 const debug = Debug('oops-test:runner')
 interface RecorderOptions {
@@ -35,11 +37,12 @@ class Recorder extends EventEmitter {
   private recording = false
 
   private get output() {
-    const rootDir = join(this.options.output, this.case.name)
+    const caseDir = join(this.options.output, this.case.name)
     return {
-      rootDir: join(this.options.output, this.case.name),
-      screenshotDir: join(rootDir, 'screenshots'),
-      caseFile: join(rootDir, 'case.json'),
+      rootDir: this.options.output,
+      caseDir: join(this.options.output, this.case.name),
+      screenshotDir: join(caseDir, 'screenshots'),
+      caseFile: join(caseDir, 'case.json'),
     }
   }
 
@@ -59,12 +62,19 @@ class Recorder extends EventEmitter {
       path: path.join(__dirname, '../inject/index.js'),
     })
 
+    // TODO:这里后期做成可配置
+    await context.exposeFunction('__oopsTest_transformSnapshot', (snapShot: string) => snapShot)
+
     await context.exposeFunction('__oopsTest_isRecording', () => this.recording)
 
     await context.exposeBinding('__oopsTest_recordAction', async ({ page }, action: Action) => {
       this.recordAction(action)
       await this.handleScreenshotAssert(action, page)
     })
+
+    await context.exposeFunction('__oopsTest_createCase', (caseInfo: Pick<Case, 'name' | 'saveMock'>) =>
+      this.createCase(caseInfo),
+    )
 
     await context.exposeBinding('__oopsTest_startRecord', (_, params) => {
       return this.startRecord(params)
@@ -145,10 +155,15 @@ class Recorder extends EventEmitter {
 
   private async handleScreenshotAssert(action: Action, page: Page) {
     if (action.action === 'assertion' && action.params.type === 'screenshot') {
+      // TODO:这里后期要重构，不要指定__oopsTest_toggleShowToolbar这种api
+
       await page.evaluate('window.__oopsTest_toggleShowToolbar(false)')
-      await page.screenshot({
+
+      await screenshot(page, {
         path: join(this.output.screenshotDir, action.params.name),
+        selector: action.params.selector,
       })
+
       await page.evaluate('window.__oopsTest_toggleShowToolbar(true)')
     }
   }
@@ -165,34 +180,38 @@ class Recorder extends EventEmitter {
     await page.goto(url)
   }
 
-  // TODO:这里拆出来一个判断case是否存在的函数
-  startRecord({
-    context,
-    page,
-    url,
-    name,
-    saveMock,
-  }: {
-    context: string
-    page: string
-    url: string
-    name: string
-    saveMock: boolean
-  }): 'success' | 'exist' | 'fail' {
-    this.case.name = name
-    this.case.saveMock = saveMock
-    if (existsSync(this.output.rootDir)) {
-      this.case = getInitCase()
+  private createCase(caseInfo: Pick<Case, 'name' | 'saveMock'>): 'success' | 'exist' | 'fail' {
+    const caseDir = join(this.output.rootDir, caseInfo.name)
+    if (existsSync(caseDir)) {
       return 'exist'
     }
 
     try {
-      createDir([this.output.rootDir, this.output.screenshotDir])
+      createDir(caseDir)
     } catch (error) {
       console.error(error)
       return 'fail'
     }
 
+    merge(this.case, caseInfo)
+
+    return 'success'
+  }
+
+  // TODO:这里拆出来一个判断case是否存在的函数
+  private startRecord({
+    context,
+    page,
+    url,
+  }: {
+    context: string
+    page: string
+    url: string
+    caseInfo: {
+      name: string
+      saveMock: boolean
+    }
+  }): void {
     this.recording = true
 
     this.recordAction({
@@ -211,11 +230,9 @@ class Recorder extends EventEmitter {
     })
 
     this.syncStatus()
-
-    return 'success'
   }
 
-  async finishRecord({ context }: { context: string }) {
+  private async finishRecord({ context }: { context: string }) {
     this.recordAction({
       action: 'closeContext',
       params: {

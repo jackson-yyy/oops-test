@@ -3,7 +3,8 @@
   bottom: 20px;
   right: 20px;
   box-shadow: 0 0 8px 0 rgba(#000, 0.2);
-  z-index: 1000;
+  // 设置一个离谱的层级
+  z-index: 9999;
   display: flex;
   align-items: center;
   background-color: #fff;
@@ -13,11 +14,23 @@
     padding: 4px 12px;
     cursor: pointer;
     color: #000;
+    position: relative;
+    &-fold {
+      position: absolute;
+      left: 0;
+      bottom: 100%;
+      width: 100%;
+      display: none;
+      background: #fff;
+    }
     &--active {
       background-color: rosybrown;
     }
     &:hover {
       background-color: rgba(#000, 0.2);
+      .oops-test-toolbar__item-fold {
+        display: block;
+      }
     }
     &--disabled {
       cursor: not-allowed;
