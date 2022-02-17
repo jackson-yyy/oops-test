@@ -13,11 +13,20 @@
     padding: 4px 12px;
     cursor: pointer;
     color: #000;
+    position: relative;
+    &-fold {
+      position: absolute;
+      bottom: 100%;
+      display: none;
+    }
     &--active {
       background-color: rosybrown;
     }
     &:hover {
       background-color: rgba(#000, 0.2);
+      .oops-test-toolbar__item-fold {
+        display: block;
+      }
     }
     &--disabled {
       cursor: not-allowed;

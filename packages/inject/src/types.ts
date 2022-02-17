@@ -7,17 +7,11 @@ export interface ToolsStatus {
   }
 }
 
-export type ToolInfo =
-  | {
-      icon?: string
-      text?: string
-      active: boolean
-      disabled: boolean
-      handler: () => void | Promise<void>
-    }
-  | {
-      text: string
-      active: boolean
-      disabled: boolean
-      children: ToolInfo[]
-    }
+export interface ToolInfo {
+  icon?: string
+  text?: string
+  active: boolean
+  disabled: boolean
+  handler?: () => void | Promise<void>
+  children?: ToolInfo[]
+}

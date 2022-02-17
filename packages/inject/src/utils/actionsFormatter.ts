@@ -77,7 +77,7 @@ export function getScrollAction(event: MouseEvent): ScrollAction | null {
   }
 }
 
-export function getScreenshotAction(event?: MouseEvent): ScreenshotAssertion {
+export function getScreenshotAssertion(event?: MouseEvent): ScreenshotAssertion {
   if (!event?.target) {
     return {
       action: 'assertion',

@@ -7,7 +7,7 @@ import {
   getHoverAction,
   getInputAction,
   getPressAction,
-  getScreenshotAction,
+  getScreenshotAssertion,
   getScrollAction,
 } from '../../utils/actionsFormatter'
 import { addEventListener, preventEvent } from '../../utils/dom'
@@ -79,7 +79,7 @@ function useClick(toolsStatus: Ref<ToolsStatus>, recordAction: (action: Action) 
     if (toolsStatus.value.asserting.elementScreenshot) {
       preventEvent(event)
       toolsStatus.value.asserting.elementScreenshot = false
-      recordAction(getScreenshotAction(event)!)
+      recordAction(getScreenshotAssertion(event)!)
       return
     }
     recordAction(getClickAction(event)!)

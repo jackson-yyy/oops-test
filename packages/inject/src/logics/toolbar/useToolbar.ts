@@ -3,7 +3,7 @@ import { ref, computed, ComputedRef } from 'vue'
 import { useRecordAction } from '../recorder/useRecordAction'
 import { useRecorder } from '../recorder/useRecorder'
 import { useRecord } from './useRecord'
-import { useElementScreenshot, useFullScreenshot } from './useAssertion'
+import { useScreenshot } from './useAssertion'
 // import { addEventListener } from '../../utils/dom'
 
 function getDefaultToolsStatus(): ToolsStatus {
@@ -43,27 +43,9 @@ export function useToolbar(): { tools: ComputedRef<ToolInfo[]> } {
 
   const recordBtnHandler = useRecord(toolsStatus)
 
-  const fullScreenshot = useFullScreenshot(toolsStatus, recordAction)
-  const elementFullScreenshot = useElementScreenshot(toolsStatus)
+  const screenshotAssertion = useScreenshot(toolsStatus, recordAction)
 
-  const featureTools = computed<ToolInfo[]>(() => [
-    {
-      text: 'Hover',
-      active: toolsStatus.value.hovering,
-      disabled: !toolsStatus.value.recording,
-      handler() {
-        toolsStatus.value.hovering = !toolsStatus.value.hovering
-      },
-    },
-    {
-      text: '截图断言',
-      active: false,
-      disabled: !toolsStatus.value.recording,
-      children: [fullScreenshot.value, elementFullScreenshot.value],
-    },
-  ])
-
-  const tools = computed<ToolInfo[]>(() => [
+  const tools = computed(() => [
     {
       text: toolsStatus.value.recording ? '停止' : '开始',
       active: false,
@@ -73,7 +55,15 @@ export function useToolbar(): { tools: ComputedRef<ToolInfo[]> } {
         recordBtnHandler()
       },
     },
-    ...featureTools.value,
+    {
+      text: 'Hover',
+      active: toolsStatus.value.hovering,
+      disabled: !toolsStatus.value.recording,
+      handler() {
+        toolsStatus.value.hovering = !toolsStatus.value.hovering
+      },
+    },
+    screenshotAssertion.value,
     {
       text: 'exit',
       active: false,
