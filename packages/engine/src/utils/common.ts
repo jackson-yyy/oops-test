@@ -1,4 +1,13 @@
-import { Page, PageScreenshotOptions } from 'playwright-core'
+import { chromium, firefox, webkit, PageScreenshotOptions, Page } from 'playwright'
+import { BrowserName } from '../types'
+
+export function getBrowser(browser: BrowserName) {
+  return {
+    chromium,
+    firefox,
+    webkit,
+  }[browser]
+}
 
 export async function screenshot(
   page: Page,

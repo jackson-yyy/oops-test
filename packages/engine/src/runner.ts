@@ -2,13 +2,14 @@ import Debug from 'debug'
 import { merge } from 'lodash'
 import { LaunchOptions, Browser, BrowserContext, Page } from 'playwright'
 import { BrowserName, Action, Assertion, ManualAction, Case } from './types'
-import { getBrowser, readJson } from './utils'
+import { getBrowser } from './utils/common'
 import expect from 'expect'
 import { EventEmitter } from 'stream'
 import { join, resolve } from 'path'
 import odiff from 'odiff-bin'
 import chalk from 'chalk'
 import { screenshot } from './utils/common'
+import { readJson } from './utils/fs'
 
 const debug = Debug('oops-test:runner')
 interface RunnerOptions {

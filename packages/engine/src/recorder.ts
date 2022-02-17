@@ -5,8 +5,9 @@ import path, { join } from 'path'
 import { BrowserContext, Browser, Page } from 'playwright'
 import { EventEmitter } from 'stream'
 import { BrowserName, Action, Signal, Case } from './types'
-import { getUuid, getBrowser, createDir, writeJson } from './utils'
-import { screenshot } from './utils/common'
+import { getBrowser, screenshot } from './utils/common'
+import { getUuid } from './utils/uuid'
+import { createDir, writeJson } from './utils/fs'
 
 const debug = Debug('oops-test:runner')
 interface RecorderOptions {
