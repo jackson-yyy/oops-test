@@ -6,6 +6,7 @@ import { BrowserContext, Browser, Page } from 'playwright'
 import { EventEmitter } from 'stream'
 import { BrowserName, Action, Signal, Case } from './types'
 import { getUuid, getBrowser, createDir, writeJson } from './utils'
+import { screenshot } from './utils/common'
 
 const debug = Debug('oops-test:runner')
 interface RecorderOptions {
@@ -153,10 +154,15 @@ class Recorder extends EventEmitter {
 
   private async handleScreenshotAssert(action: Action, page: Page) {
     if (action.action === 'assertion' && action.params.type === 'screenshot') {
+      // TODO:这里后期要重构，不要指定__oopsTest_toggleShowToolbar这种api
+
       await page.evaluate('window.__oopsTest_toggleShowToolbar(false)')
-      await page.screenshot({
+
+      await screenshot(page, {
         path: join(this.output.screenshotDir, action.params.name),
+        selector: action.params.selector,
       })
+
       await page.evaluate('window.__oopsTest_toggleShowToolbar(true)')
     }
   }
