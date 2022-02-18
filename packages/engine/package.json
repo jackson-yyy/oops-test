@@ -21,6 +21,8 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
+    "@types/prettier": "^2.4.4",
+    "@types/pretty": "^2.0.1",
     "dayjs": "^1.10.7",
     "debug": "^4.3.2",
     "expect": "^27.1.1",
@@ -28,6 +30,7 @@
     "odiff-bin": "^2.4.2",
     "pixelmatch": "^5.2.1",
     "playwright": "^1.14.1",
-    "playwright-core": "^1.14.1"
+    "playwright-core": "^1.14.1",
+    "pretty": "^2.0.0"
   }
 }

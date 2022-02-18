@@ -2,14 +2,14 @@ import Debug from 'debug'
 import { merge } from 'lodash'
 import { LaunchOptions, Browser, BrowserContext, Page } from 'playwright'
 import { BrowserName, Action, Assertion, ManualAction, Case } from './types'
-import { getBrowser } from './utils/common'
+import { getBrowser, getSnapshot } from './utils/common'
 import expect from 'expect'
 import { EventEmitter } from 'stream'
 import { join, resolve } from 'path'
 import odiff from 'odiff-bin'
 import chalk from 'chalk'
 import { screenshot } from './utils/common'
-import { readJson } from './utils/fs'
+import { getSnapshotData, readJson } from './utils/fs'
 
 const debug = Debug('oops-test:runner')
 interface RunnerOptions {
@@ -70,6 +70,8 @@ class Runner extends EventEmitter {
 
   private caseDir = ''
 
+  private snapshots: Record<string, string> = {}
+
   constructor(options?: RunnerOptions) {
     super()
     merge(this.options, options)
@@ -83,6 +85,8 @@ class Runner extends EventEmitter {
     this.caseDir = caseDir
 
     const cas = readJson<Case>(join(caseDir, 'case.json'))
+    this.snapshots = getSnapshotData(join(this.caseDir, 'snapshots.snap'))
+
     for (const action of cas.actions) {
       await this.runAction(action)
     }
@@ -198,7 +202,16 @@ class Runner extends EventEmitter {
           )
 
           if (!match) throw new Error(chalk.red(`screenshot ${action.params.name} compare fail!`))
+          break
         }
+
+        case 'snapshot':
+          expect(
+            await getSnapshot(page, {
+              selector: action.params.selector,
+            }),
+          ).toBe(this.snapshots[action.params.name])
+          break
       }
     } catch (error: any) {
       throw new Error(error.message)

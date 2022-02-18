@@ -8,6 +8,7 @@ import {
   getPressAction,
   getScreenshotAssertion,
   getScrollAction,
+  getSnapshotAssertion,
 } from '../../utils/actionsFormatter'
 import { addEventListener, preventEvent } from '../../utils/dom'
 
@@ -81,6 +82,15 @@ function useClick(toolsStatus: Ref<ToolsStatus>, recordAction: (action: Action) 
       recordAction(getScreenshotAssertion(event)!)
       return
     }
+
+    // 元素快照中
+    if (toolsStatus.value.asserting.elementSnapshot) {
+      preventEvent(event)
+      toolsStatus.value.asserting.elementSnapshot = false
+      recordAction(getSnapshotAssertion(event)!)
+      return
+    }
+
     recordAction(getClickAction(event)!)
   }
 }

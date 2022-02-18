@@ -3,7 +3,7 @@ export interface ToolsStatus {
   hovering: boolean
   asserting: {
     elementScreenshot: boolean
-    snapshot: boolean
+    elementSnapshot: boolean
   }
 }
 

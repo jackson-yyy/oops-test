@@ -3,7 +3,7 @@ import { ref, computed, ComputedRef } from 'vue'
 import { useRecordAction } from '../recorder/useRecordAction'
 import { useRecorder } from '../recorder/useRecorder'
 import { useRecord } from './useRecord'
-import { useScreenshot } from './useAssertion'
+import { useScreenshot, useElementSnapshot } from './useAssertion'
 // import { addEventListener } from '../../utils/dom'
 
 function getDefaultToolsStatus(): ToolsStatus {
@@ -12,7 +12,7 @@ function getDefaultToolsStatus(): ToolsStatus {
     hovering: false,
     asserting: {
       elementScreenshot: false,
-      snapshot: false,
+      elementSnapshot: false,
     },
   }
 }
@@ -44,6 +44,7 @@ export function useToolbar(): { tools: ComputedRef<ToolInfo[]> } {
   const recordBtnHandler = useRecord(toolsStatus)
 
   const screenshotAssertion = useScreenshot(toolsStatus, recordAction)
+  const snapshotAssertion = useElementSnapshot(toolsStatus)
 
   const tools = computed(() => [
     {
@@ -64,6 +65,7 @@ export function useToolbar(): { tools: ComputedRef<ToolInfo[]> } {
       },
     },
     screenshotAssertion.value,
+    snapshotAssertion.value,
     {
       text: 'exit',
       active: false,

@@ -1,5 +1,6 @@
 import { chromium, firefox, webkit, PageScreenshotOptions, Page, BrowserType } from 'playwright'
 import { BrowserName } from '../types'
+import pretty from 'pretty'
 
 export function getBrowser(browser: BrowserName): BrowserType {
   return {
@@ -9,6 +10,16 @@ export function getBrowser(browser: BrowserName): BrowserType {
   }[browser]
 }
 
+/**
+ * 截图工具
+ *
+ * @export
+ * @param {Page} page
+ * @param {{
+ *     path: string
+ *     selector?: string
+ *   }} options
+ */
 export async function screenshot(
   page: Page,
   options: {
@@ -17,7 +28,6 @@ export async function screenshot(
   },
 ) {
   const screenshotParams: PageScreenshotOptions = {}
-
   if (options.selector) {
     const boudingRect = await page.locator(options.selector).boundingBox()
     if (boudingRect) {
@@ -29,4 +39,33 @@ export async function screenshot(
     path: options.path,
     ...screenshotParams,
   })
+}
+
+/**
+ * 获取
+ *
+ * @export
+ * @param {Page} page
+ * @param {{
+ *     path: string
+ *     selector: string
+ *     filter?: (snap: string) => string
+ *   }} {
+ *     path,
+ *     selector,
+ *     filter = str => str,
+ *   }
+ */
+export async function getSnapshot(
+  page: Page,
+  {
+    selector,
+    filter = str => str,
+  }: {
+    selector: string
+    filter?: (snap: string) => string
+  },
+) {
+  const snapshot = await page.locator(selector).evaluate(node => node.outerHTML)
+  return filter(pretty(snapshot))
 }

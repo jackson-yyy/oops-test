@@ -4,10 +4,11 @@ import { merge } from 'lodash'
 import path, { join } from 'path'
 import { BrowserContext, Browser, Page } from 'playwright'
 import { EventEmitter } from 'stream'
-import { BrowserName, Action, Signal, Case, EngineApis } from './types'
-import { getBrowser, screenshot } from './utils/common'
+import { BrowserName, Action, Signal, Case, EngineApis, Assertion } from './types'
+import { getBrowser, getSnapshot, screenshot } from './utils/common'
 import { getUuid } from './utils/uuid'
-import { createDir, writeJson } from './utils/fs'
+import { appendFile, createDir, writeJson } from './utils/fs'
+import { ScreenshotAssertion, SnapshotAssertion } from '../engine'
 
 const debug = Debug('oops-test:runner')
 interface RecorderOptions {
@@ -40,8 +41,9 @@ class Recorder extends EventEmitter {
     const caseDir = join(this.options.output, this.case.name)
     return {
       rootDir: this.options.output,
-      caseDir: join(this.options.output, this.case.name),
+      caseDir,
       screenshotDir: join(caseDir, 'screenshots'),
+      snapshotFile: join(caseDir, 'snapshots.snap'),
       caseFile: join(caseDir, 'case.json'),
     }
   }
@@ -62,17 +64,17 @@ class Recorder extends EventEmitter {
       path: path.join(__dirname, '../inject/index.js'),
     })
 
-    // TODO:这里后期做成可配置
-    await context.exposeFunction('__oopsTest_transformSnapshot', (snapShot: string) => snapShot)
-
     await context.exposeFunction(
       '__oopsTest_isRecording',
       (() => this.recording) as EngineApis['__oopsTest_isRecording'],
     )
 
-    await context.exposeBinding('__oopsTest_recordAction', async ({ page }, action: Action) => {
+    await context.exposeBinding('__oopsTest_recordAction', ({ page }, action: Action) => {
       this.recordAction(action)
-      await this.handleScreenshotAssert(action, page)
+
+      if (action.action === 'assertion') {
+        this.handleAssertion(action, page)
+      }
     })
 
     await context.exposeFunction(
@@ -157,19 +159,38 @@ class Recorder extends EventEmitter {
     this.lastAction.signals[name] = params
   }
 
-  private async handleScreenshotAssert(action: Action, page: Page) {
-    if (action.action === 'assertion' && action.params.type === 'screenshot') {
-      // TODO:这里后期要重构，不要指定__oopsTest_toggleShowToolbar这种api
-
-      await page.evaluate('window.__oopsTest_toggleShowToolbar(false)')
-
-      await screenshot(page, {
-        path: join(this.output.screenshotDir, action.params.name),
-        selector: action.params.selector,
-      })
-
-      await page.evaluate('window.__oopsTest_toggleShowToolbar(true)')
+  private handleAssertion(action: Assertion, page: Page) {
+    switch (action.params.type) {
+      case 'url':
+        break
+      case 'snapshot':
+        this.handleSnapshotAssertion(action as SnapshotAssertion, page)
+        break
+      case 'screenshot':
+        this.handleScreenshotAssertion(action as ScreenshotAssertion, page)
+        break
     }
+  }
+
+  private async handleScreenshotAssertion(action: ScreenshotAssertion, page: Page) {
+    // TODO:这里后期要重构，不要指定__oopsTest_toggleShowToolbar这种api
+    await page.evaluate('window.__oopsTest_toggleShowToolbar(false)')
+
+    await screenshot(page, {
+      path: join(this.output.screenshotDir, action.params.name),
+      selector: action.params.selector,
+    })
+
+    await page.evaluate('window.__oopsTest_toggleShowToolbar(true)')
+  }
+
+  private async handleSnapshotAssertion(action: SnapshotAssertion, page: Page) {
+    const snapshot = await getSnapshot(page, {
+      selector: action.params.selector,
+      // TODO:补充读取配置功能
+      filter: (snapshot: string) => snapshot,
+    })
+    appendFile(this.output.snapshotFile, `exports[\`${action.params.name}\`] = \`${snapshot}\`\n\n`)
   }
 
   async start({ url = 'http://localhost:8080', browser = 'chromium' }: { url: string; browser?: BrowserName }) {

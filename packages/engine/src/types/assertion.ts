@@ -20,9 +20,9 @@ export interface UrlAssertion extends BaseAssertion {
 
 export interface SnapshotAssertion extends BaseAssertion {
   params: {
-    type: 'snapShot'
+    type: 'snapshot'
     selector: string
-    snapshot: string
+    name: string
   }
 }
 
