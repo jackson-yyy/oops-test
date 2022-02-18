@@ -3,6 +3,14 @@ import { Action } from '@oops-test/engine'
 import { ToolInfo, ToolsStatus } from '../../types'
 import { getScreenshotAssertion } from '../../utils/actionsFormatter'
 
+/**
+ * 全屏截图
+ *
+ * @export
+ * @param {Ref<ToolsStatus>} toolsStatus
+ * @param {(action: Action) => void} recordAction
+ * @returns {*}  {ComputedRef<ToolInfo>}
+ */
 export function useFullScreenshot(
   toolsStatus: Ref<ToolsStatus>,
   recordAction: (action: Action) => void,
@@ -18,6 +26,13 @@ export function useFullScreenshot(
   }))
 }
 
+/**
+ * 元素截图
+ *
+ * @export
+ * @param {Ref<ToolsStatus>} toolsStatus
+ * @returns {*}  {ComputedRef<ToolInfo>}
+ */
 export function useElementScreenshot(toolsStatus: Ref<ToolsStatus>): ComputedRef<ToolInfo> {
   return computed(() => ({
     text: '选择元素',
@@ -30,6 +45,14 @@ export function useElementScreenshot(toolsStatus: Ref<ToolsStatus>): ComputedRef
   }))
 }
 
+/**
+ * 截图工具的配置
+ *
+ * @export
+ * @param {Ref<ToolsStatus>} toolsStatus
+ * @param {(action: Action) => void} recordAction
+ * @returns {*}
+ */
 export function useScreenshot(toolsStatus: Ref<ToolsStatus>, recordAction: (action: Action) => void) {
   const fullScreenshot = useFullScreenshot(toolsStatus, recordAction)
   const elementScreenshot = useElementScreenshot(toolsStatus)
@@ -39,5 +62,17 @@ export function useScreenshot(toolsStatus: Ref<ToolsStatus>, recordAction: (acti
     active: screenshotTools.value.some(item => item.active),
     disabled: !toolsStatus.value.recording,
     children: screenshotTools.value,
+  }))
+}
+
+export function useElementSnapshot(toolsStatus: Ref<ToolsStatus>) {
+  return computed(() => ({
+    text: '元素快照',
+    active: toolsStatus.value.asserting.elementSnapshot,
+    disabled: !toolsStatus.value.recording,
+    handler() {
+      if (!toolsStatus.value.recording) return
+      toolsStatus.value.asserting.elementSnapshot = !toolsStatus.value.asserting.elementSnapshot
+    },
   }))
 }
