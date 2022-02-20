@@ -1,9 +1,11 @@
 import type { Assertion } from './assertion'
 import type { Signal } from './signal'
 
-export type Action = Assertion | NewContext | CloseContext | NewPage | ClosePage | ErrorAction | ManualAction
+export type Action = Assertion | BrowserAction | ManualAction
 
 export type ManualAction = ClickAction | MousemoveAction | HoverAction | PressAction | InputAction | ScrollAction
+
+export type BrowserAction = NewContext | CloseContext | NewPage | ClosePage | ErrorAction
 
 export type Modifier = 'Shift' | 'Control' | 'Alt' | 'Meta'
 
@@ -14,7 +16,7 @@ export interface BaseAction {
 }
 
 // 浏览器行为
-export interface BrowserAction extends BaseAction {
+export interface BaseBrowserAction extends BaseAction {
   action: 'newContext' | 'closeContext' | 'newPage' | 'closePage'
   context?: string
   screenShot?: string
@@ -26,20 +28,20 @@ export interface BaseManualAction extends BaseAction {
   page: string
   screenShot?: string
 }
-export interface NewContext extends BrowserAction {
+export interface NewContext extends BaseBrowserAction {
   action: 'newContext'
   params: {
     id: string
   }
 }
 
-export interface CloseContext extends BrowserAction {
+export interface CloseContext extends BaseBrowserAction {
   action: 'closeContext'
   params: {
     id: string
   }
 }
-export interface NewPage extends BrowserAction {
+export interface NewPage extends BaseBrowserAction {
   action: 'newPage'
   context: string
   screenShot?: string
@@ -48,7 +50,7 @@ export interface NewPage extends BrowserAction {
     url: string
   }
 }
-export interface ClosePage extends BrowserAction {
+export interface ClosePage extends BaseBrowserAction {
   action: 'closePage'
   context: string
   params: {

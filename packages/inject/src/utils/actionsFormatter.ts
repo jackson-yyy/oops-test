@@ -51,7 +51,6 @@ export function getInputAction(event: InputEvent): InputAction | null {
 // TODO:keyboard这里会比较复杂，需要处理奇奇怪怪的按键，后续优化
 export function getPressAction(event: KeyboardEvent): PressAction | null {
   if (!canPress(event) || !event.target) return null
-  console.log(event, 'event')
 
   return {
     action: 'press',
@@ -143,7 +142,7 @@ function canPress(event: KeyboardEvent): boolean {
   if (event.key.length <= 1 && !modifier) return false
 
   // shift加单个英文字符当做大小写转换，当做input处理
-  if (/[a-zA-z]/.test(event.key) && modifier === 'Shift') return false
+  if (event.key && modifier === 'Shift') return false
 
   return true
 }
