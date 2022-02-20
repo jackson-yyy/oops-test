@@ -7,6 +7,7 @@ import {
   ScreenshotAssertion,
   ScrollAction,
   SnapshotAssertion,
+  UrlAssertion,
 } from '@oops-test/engine'
 import dayjs from 'dayjs'
 
@@ -51,7 +52,6 @@ export function getInputAction(event: InputEvent): InputAction | null {
 // TODO:keyboard这里会比较复杂，需要处理奇奇怪怪的按键，后续优化
 export function getPressAction(event: KeyboardEvent): PressAction | null {
   if (!canPress(event) || !event.target) return null
-  console.log(event, 'event')
 
   return {
     action: 'press',
@@ -117,6 +117,18 @@ export function getSnapshotAssertion(event: MouseEvent): SnapshotAssertion | nul
   }
 }
 
+export function getUrlAssertion(): UrlAssertion {
+  return {
+    action: 'assertion',
+    context: window.__oopsTest_contextId,
+    page: window.__oopsTest_pageId,
+    params: {
+      type: 'url',
+      url: location.href,
+    },
+  }
+}
+
 function canPress(event: KeyboardEvent): boolean {
   // 只拦截input上的键盘输入
   if ((event.target as HTMLElement).tagName !== 'INPUT') {
@@ -143,7 +155,7 @@ function canPress(event: KeyboardEvent): boolean {
   if (event.key.length <= 1 && !modifier) return false
 
   // shift加单个英文字符当做大小写转换，当做input处理
-  if (/[a-zA-z]/.test(event.key) && modifier === 'Shift') return false
+  if (event.key && modifier === 'Shift') return false
 
   return true
 }

@@ -1,6 +1,5 @@
 import { defineComponent, ref, computed } from 'vue'
-import { object } from 'vue-types'
-import { useToolbar } from '../../logics/toolbar/useToolbar'
+import { array, object } from 'vue-types'
 import { ToolInfo } from '../../types'
 import './index.less'
 // import { addEventListener } from '../../utils/dom'
@@ -38,9 +37,10 @@ const Tool = defineComponent({
 })
 
 export default defineComponent({
-  setup() {
-    const { tools } = useToolbar()
-
+  props: {
+    tools: array<ToolInfo>().isRequired,
+  },
+  setup(props) {
     const toolbarVisible = ref(true)
     window.__oopsTest_toggleShowToolbar = (visible: boolean) => {
       toolbarVisible.value = visible
@@ -48,7 +48,7 @@ export default defineComponent({
 
     return () => (
       <div class="oops-test-toolbar" v-show={toolbarVisible.value}>
-        {tools.value.map(tool => (
+        {props.tools.map(tool => (
           <Tool info={tool} />
         ))}
       </div>
