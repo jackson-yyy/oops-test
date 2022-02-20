@@ -1,7 +1,7 @@
 import { computed, ComputedRef, Ref } from 'vue'
 import { Action } from '@oops-test/engine'
 import { ToolInfo, ToolsStatus } from '../../types'
-import { getScreenshotAssertion } from '../../utils/actionsFormatter'
+import { getScreenshotAssertion, getUrlAssertion } from '../../utils/actionsFormatter'
 
 /**
  * 全屏截图
@@ -73,6 +73,18 @@ export function useElementSnapshot(toolsStatus: Ref<ToolsStatus>) {
     handler() {
       if (!toolsStatus.value.recording) return
       toolsStatus.value.asserting.elementSnapshot = !toolsStatus.value.asserting.elementSnapshot
+    },
+  }))
+}
+
+export function useUrlAssertion(toolsStatus: Ref<ToolsStatus>, recordAction: (action: Action) => void) {
+  return computed(() => ({
+    text: '断言url',
+    active: false,
+    disabled: !toolsStatus.value.recording,
+    handler() {
+      if (!toolsStatus.value.recording) return
+      recordAction(getUrlAssertion())
     },
   }))
 }

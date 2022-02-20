@@ -3,7 +3,7 @@ import { ref, computed, ComputedRef } from 'vue'
 import { useRecordAction } from '../recorder/useRecordAction'
 import { useRecorder } from '../recorder/useRecorder'
 import { useRecord } from './useRecord'
-import { useScreenshot, useElementSnapshot } from './useAssertion'
+import { useScreenshot, useElementSnapshot, useUrlAssertion } from './useAssertion'
 // import { addEventListener } from '../../utils/dom'
 
 function getDefaultToolsStatus(): ToolsStatus {
@@ -45,6 +45,7 @@ export function useToolbar(): { tools: ComputedRef<ToolInfo[]> } {
 
   const screenshotAssertion = useScreenshot(toolsStatus, recordAction)
   const snapshotAssertion = useElementSnapshot(toolsStatus)
+  const urlAssertion = useUrlAssertion(toolsStatus, recordAction)
 
   const tools = computed(() => [
     {
@@ -64,6 +65,7 @@ export function useToolbar(): { tools: ComputedRef<ToolInfo[]> } {
         toolsStatus.value.hovering = !toolsStatus.value.hovering
       },
     },
+    urlAssertion.value,
     screenshotAssertion.value,
     snapshotAssertion.value,
     {

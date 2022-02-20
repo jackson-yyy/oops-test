@@ -7,6 +7,7 @@ import {
   ScreenshotAssertion,
   ScrollAction,
   SnapshotAssertion,
+  UrlAssertion,
 } from '@oops-test/engine'
 import dayjs from 'dayjs'
 
@@ -112,6 +113,18 @@ export function getSnapshotAssertion(event: MouseEvent): SnapshotAssertion | nul
       type: 'snapshot',
       selector: getSelector(event.target, document),
       name: `element_snapshot_${dayjs().valueOf()}`,
+    },
+  }
+}
+
+export function getUrlAssertion(): UrlAssertion {
+  return {
+    action: 'assertion',
+    context: window.__oopsTest_contextId,
+    page: window.__oopsTest_pageId,
+    params: {
+      type: 'url',
+      url: location.href,
     },
   }
 }
