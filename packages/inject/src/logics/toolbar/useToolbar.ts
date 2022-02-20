@@ -1,5 +1,5 @@
 import { ToolInfo, ToolsStatus } from '../../types'
-import { ref, computed, ComputedRef } from 'vue'
+import { ref, computed, ComputedRef, Ref } from 'vue'
 import { useRecordAction } from '../recorder/useRecordAction'
 import { useRecorder } from '../recorder/useRecorder'
 import { useRecord } from './useRecord'
@@ -35,7 +35,7 @@ function useToolsStatus() {
   return toolsStatus
 }
 
-export function useToolbar(): { tools: ComputedRef<ToolInfo[]> } {
+export function useToolbar(): { tools: ComputedRef<ToolInfo[]>; toolsStatus: Ref<ToolsStatus> } {
   const toolsStatus = useToolsStatus()
   const { recordAction, recordPreventedAction } = useRecordAction(toolsStatus)
 
@@ -81,5 +81,6 @@ export function useToolbar(): { tools: ComputedRef<ToolInfo[]> } {
 
   return {
     tools,
+    toolsStatus,
   }
 }
